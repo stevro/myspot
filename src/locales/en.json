@@ -1,0 +1,32 @@
+{
+  "common": {
+    "btn": {
+      "back": "Back",
+      "close": "Close"
+    },
+    "calendar": {
+      "today": "Today",
+      "this_week": "This week",
+      "last_week": "Last week",
+      "last_7_days": "Last 7 days",
+      "this_month": "This month",
+      "last_month": "Last month",
+      "this_year": "This year",
+      "last_year": "Last year"
+    }
+  },
+  "login": {
+    "welcome": "Welcome"
+  },
+  "sidebar": {
+    "hello": "Hello",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "language_switch": "Change language"
+
+  },
+  "languageSwitcher": {
+    "title": "Change language"
+  }
+}
+

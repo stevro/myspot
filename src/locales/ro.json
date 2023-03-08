@@ -1,0 +1,22 @@
+{
+  "common": {
+    "btn": {
+      "back": "Înapoi",
+      "close": "Închide"
+    }
+  },
+  "login": {
+    "welcome": "Bine ați venit"
+  },
+  "sidebar": {
+    "hello": "Salut",
+    "dashboard": "Panou central",
+    "profile": "Profil",
+    "logout": "Deconectare",
+    "language_switch": "Limbă"
+  },
+  "languageSwitcher": {
+    "title": "Schimbă limba"
+  }
+}
+
