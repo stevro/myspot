@@ -3,7 +3,7 @@
   <v-container>
 
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" md="9">
         <v-text-field
             v-model="search"
             clearable
@@ -14,6 +14,9 @@
             density="compact"
             :loading="isSearching"
         ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">New</v-btn>
       </v-col>
     </v-row>
 
@@ -26,7 +29,7 @@
 
     <v-row v-for="event in events" v-bind:key="id">
       <v-col>
-        <v-card :prepend-icon="event.icon" :title="event.title" :subtitle="event.subcategory">
+        <v-card :prepend-icon="event.icon" :title="event.title" :subtitle="event.category">
           <template v-slot:prepend>
             <v-icon size="x-large"></v-icon>
           </template>
@@ -57,6 +60,14 @@
             </v-btn>
             <v-btn v-else size="small" color="primary" variant="flat" disabled>{{
                 $t('event.fully_booked')
+              }}
+            </v-btn>
+            <v-btn  size="small" color="error" variant="flat">{{
+                $t('event.withdraw')
+              }}
+            </v-btn>
+            <v-btn  size="small" color="success" disabled variant="flat">{{
+                $t('event.booked')
               }}
             </v-btn>
             <v-spacer></v-spacer>
@@ -114,8 +125,7 @@ events.value = [
   {
     id: 1,
     title: 'Meci volei',
-    category: 'sport',
-    subcategory: 'Volei',
+    category: 'Volei',
     location: "Sala tudor",
     date: '2023-03-09 20:00 EET',
     duration: '120',
@@ -125,13 +135,13 @@ events.value = [
     totalSpots: 12,
     createdBy: 'John Doe',
     showDetails: false,
-    allowReserves: true
+    allowReserves: true,
+    participants: []
   },
   {
     id: 2,
     title: 'Meci volei',
-    category: 'sport',
-    subcategory: 'footbal',
+    category: 'football',
     location: "Sala tudor",
     date: '2023-03-09 20:00 EET',
     duration: '120',
@@ -141,13 +151,13 @@ events.value = [
     totalSpots: 12,
     createdBy: 'John Doe',
     showDetails: false,
-    allowReserves: false
+    allowReserves: false,
+    participants: []
   },
   {
     id: 3,
     title: 'Meci volei',
-    category: 'sport',
-    subcategory: 'basketball',
+    category: 'basketball',
     location: "Sala tudor",
     date: '2023-03-09 20:00 EET',
     duration: '120',
@@ -157,13 +167,13 @@ events.value = [
     totalSpots: 12,
     createdBy: 'John Doe',
     showDetails: false,
-    allowReserves: true
+    allowReserves: true,
+    participants: []
   },
   {
     id: 4,
     title: 'Meci volei',
-    category: 'sport',
-    subcategory: 'Volei',
+    category: 'Volei',
     location: "Sala tudor",
     date: '2023-03-09 20:00 EET',
     duration: '120',
@@ -173,7 +183,8 @@ events.value = [
     totalSpots: 12,
     createdBy: 'John Doe',
     showDetails: false,
-    allowReserves: true
+    allowReserves: true,
+    participants: []
   },
 ];
 

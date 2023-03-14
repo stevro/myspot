@@ -22,7 +22,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
 
-      <v-toolbar-title>App</v-toolbar-title>
+      <v-toolbar-title><span id="pageTitle">App</span></v-toolbar-title>
 
 
     </v-app-bar>
