@@ -41,7 +41,77 @@ export const useNomenclaturesStore = defineStore('nomenclatures', {
         categories.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
         return {
-            categories: categories
+            categories: categories,
+            durations: [
+                {
+                    name:'30 min',
+                    value: 30,
+                },
+                {
+                    name:'1h',
+                    value: 60,
+                },
+                {
+                    name:'1h 30min',
+                    value: 90,
+                },
+                {
+                    name:'2h',
+                    value: 120,
+                },
+                {
+                    name:'2h 30min',
+                    value: 150,
+                },
+                {
+                    name:'3h',
+                    value: 180,
+                },
+                {
+                    name:'3h 30min',
+                    value: 210,
+                },
+                {
+                    name:'4h',
+                    value: 240,
+                },
+                {
+                    name:'5h',
+                    value: 300,
+                },
+                {
+                    name:'6h',
+                    value: 360,
+                },
+                {
+                    name:'7h',
+                    value: 420,
+                },
+                {
+                    name:'8h',
+                    value: 480,
+                },
+                {
+                    name:'9h',
+                    value: 540,
+                },
+                {
+                    name:'10h',
+                    value: 590,
+                },
+                {
+                    name:'11h',
+                    value: 660,
+                },
+                {
+                    name:'12h',
+                    value: 720,
+                },
+                {
+                    name:'24h',
+                    value: 1440,
+                },
+            ]
         };
     },
     getters: {

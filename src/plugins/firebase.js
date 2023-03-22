@@ -2,6 +2,7 @@
 import {initializeApp} from "firebase/app";
 
 import {getAnalytics} from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -17,5 +18,7 @@ export const initFirebase = (Vue) => {
     // Initialize Firebase
     const firebase = initializeApp(firebaseConfig)
     const analytics = getAnalytics(firebase);
+    const firestore = getFirestore(firebase);
     Vue.provide('firebase', firebase)
+    Vue.provide('firestore', firestore)
 };

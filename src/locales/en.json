@@ -20,7 +20,7 @@
   },
   "sidebar": {
     "hello": "Hello",
-    "dashboard": "Dashboard",
+    "dashboard": "Events",
     "logout": "Logout",
     "language_switch": "Change language"
 

@@ -36,6 +36,7 @@ export default createVuetify({
             variant: 'solo',
             density: 'compact',
             hideDetails: 'auto',
+            bgColor: 'white',
         },
         VSelect: {
             variant: 'solo',
