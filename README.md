@@ -2,6 +2,7 @@
 An app for booking a spot in a team / to an event / etc.
 
 # To do
+[x] Authentication
 [x] Add new event
 [x] Show events list
 [] Edit event
