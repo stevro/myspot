@@ -15,3 +15,4 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Notify reserves about open spot
 - [ ] Share event on FB/Whatsapp
 - [ ] Show directions to event place
+- [ ] Add minimum security on backend, e.g. check event author on update

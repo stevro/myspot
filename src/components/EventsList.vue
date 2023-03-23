@@ -246,6 +246,16 @@ function searchEvents() {
 }
 
 function deleteSpotEvent(spotEvent) {
+
+  if (!spotEvent.isAuthor(userStore.id)) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Permission denied',
+      confirmButtonColor: "#3085d6"
+    })
+    return
+  }
+
   Swal.fire({
     title: 'Are you sure?',
     //text: "You won't be able to revert this!",

@@ -149,6 +149,8 @@ import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import moment from "moment";
 
 import SpotEvent from "@/models/spotEvent";
+import {useUserStore} from "@/stores/user";
+import Swal from 'sweetalert2'
 
 const firestore = inject('firestore')
 const spotEvent = ref(new SpotEvent())
@@ -159,6 +161,7 @@ const router = useRouter()
 const nomenclatures = useNomenclaturesStore()
 const isSaved = ref(false)
 const spotEventForm = ref(null)
+const userStore = useUserStore()
 
 const rules = ref({
   'required': [
@@ -190,6 +193,15 @@ async function cancel() {
 
 async function submitEvent() {
   try {
+
+    if (!spotEvent.value.isAuthor(userStore.id)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Permission denied',
+        confirmButtonColor: "#3085d6"
+      })
+      return
+    }
 
     spotEvent.value.updatedAt = moment().format('YYYY-MM-DD HH:mm Z')
 
