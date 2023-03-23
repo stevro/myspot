@@ -67,7 +67,7 @@
                                               :label="$t('event.date')"
                                               minute-interval="5"
                                               min-date="now"
-                                              first-day-of-week="1"
+                                              :first-day-of-week="1"
                                               format="YYYY-MM-DD HH:mm"
                                               formatted="DD-MM-YYYY HH:mm"
                                               output-format="YYYY-MM-DD HH:mm"
@@ -155,6 +155,13 @@
         >
           Back
         </v-btn>
+        <v-btn
+            v-if="step === 1"
+            variant="text"
+            :to="{name:'dashboard'}"
+        >
+          Back to list
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn
             v-if="step < 3"
@@ -241,21 +248,6 @@ const currentTitle = computed(() => {
 
 const newEvent = ref(new SpotEvent())
 
-// const newEvent = ref({
-//   id: null,
-//   title: '',
-//   category: null,
-//   location: "",
-//   date: '',
-//   duration: '',
-//   description: '',
-//   bookedSpots: null,
-//   totalSpots: null,
-//   authorName: '',
-//   allowReserves: true,
-//   participants: [],
-//   createdAt: null
-// })
 
 async function isStepValid(stepForm) {
   const {valid} = await stepForm.validate()

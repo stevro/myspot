@@ -10,7 +10,7 @@
             label=""
             append-inner-icon="mdi-magnify"
             variant="solo"
-            placeholder="Search for an eventItem"
+            placeholder="Search for an event"
             density="compact"
             :loading="isSearching"
         ></v-text-field>
@@ -52,7 +52,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-for="eventItem in eventsList" v-bind:key="id">
+    <v-row v-for="eventItem in eventsList" v-bind:key="eventItem.id">
       <v-col>
         <v-card :prepend-icon="eventItem.spotEvent.category.icon" :title="eventItem.spotEvent.title"
                 :subtitle="eventItem.spotEvent.category.name">
@@ -111,7 +111,7 @@
                 <v-btn
                     color="accent"
                     icon="mdi-note-edit-outline"
-                    @click=""
+                    :to="{name:'edit-event',params:{'eventId':eventItem.spotEvent.id}}"
                     variant="plain"
                     v-if="eventItem.spotEvent.isAuthor(userStore.id)"
                 ></v-btn>
@@ -238,7 +238,7 @@ function searchEvents() {
 
     querySnapshot.forEach((doc) => {
       let data = doc.data();
-      data.id = doc.id;
+
       events.value.push(new EventListItem(data))
     });
 

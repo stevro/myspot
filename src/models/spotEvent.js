@@ -16,8 +16,10 @@ export default class SpotEvent {
     author = Author
     allowReserves = true
     participants = []
+    createdAt = null
+    updatedAt = null
 
-    constructor(title = '', description = '', category = new Category()) {
+    constructor(title = '', description = '', category) {
         this.title = title;
         this.description = description;
         this.category = category;

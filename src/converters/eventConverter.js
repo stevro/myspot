@@ -17,7 +17,9 @@ const eventConverter = {
             author: authorConverter.toFirestore(event.author),
             showDetails: event.showDetails,
             allowReserves: event.allowReserves,
-            participants: event.participants
+            participants: event.participants,
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
         };
     },
     fromFirestore: (snapshot, options) => {
@@ -27,7 +29,7 @@ const eventConverter = {
         data.author = authorConverter.init(data.author);
 
         let event = new SpotEvent();
-
+        event.id = snapshot.id
         Object.assign(event, data);
 
         return event;

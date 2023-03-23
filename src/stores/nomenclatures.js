@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import Category from "@/models/category";
 
 
 export const useNomenclaturesStore = defineStore('nomenclatures', {

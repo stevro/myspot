@@ -31,6 +31,15 @@ const router = createRouter({
                     }
                 },
                 {
+                    path: '/event/:eventId/edit',
+                    name: 'edit-event',
+                    component: () => import('@/views/EditEvent.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        title: 'Edit event',
+                    }
+                },
+                {
                     path: '/profile',
                     name: 'profile',
                     component: () => import('@/views/Profile.vue'),
