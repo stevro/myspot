@@ -68,9 +68,9 @@
                                               minute-interval="5"
                                               min-date="now"
                                               first-day-of-week="1"
-                                              format="YYYY-MM-DD hh:mm"
-                                              formatted="DD-MM-YYYY hh:mm"
-                                              output-format="YYYY-MM-DD hh:mm"
+                                              format="YYYY-MM-DD HH:mm"
+                                              formatted="DD-MM-YYYY HH:mm"
+                                              output-format="YYYY-MM-DD HH:mm"
 
                     ></vue-ctk-date-time-picker>
                   </v-validation>
@@ -126,7 +126,7 @@
 
               <v-col cols="12" class="py-1">
                 <v-icon>mdi-calendar-month</v-icon>
-                {{ newEvent.date }}
+                {{ newEvent.displayDate() }}
               </v-col>
               <v-col cols="12" class="py-1">
                 <v-icon>mdi-map-marker</v-icon>
@@ -200,6 +200,9 @@ import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import {addDoc, collection} from "firebase/firestore";
 import {useUserStore} from "@/stores/user";
 import moment from "moment/moment";
+import eventConverter from "@/converters/eventConverter";
+import SpotEvent from "@/models/spotEvent";
+import Author from "@/models/author";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
@@ -236,21 +239,23 @@ const currentTitle = computed(() => {
   }
 })
 
-const newEvent = ref({
-  id: null,
-  title: '',
-  category: null,
-  location: "",
-  date: '',
-  duration: '',
-  description: '',
-  bookedSpots: null,
-  totalSpots: null,
-  createdBy: '',
-  allowReserves: true,
-  participants: [],
-  createdAt: null
-})
+const newEvent = ref(new SpotEvent())
+
+// const newEvent = ref({
+//   id: null,
+//   title: '',
+//   category: null,
+//   location: "",
+//   date: '',
+//   duration: '',
+//   description: '',
+//   bookedSpots: null,
+//   totalSpots: null,
+//   authorName: '',
+//   allowReserves: true,
+//   participants: [],
+//   createdAt: null
+// })
 
 async function isStepValid(stepForm) {
   const {valid} = await stepForm.validate()
@@ -279,9 +284,10 @@ async function validateStep() {
 async function submitEvent() {
   try {
 
-    newEvent.value.createdAt = moment().format('YYYY-MM-DD HH:mm')
-    newEvent.value.createdBy = userStore.displayName
-    const docRef = await addDoc(collection(firestore, "events"), newEvent.value);
+    newEvent.value.createdAt = moment().format('YYYY-MM-DD HH:mm Z')
+    newEvent.value.author = new Author(userStore.id, userStore.displayName)
+
+    const docRef = (await addDoc(collection(firestore, "spot_events").withConverter(eventConverter), newEvent.value));
     console.log("Document written with ID: ", docRef.id);
     isSaved.value = true
   } catch (e) {

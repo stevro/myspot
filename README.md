@@ -6,8 +6,9 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Add new event
 - [x] Show events list
 - [ ] Edit event
+- [x] Delete event
 - [ ] Book spot/withdraw
-- [ ] Search events
+- [x] Search events
 - [ ] Archive old events
 - [ ] Notify users about new event
 - [ ] Notify reserves about open spot

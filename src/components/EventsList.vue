@@ -10,7 +10,7 @@
             label=""
             append-inner-icon="mdi-magnify"
             variant="solo"
-            placeholder="Search for an event"
+            placeholder="Search for an eventItem"
             density="compact"
             :loading="isSearching"
         ></v-text-field>
@@ -20,32 +20,59 @@
       </v-col>
     </v-row>
 
-    <!--    <v-row>-->
-    <!--      <v-col cols="12">-->
+    <v-row v-if="isLoading">
+      <v-col cols="12">
 
-    <!--<v-progress-linear indeterminate color="primary"></v-progress-linear>-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
+        <v-progress-linear indeterminate color="primary"></v-progress-linear>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="events.length === 0">
+      <v-col cols="12">
+        <v-card>
 
-    <v-row v-for="event in events" v-bind:key="id">
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" class="text-center">
+                <h3>No events found :(</h3>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+
+          <v-card-actions>
+            <v-btn size="small" color="success" variant="flat" block
+                   :to="{'name':'new-event'}"
+            >{{
+                $t('eventItem.create_one_now')
+              }}
+            </v-btn>
+          </v-card-actions>
+
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row v-for="eventItem in eventsList" v-bind:key="id">
       <v-col>
-        <v-card :prepend-icon="event.category.icon" :title="event.title" :subtitle="event.category.name">
+        <v-card :prepend-icon="eventItem.spotEvent.category.icon" :title="eventItem.spotEvent.title"
+                :subtitle="eventItem.spotEvent.category.name">
           <template v-slot:prepend>
             <v-icon size="x-large"></v-icon>
           </template>
+
           <v-card-text>
             <v-row no-gutters>
               <v-col cols="12" class="py-1">
-                {{ event.description }}
+                {{ eventItem.spotEvent.description }}
               </v-col>
 
               <v-col cols="12" class="py-1">
                 <v-icon>mdi-calendar-month</v-icon>
-                {{ event.date }}
+                {{ eventItem.spotEvent.displayDate() }}
               </v-col>
               <v-col cols="12" class="py-1">
                 <v-icon>mdi-map-marker</v-icon>
-                {{ event.location }}
+                {{ eventItem.spotEvent.location }}
               </v-col>
 
 
@@ -55,42 +82,58 @@
 
           <v-card-actions>
             <v-row>
-              <v-col cols="12" v-if="canBookSpot(event)">
-                <v-btn  size="small" color="primary" variant="flat" block>{{
-                    $t('event.book_spot')
+              <v-col cols="12" v-if="canBookSpot(eventItem)">
+                <v-btn size="small" color="primary" variant="flat" block>{{
+                    $t('eventItem.book_spot')
                   }}
                 </v-btn>
 
               </v-col>
-            <v-col cols="12" v-else>
-              <v-btn  size="small" color="primary" variant="flat" disabled block>{{
-                  $t('event.fully_booked')
-                }}
-              </v-btn>
-            </v-col>
-              <v-col cols="12">
-                <v-btn size="small" color="success" disabled variant="flat" block>{{
-                    $t('event.booked')
+              <v-col cols="12" v-else>
+                <v-btn size="small" color="primary" variant="flat" disabled block>{{
+                    $t('eventItem.fully_booked')
                   }}
                 </v-btn>
               </v-col>
-              <v-col cols="12">
-                <v-btn size="small" color="error" variant="flat" block>{{
-                    $t('event.withdraw')
-                  }}
-                </v-btn>
+              <!--              <v-col cols="12">-->
+              <!--                <v-btn size="small" color="success" disabled variant="flat" block>{{-->
+              <!--                    $t('eventItem.booked')-->
+              <!--                  }}-->
+              <!--                </v-btn>-->
+              <!--              </v-col>-->
+              <!--              <v-col cols="12">-->
+              <!--                <v-btn size="small" color="error" variant="flat" block>{{-->
+              <!--                    $t('eventItem.withdraw')-->
+              <!--                  }}-->
+              <!--                </v-btn>-->
+              <!--              </v-col>-->
+              <v-col cols="6" class="text-left pt-0">
+                <v-btn
+                    color="accent"
+                    icon="mdi-note-edit-outline"
+                    @click=""
+                    variant="plain"
+                    v-if="eventItem.spotEvent.isAuthor(userStore.id)"
+                ></v-btn>
+                <v-btn
+                    color="red"
+                    icon="mdi-delete"
+                    @click="deleteSpotEvent(eventItem.spotEvent)"
+                    variant="plain"
+                    v-if="eventItem.spotEvent.isAuthor(userStore.id)"
+                ></v-btn>
               </v-col>
-              <v-spacer></v-spacer>
-              <v-btn
-
-                  color="accent"
-                  :icon="event.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-                  @click="event.showDetails = !event.showDetails"
-              ></v-btn>
+              <v-col cols="6" class="text-right pt-0">
+                <v-btn
+                    color="accent"
+                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+                    @click="eventItem.showDetails = !eventItem.showDetails"
+                ></v-btn>
+              </v-col>
             </v-row>
           </v-card-actions>
           <v-expand-transition>
-            <div v-show="event.showDetails">
+            <div v-show="eventItem.showDetails">
               <v-divider></v-divider>
 
               <v-card-text>
@@ -98,11 +141,11 @@
 
                   <v-col cols="12" class="py-1">
                     <v-icon>mdi-account-group</v-icon>
-                    {{ event.bookedSpots }} / {{ event.totalSpots }}
+                    {{ eventItem.spotEvent.bookedSpots }} / {{ eventItem.spotEvent.totalSpots }}
                   </v-col>
                   <v-col cols="12" class="py-1">
                     <v-icon>mdi-account</v-icon>
-                    {{ event.createdBy }}
+                    {{ eventItem.spotEvent.author }}
                   </v-col>
                 </v-row>
 
@@ -121,107 +164,103 @@
 <script setup>
 
 import {useI18n} from "vue-i18n";
-import {computed, inject, ref} from "vue";
+import {computed, inject, onMounted, ref, watch} from "vue";
 import moment from 'moment';
+import {collection, deleteDoc, doc, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import eventConverter from "@/converters/eventConverter";
+import {useUserStore} from "@/stores/user";
+import Swal from 'sweetalert2'
+import EventListItem from "@/models/eventListItem";
+
 const {t} = useI18n()
 const firestore = inject('firestore')
-
+const isLoading = ref(true)
 const search = ref('')
-const isSearching = computed(function () {
-  return search.value?.length > 0
-})
+const isSearching = ref(false);
+
+const userStore = useUserStore()
 
 const events = ref([])
 
-// events.value = [
-//   {
-//     id: 1,
-//     title: 'Meci volei',
-//     category: 'Volei',
-//     location: "Sala tudor",
-//     date: '2023-03-09 20:00 EET',
-//     duration: '120',
-//     description: 'Se joaca 3 echipe a cate 6 timp de 2 ore',
-//     icon: 'mdi-volleyball',
-//     bookedSpots: 3,
-//     totalSpots: 12,
-//     createdBy: 'John Doe',
-//     showDetails: false,
-//     allowReserves: true,
-//     participants: []
-//   },
-//   {
-//     id: 2,
-//     title: 'Meci volei',
-//     category: 'football',
-//     location: "Sala tudor",
-//     date: '2023-03-09 20:00 EET',
-//     duration: '120',
-//     description: 'Se joaca 3 echipe a cate 6 timp de 2 ore',
-//     icon: 'mdi-soccer',
-//     bookedSpots: 12,
-//     totalSpots: 12,
-//     createdBy: 'John Doe',
-//     showDetails: false,
-//     allowReserves: false,
-//     participants: []
-//   },
-//   {
-//     id: 3,
-//     title: 'Meci volei',
-//     category: 'basketball',
-//     location: "Sala tudor",
-//     date: '2023-03-09 20:00 EET',
-//     duration: '120',
-//     description: 'Se joaca 3 echipe a cate 6 timp de 2 ore',
-//     icon: 'mdi-basketball',
-//     bookedSpots: 14,
-//     totalSpots: 12,
-//     createdBy: 'John Doe',
-//     showDetails: false,
-//     allowReserves: true,
-//     participants: []
-//   },
-//   {
-//     id: 4,
-//     title: 'Meci volei',
-//     category: 'Volei',
-//     location: "Sala tudor",
-//     date: '2023-03-09 20:00 EET',
-//     duration: '120',
-//     description: 'Se joaca 3 echipe a cate 6 timp de 2 ore',
-//     icon: 'mdi-volleyball',
-//     bookedSpots: 3,
-//     totalSpots: 12,
-//     createdBy: 'John Doe',
-//     showDetails: false,
-//     allowReserves: true,
-//     participants: []
-//   },
-// ];
+watch(search, function (newSearch, oldSearch) {
+  isSearching.value = false;
+  if (!newSearch || newSearch.length === 0) {
+    events.value.map(function (eventListItem) {
+      eventListItem.isVisible = true;
+    })
+    return;
+  }
+  if (newSearch.length < 3) {
+    return;
+  }
 
-function canBookSpot(event) {
-  return !isFull(event) || event.allowReserves
+  isSearching.value = true;
+
+  events.value.map(function (eventListItem) {
+
+    if (eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)) {
+      eventListItem.isVisible = true;
+      return;
+    }
+
+    eventListItem.isVisible = false
+  })
+
+  isSearching.value = false;
+
+})
+
+const eventsList = computed(function () {
+  return events.value.filter(function (item) {
+    return item.isVisible
+  })
+})
+
+onMounted(() => {
+  searchEvents()
+})
+
+function canBookSpot(eventItem) {
+  return !isFull(eventItem.spotEvent) || eventItem.spotEvent.allowReserves
 }
 
-function isFull(event) {
-  return event.totalSpots === event.bookedSpots;
+function isFull(spotEvent) {
+  return spotEvent.totalSpots === spotEvent.bookedSpots;
 }
 
-import { query, orderBy, where, onSnapshot, collection } from "firebase/firestore";
+function searchEvents() {
+  let now = moment().format('YYYY-MM-DD HH:mm')
 
+  const q = query(collection(firestore, "spot_events"), where('date', '>=', now), orderBy('date', 'asc')).withConverter(eventConverter);
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    isLoading.value = false;
+    events.value = [];
 
-let now = moment().format('YYYY-MM-DD HH:mm')
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      data.id = doc.id;
+      events.value.push(new EventListItem(data))
+    });
 
-const q = query(collection(firestore, "events"),where('date','>=',now),orderBy('date','asc'));
-const unsubscribe = onSnapshot(q, (querySnapshot) => {
-events.value=[];
-  querySnapshot.forEach((doc) => {
-
-    events.value.push(doc.data())
   });
+}
 
-});
+function deleteSpotEvent(spotEvent) {
+  Swal.fire({
+    title: 'Are you sure?',
+    //text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteDoc(doc(firestore, "spot_events", spotEvent.id));
+    }
+  })
+
+}
 
 </script>
 

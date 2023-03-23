@@ -3,6 +3,7 @@ import {defineStore} from 'pinia'
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
+      id: localStorage.getItem('user-uid') || null,
       displayName: localStorage.getItem('user-displayName') || null,
       email: localStorage.getItem('user-email') || null,
       locale: localStorage.getItem('user-locale') || 'en',
@@ -14,6 +15,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     setUser(user) {
 
+      localStorage.setItem('user-uid', user.uid);
       localStorage.setItem('user-displayName', user.displayName);
       localStorage.setItem('user-email', user.email);
       localStorage.setItem('user-locale', user.locale||'en');

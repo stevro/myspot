@@ -8,8 +8,8 @@ export const useNomenclaturesStore = defineStore('nomenclatures', {
 
                 {
                     id: 1,
-                    name: 'Voleyball',
-                    icon: 'mdi-voleyball'
+                    name: 'Volleyball',
+                    icon: 'mdi-volleyball'
                 },
                 {
                     id: 2,
@@ -24,7 +24,7 @@ export const useNomenclaturesStore = defineStore('nomenclatures', {
                 {
                     id: 4,
                     name: 'Tennis',
-                    icon: 'mdi-tenis-ball'
+                    icon: 'mdi-tennis'
                 },
                 {
                     id: 5,
