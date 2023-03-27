@@ -52,7 +52,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-for="eventItem in eventsList" v-bind:key="eventItem.id">
+    <v-row v-for="eventItem in visibleEventsList" v-bind:key="eventItem.id">
       <v-col>
         <v-card :prepend-icon="eventItem.spotEvent.category.icon" :title="eventItem.spotEvent.title"
                 :subtitle="eventItem.spotEvent.category.name">
@@ -82,12 +82,8 @@
 
           <v-card-actions>
             <v-row>
-              <v-col cols="12" v-if="canBookSpot(eventItem)">
-                <v-btn size="small" color="primary" variant="flat" block>{{
-                    $t('eventItem.book_spot')
-                  }}
-                </v-btn>
-
+              <v-col cols="12" v-if="hasSpotsAvailable(eventItem.spotEvent)">
+                <book-spot :spot-event="eventItem.spotEvent"></book-spot>
               </v-col>
               <v-col cols="12" v-else>
                 <v-btn size="small" color="primary" variant="flat" disabled block>{{
@@ -95,18 +91,9 @@
                   }}
                 </v-btn>
               </v-col>
-              <!--              <v-col cols="12">-->
-              <!--                <v-btn size="small" color="success" disabled variant="flat" block>{{-->
-              <!--                    $t('eventItem.booked')-->
-              <!--                  }}-->
-              <!--                </v-btn>-->
-              <!--              </v-col>-->
-              <!--              <v-col cols="12">-->
-              <!--                <v-btn size="small" color="error" variant="flat" block>{{-->
-              <!--                    $t('eventItem.withdraw')-->
-              <!--                  }}-->
-              <!--                </v-btn>-->
-              <!--              </v-col>-->
+              <v-col cols="12" v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
+                <withdraw :spot-event="eventItem.spotEvent"></withdraw>
+              </v-col>
               <v-col cols="6" class="text-left pt-0">
                 <v-btn
                     color="accent"
@@ -141,7 +128,7 @@
 
                   <v-col cols="12" class="py-1">
                     <v-icon>mdi-account-group</v-icon>
-                    {{ eventItem.spotEvent.bookedSpots }} / {{ eventItem.spotEvent.totalSpots }}
+                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}
                   </v-col>
                   <v-col cols="12" class="py-1">
                     <v-icon>mdi-account</v-icon>
@@ -171,6 +158,8 @@ import eventConverter from "@/converters/eventConverter";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
 import EventListItem from "@/models/eventListItem";
+import BookSpot from "@/components/BookSpot.vue";
+import Withdraw from "@/components/Withdraw.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
@@ -210,7 +199,7 @@ watch(search, function (newSearch, oldSearch) {
 
 })
 
-const eventsList = computed(function () {
+const visibleEventsList = computed(function () {
   return events.value.filter(function (item) {
     return item.isVisible
   })
@@ -220,13 +209,12 @@ onMounted(() => {
   searchEvents()
 })
 
-function canBookSpot(eventItem) {
-  return !isFull(eventItem.spotEvent) || eventItem.spotEvent.allowReserves
+
+function hasSpotsAvailable(spotEvent) {
+
+  return !spotEvent.isFull()
 }
 
-function isFull(spotEvent) {
-  return spotEvent.totalSpots === spotEvent.bookedSpots;
-}
 
 function searchEvents() {
   let now = moment().format('YYYY-MM-DD HH:mm')

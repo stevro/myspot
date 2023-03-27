@@ -6,7 +6,9 @@
     }
   },
   "login": {
-    "welcome": "Bine ați venit"
+    "welcome": "Bine ați venit",
+    "email": "Email",
+    "password": "Parola"
   },
   "sidebar": {
     "hello": "Salut",

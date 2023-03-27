@@ -107,7 +107,11 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to) => {
     nextTick(() => {
         document.title = to.meta.title || import.meta.env.VITE_APP_DEFAULT_TITLE;
-        document.getElementById('pageTitle').textContent = to.meta.title || import.meta.env.VITE_APP_DEFAULT_TITLE;
+        let pageTitleElement = document.getElementById('pageTitle')
+
+            if(typeof pageTitleElement !== 'undefined' && pageTitleElement !== null) {
+                pageTitleElement.textContent = to.meta.title || import.meta.env.VITE_APP_DEFAULT_TITLE;
+            }
     });
 });
 

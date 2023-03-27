@@ -11,11 +11,11 @@ export default class SpotEvent {
     date = null
     duration = null
     description = ''
-    bookedSpots = 0
     totalSpots = null
     author = Author
     allowReserves = true
     participants = []
+    reserves = []
     createdAt = null
     updatedAt = null
 
@@ -35,6 +35,64 @@ export default class SpotEvent {
         }
 
         return userId === this.author.id;
+    }
+
+    isFull() {
+        if (this.allowReserves === true) {
+            return false;
+        }
+
+        return this.bookedSpots() >= this.totalSpots;
+    }
+
+    addReserve(participant) {
+        this.reserves.push(participant)
+    }
+
+    addParticipant(participant) {
+
+        if (this.participants.length >= this.totalSpots) {
+            if (false === this.allowReserves) {
+                throw new Error('Maximum number of spots reached!')
+            }
+
+            this.addReserve(participant)
+            return;
+        }
+
+        this.participants.push(participant)
+
+        this.updatedAt = moment().format('YYYY-MM-DD HH:mm Z')
+    }
+
+    bookedSpots() {
+        return this.participants.length + this.reserves.length
+    }
+
+    isParticipant(userId) {
+        return this.participants.filter(function (p) {
+            return p.id === userId
+        }).length > 0;
+    }
+
+    isReserve(userId) {
+        return this.reserves.filter(function (p) {
+            return p.id === userId
+        }).length > 0;
+    }
+
+    hasBookedSpot(userId) {
+        return this.isParticipant(userId) || this.isReserve(userId)
+    }
+
+    withdraw(userId) {
+        this.participants = this.participants.filter(function (p) {
+            return p.id !== userId
+        })
+        this.reserves = this.reserves.filter(function (p) {
+            return p.id !== userId
+        })
+
     }
 
     toString() {

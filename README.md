@@ -7,7 +7,7 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Show events list
 - [x] Edit event
 - [x] Delete event
-- [ ] Book spot/withdraw
+- [x] Book spot/withdraw
 - [x] Search events
 - [ ] Archive old events
 - [ ] Auto promote reserve to first team on withdrawal

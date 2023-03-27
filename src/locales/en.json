@@ -16,7 +16,9 @@
     }
   },
   "login": {
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "email": "Email",
+    "password": "Password"
   },
   "sidebar": {
     "hello": "Hello",

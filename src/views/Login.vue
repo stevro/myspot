@@ -8,10 +8,44 @@
         <v-col cols="12" lg="4" sm="6">
           <h1>{{ $t('login.welcome') }}</h1>
         </v-col>
-        <v-col cols="12" lg="4" sm="6">
+        <v-col cols="12" md="4" sm="6">
+          <v-form @submit.prevent="signIn('email')" ref="loginForm">
+            <v-row>
+              <v-col cols="12">
+                <h3>Sign in</h3>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field variant="underlined" prepend-icon="mdi-email" v-model="email"
+                              :label="t('login.email')"
+                              :rules="[v => !!v || 'Is required']"
+                              v-on:keyup.enter="signIn('email')"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field variant="underlined" prepend-icon="mdi-key" type="password" v-model="password"
+                              :label="t('login.password')"
+                              :rules="[v => !!v || 'Is required']"
+                              v-on:keyup.enter="signIn('email')"
+                              autocomplete="current-password"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-btn variant="flat" color="accent" block @click="signIn('email')">Sign in</v-btn>
+              </v-col>
+              <!--            <v-col cols="12">-->
+              <!--              <v-btn variant="text" size="small" block :to="{name:'register'}">No account? Register!</v-btn>-->
+              <!--            </v-col>-->
+            </v-row>
+          </v-form>
+          <v-row>
+            <v-col cols="12">
+              <h3>or use</h3>
+            </v-col>
+            <v-col cols="12">
+              <v-btn variant="flat" block prepend-icon="mdi-facebook" @click="signIn('facebook')">Facebook</v-btn>
+            </v-col>
 
-            <v-btn variant="flat" prepend-icon="mdi-facebook" @click="signIn">Sign in</v-btn>
-
+          </v-row>
         </v-col>
       </v-row>
 
@@ -24,8 +58,14 @@
 <script setup>
 
 import {useI18n} from 'vue-i18n'
-import {FacebookAuthProvider, getAuth, onAuthStateChanged, signInWithRedirect} from "firebase/auth";
-import {inject} from "vue";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithRedirect
+} from "firebase/auth";
+import {inject, ref} from "vue";
 import {useAuthenticationStore} from "@/stores/auth";
 import {useUserStore} from "@/stores/user";
 import router from "@/router";
@@ -35,6 +75,10 @@ const authStore = useAuthenticationStore()
 const userStore = useUserStore()
 const firebase = inject('firebase')
 
+const loginForm = ref(null)
+const email = ref('')
+const password = ref('')
+
 const provider = new FacebookAuthProvider();
 provider.addScope('public_profile');
 provider.addScope('email');
@@ -43,47 +87,42 @@ const auth = getAuth();
 
 auth.useDeviceLanguage();
 
-function signIn() {
-  signInWithRedirect(auth, provider)
-//   signInWithPopup(auth, provider)
-//       .then((result) => {
-//         // The signed-in user info.
-//         const user = result.user;
-//
-//         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-//         const credential = FacebookAuthProvider.credentialFromResult(result);
-//         const accessToken = credential.accessToken;
-// console.log(credential)
-//         // IdP data available using getAdditionalUserInfo(result)
-//         // ...
-//       })
-//       .catch((error) => {
-//         // Handle Errors here.
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         // The email of the user's account used.
-//         const email = error.customData.email;
-//         // The AuthCredential type that was used.
-//         const credential = FacebookAuthProvider.credentialFromError(error);
-// console.log(error)
-//         // ...
-//       });
+
+async function signIn(providerType) {
+
+  if (providerType === 'email') {
+    if(true === await isLoginFormValid()){
+
+      await signInWithEmailAndPassword(auth, email.value, password.value)
+    }
+  } else {
+    await signInWithRedirect(auth, provider)
+  }
+
 }
 
 onAuthStateChanged(auth, (user) => {
+
   if (user) {
     // console.log(user);
 
     authStore.authenticate(user)
     userStore.setUser(user)
 
-    router.push({name: 'dashboard'})
+    console.log('push')
+    router.push({'name': 'dashboard'})
   } else {
     authStore.clearAuthToken()
     userStore.clearUserData()
     router.push({'name': 'login'})
   }
 });
+
+async function isLoginFormValid() {
+  const {valid} = await loginForm.value.validate()
+
+  return valid;
+}
 
 </script>
 

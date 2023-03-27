@@ -95,7 +95,7 @@
 
       <v-card-actions>
         <v-row v-if="!isSaved">
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
             <v-btn
                 color="accent"
                 variant="flat"
@@ -105,7 +105,7 @@
               Cancel
             </v-btn>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="2">
             <v-btn
                 color="primary"
                 variant="flat"
@@ -209,6 +209,7 @@ async function submitEvent() {
 
     isSaved.value = true
   } catch (e) {
+    isSaved.value = false
     console.error("Error adding document: ", e);
   }
 }

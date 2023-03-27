@@ -12,12 +12,11 @@ const eventConverter = {
             date: event.date,
             duration: event.duration,
             description: event.description,
-            bookedSpots: event.bookedSpots,
             totalSpots: event.totalSpots,
             author: authorConverter.toFirestore(event.author),
-            showDetails: event.showDetails,
             allowReserves: event.allowReserves,
             participants: event.participants,
+            reserves: event.reserves,
             createdAt: event.createdAt,
             updatedAt: event.updatedAt,
         };
