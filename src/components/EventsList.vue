@@ -3,20 +3,28 @@
   <v-container>
 
     <v-row>
-      <v-col cols="12" md="9">
-        <v-text-field
+      <v-col cols="12" md="7">
+        <v-combobox
+            :placeholder="$t('eventItem.search')"
             v-model="search"
+            :items="nomenclatures.categories"
+            item-title="name"
             clearable
+            variant="solo"
             label=""
             append-inner-icon="mdi-magnify"
-            variant="solo"
-            :placeholder="$t('eventItem.search')"
             density="compact"
             :loading="isSearching"
-        ></v-text-field>
+        ></v-combobox>
       </v-col>
+      <v-col cols="6" md="2">
+        <v-switch color="primary" label="Created by me" inset v-model="showOnlyCreatedByMe"></v-switch>
+      </v-col>
+<!--      <v-col cols="6" md="2">-->
+<!--        <v-switch color="primary" label="Booked by me" inset v-model="showOnlyBookedByMe"></v-switch>-->
+<!--      </v-col>-->
       <v-col cols="12" md="3">
-        <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">{{$t('common.btn.new')}}</v-btn>
+        <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">{{ $t('common.btn.new') }}</v-btn>
       </v-col>
     </v-row>
 
@@ -26,14 +34,14 @@
         <v-progress-linear indeterminate color="primary"></v-progress-linear>
       </v-col>
     </v-row>
-    <v-row v-else-if="events.length === 0">
+    <v-row v-else-if="visibleEventsList.length === 0">
       <v-col cols="12">
         <v-card>
 
           <v-card-text>
             <v-row>
               <v-col cols="12" class="text-center">
-                <h3>{{$t('eventItem.not_found')}}</h3>
+                <h3>{{ $t('eventItem.not_found') }}</h3>
               </v-col>
             </v-row>
           </v-card-text>
@@ -85,7 +93,8 @@
               <v-col cols="12">
                 <book-spot :spot-event="eventItem.spotEvent"></book-spot>
               </v-col>
-              <v-col cols="12" v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
+              <v-col cols="12"
+                     v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
                 <withdraw :spot-event="eventItem.spotEvent"></withdraw>
               </v-col>
               <v-col cols="6" class="text-left pt-0">
@@ -145,7 +154,7 @@
 <script setup>
 
 import {useI18n} from "vue-i18n";
-import {computed, inject, onMounted, ref, watch} from "vue";
+import {computed, inject, nextTick, onMounted, ref, watch} from "vue";
 import moment from 'moment';
 import {collection, deleteDoc, doc, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
@@ -154,44 +163,115 @@ import Swal from 'sweetalert2'
 import EventListItem from "@/models/eventListItem";
 import BookSpot from "@/components/BookSpot.vue";
 import Withdraw from "@/components/Withdraw.vue";
+import {useNomenclaturesStore} from "@/stores/nomenclatures";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
 const isLoading = ref(true)
 const search = ref('')
 const isSearching = ref(false);
-
+const nomenclatures = useNomenclaturesStore()
 const userStore = useUserStore()
-
+const showOnlyCreatedByMe = ref(false)
+const showOnlyBookedByMe = ref(false)
 const events = ref([])
 
-watch(search, function (newSearch, oldSearch) {
-  isSearching.value = false;
-  if (!newSearch || newSearch.length === 0) {
-    events.value.map(function (eventListItem) {
-      eventListItem.isVisible = true;
-    })
-    return;
-  }
-  if (newSearch.length < 3) {
-    return;
-  }
+watch(showOnlyCreatedByMe, function () {
+  setTimeout(function(){
+    filterEvents()
+  }, 50)
+})
+watch(showOnlyBookedByMe, function () {
+  setTimeout(function(){
+    filterEvents()
+  }, 50)
+})
 
+watch(search, function (newSearch, oldSearch) {
+  setTimeout(function(){
+    filterEvents()
+  }, 50)
+})
+
+function filterEvents() {
   isSearching.value = true;
 
-  events.value.map(function (eventListItem) {
+  let newSearch = search.value;
+  if (!newSearch || typeof newSearch === 'undefined' || newSearch.length === 0) {
+    events.value.map(function (eventListItem) {
 
-    if (eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)) {
-      eventListItem.isVisible = true;
+      if (showOnlyCreatedByMe.value === false) {
+        eventListItem.isVisible = true;
+        return;
+      }
+
+      if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
+        eventListItem.isVisible = true;
+        return;
+      }
+
+      eventListItem.isVisible = false;
+    })
+
+    isSearching.value = false;
+
+    return;
+  }
+
+  if (typeof newSearch === 'string') {
+    if (newSearch.length < 3) {
+      isSearching.value = false;
+
       return;
     }
 
-    eventListItem.isVisible = false
-  })
+    events.value.map(function (eventListItem) {
+
+      if (eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)) {
+
+        if (showOnlyCreatedByMe.value === false) {
+          eventListItem.isVisible = true;
+          return;
+        }
+
+        if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
+          eventListItem.isVisible = true;
+          return;
+        }
+
+
+      }
+
+      eventListItem.isVisible = false
+    })
+
+  }
+
+  if (typeof newSearch === 'object') {
+
+    events.value.map(function (eventListItem) {
+
+      if (eventListItem.spotEvent.category.id === newSearch.id) {
+        if (showOnlyCreatedByMe.value === false) {
+          eventListItem.isVisible = true;
+          return;
+        }
+
+        if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
+          eventListItem.isVisible = true;
+          return;
+        }
+
+      }
+
+      eventListItem.isVisible = false
+    })
+
+  }
 
   isSearching.value = false;
 
-})
+}
 
 const visibleEventsList = computed(function () {
   return events.value.filter(function (item) {

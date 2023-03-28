@@ -72,7 +72,7 @@
     "is_participant": "You have a spot",
     "is_reserve": "You are on waiting list",
     "withdraw": "Withdraw",
-    "search": "Search for an event"
+    "search": "Search for an event by category or title"
   }
 }
 

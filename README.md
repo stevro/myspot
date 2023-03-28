@@ -16,6 +16,8 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Add minimum security on backend, e.g. check event author on update
 
 # To do for v1
+- [x] Allow searching on category/ownership
+- [ ] Allow searching on booked events
 - [ ] Archive old events
 - [ ] Share event on FB/Whatsapp
 - [ ] Locations autocomplete with GMaps or ORS

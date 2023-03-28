@@ -34,6 +34,8 @@ export default defineConfig({
               theme_color: '#ffffff',
               background_color: "#ffffff",
               display: "standalone",
+              orientation: "portrait",
+              dir:"ltr",
               icons: [
                   {
                       src: 'android-chrome-192x192.png',
@@ -41,8 +43,8 @@ export default defineConfig({
                       type: 'image/png'
                   },
                   {
-                      src: 'android-chrome-512x512.png',
-                      sizes: '512x512',
+                      src: 'android-chrome-256x256.png',
+                      sizes: '256x256',
                       type: 'image/png'
                   }
               ]
