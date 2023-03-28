@@ -1,9 +1,10 @@
 <template>
+  <div class="text-center">
   <v-menu open-on-hover bottom offset-y max-height="250px">
     <template v-slot:activator="{ props }">
       <v-btn
-        text
-        v-bind="props"
+          text
+          v-bind="props"
       >
         <v-badge v-if="notificationsCount > 0" :content="notificationsCount" bottom color="red">
           <v-icon small>mdi-bell-ring</v-icon>
@@ -30,13 +31,14 @@
 
   </v-menu>
 
+
   <v-snackbar
-    v-model="showNotificationPopup"
-    multi-line
-    location="top"
-    timeout="-1"
-    color="primary"
-    elevation="24"
+      v-model="showNotificationPopup"
+      multi-line
+      location="top"
+      timeout="-1"
+      color="primary"
+      elevation="24"
   >
     <template v-slot:default v-if="currentNotification">
       {{ currentNotification.title }}
@@ -46,15 +48,15 @@
 
     <template v-slot:actions>
       <v-btn
-        color="white"
-        variant="tonal"
-        @click="closeNotification(currentNotification)"
-        icon="mdi-close"
-        size="small"
+          color="white"
+          variant="tonal"
+          @click="closeNotification(currentNotification)"
+          icon="mdi-close"
+          size="small"
       ></v-btn>
     </template>
   </v-snackbar>
-
+  </div>
 </template>
 
 <script setup>

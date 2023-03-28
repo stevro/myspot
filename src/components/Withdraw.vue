@@ -9,9 +9,12 @@
 
 import SpotEvent from "@/models/spotEvent";
 import {useUserStore} from "@/stores/user";
-import {doc, setDoc} from "firebase/firestore";
+import {deleteDoc, doc, setDoc} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {inject} from "vue";
+import Swal from "sweetalert2";
+import {useI18n} from "vue-i18n";
+const {t} = useI18n()
 const firestore = inject('firestore')
 
 const userStore = useUserStore()
@@ -20,21 +23,30 @@ const props = defineProps({
 })
 
 async function withdraw() {
-  let spotEvent = props.spotEvent
 
-  if(!spotEvent.isParticipant(userStore.id) && !spotEvent.isReserve(userStore.id)){
-    return false;
-  }
+  Swal.fire({
+    title: t('common.confirm.title'),
+    //text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: t('common.confirm.withdraw_confirm')
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let spotEvent = props.spotEvent
 
-  spotEvent.withdraw(userStore.id)
+      if (!spotEvent.isParticipant(userStore.id) && !spotEvent.isReserve(userStore.id)) {
+        return false;
+      }
 
-  if(spotEvent.participants.length < spotEvent.totalSpots && spotEvent.reserves.length > 0){
+      spotEvent.withdraw(userStore.id)
 
-    let firstReserve = spotEvent.reserves.shift()
-      spotEvent.addParticipant(firstReserve)
-  }
+      setDoc(doc(firestore, "spot_events", spotEvent.id).withConverter(eventConverter), spotEvent);
+    }
+  })
 
-  await setDoc(doc(firestore, "spot_events", spotEvent.id).withConverter(eventConverter), spotEvent);
+
 }
 
 </script>

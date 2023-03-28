@@ -19,9 +19,10 @@ export default defineConfig({
       }),
       VitePWA({
           registerType: 'autoUpdate',
-          // devOptions: {
-          //     enabled: process.env.NODE_ENV === 'development'
-          // },
+          devOptions: {
+              // enabled: process.env.NODE_ENV === 'development'
+              enabled: false
+          },
           workbox: {
               globPatterns: ['**/*.{js,css,html,ico,png,svg}']
           },

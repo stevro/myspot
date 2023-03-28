@@ -26,7 +26,7 @@
             <v-card-text>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-autocomplete v-model="newEvent.category" clearable :label="$t('event.category')"
+                  <v-autocomplete v-model="newEvent.category" clearable :label="$t('spotEvent.category')"
                                   :items="nomenclatures.categories" item-title="name" return-object
                                   :rules="rules.required"
                   >
@@ -36,16 +36,15 @@
               </v-row>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="newEvent.title" :label="$t('event.title')"
-                                :hint="$t('event.titleHint')"
+                  <v-text-field v-model="newEvent.title" :label="$t('spotEvent.title')"
                                 :rules="rules.required"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="newEvent.description" :label="$t('event.description')"
-                                :hint="$t('event.descriptionHint')"></v-text-field>
+                  <v-text-field v-model="newEvent.description" :label="$t('spotEvent.description')"
+                                ></v-text-field>
                 </v-col>
 
               </v-row>
@@ -63,29 +62,33 @@
                       v-model="newEvent.date"
                   >
 
-                    <vue-ctk-date-time-picker v-model="newEvent.date"
-                                              :label="$t('event.date')"
-                                              minute-interval="5"
-                                              min-date="now"
-                                              :first-day-of-week="1"
-                                              format="YYYY-MM-DD HH:mm"
-                                              formatted="DD-MM-YYYY HH:mm"
-                                              output-format="YYYY-MM-DD HH:mm"
+                    <VueDatePicker
+                        :placeholder="$t('spotEvent.date')"
+                        v-model="newEvent.date"
+                        model-type="yyyy-MM-dd HH:mm"
+                        format="dd-MM-yyyy HH:mm"
+                        :is-24="true"
+                        :min-date="currentDate"
+                        teleport="body"
+                        :locale="userStore.locale"
+                        required
+                    >
 
-                    ></vue-ctk-date-time-picker>
+                    </VueDatePicker>
+
                   </v-validation>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="newEvent.location" :label="$t('event.location')"
+                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"
                                 :rules="rules.required"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-select :items="nomenclatures.durations" v-model="newEvent.duration" :label="$t('event.duration')"
+                  <v-select :items="nomenclatures.durations" v-model="newEvent.duration" :label="$t('spotEvent.duration')"
                             item-title="name"
                             item-value="value"
                             :return-object="false"
@@ -94,17 +97,15 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field type="number" v-model="newEvent.totalSpots"
-                                :label="$t('event.totalSpots')"
+                                :label="$t('spotEvent.totalSpots')"
                                 :rules="[rules.required, rules.greaterThan0]"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-switch inset color="primary" v-model="newEvent.allowReserves"
-                            :label=" newEvent.allowReserves ? $t('event.allowReserves') : $t('event.doNotAllowReserves')"
+                            :label=" newEvent.allowReserves ? $t('spotEvent.allowReserves') : $t('spotEvent.doNotAllowReserves')"
                   ></v-switch>
-                  <small>{{
-                      $t("Allowing reserves will let people join your event even if it\'s fully booked and if any of the participants resigns then the system will automatically notify the first reserve about the open spot.")
-                    }}</small>
+                  <small>{{$t("spotEvent.allowReserves_hint")}}</small>
                 </v-col>
 
               </v-row>
@@ -135,8 +136,8 @@
               <v-col cols="12" class="py-1">
                 <v-icon>mdi-account-group</v-icon>
                 {{ newEvent.totalSpots }} (<span
-                  v-if="newEvent.allowReserves">{{ $t('Reserves allowed') }}</span><span
-                  v-else>{{ $t('Reserves not allowed') }}</span>)
+                  v-if="newEvent.allowReserves">{{ $t('spotEvent.reserves_allowed') }}</span><span
+                  v-else>{{ $t('spotEvent.reserves_not_allowed') }}</span>)
               </v-col>
 
 
@@ -153,14 +154,14 @@
             variant="text"
             @click="step--"
         >
-          Back
+          {{ $t('common.btn.back') }}
         </v-btn>
         <v-btn
             v-if="step === 1"
             variant="text"
             :to="{name:'dashboard'}"
         >
-          Back to list
+          {{ $t('common.btn.back_to_list') }}
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
@@ -169,7 +170,7 @@
             variant="flat"
             @click="validateStep"
         >
-          Next
+          {{ $t('common.btn.next') }}
         </v-btn>
         <v-btn
             v-if="step === 3"
@@ -177,18 +178,18 @@
             variant="flat"
             @click="submitEvent"
         >
-          Submit
+          {{ $t('common.btn.submit') }}
         </v-btn>
       </v-card-actions>
       <v-card-actions v-else>
 
         <v-row>
           <v-col cols="12">
-            <v-alert title="Event created" text="Your event has been created successfully" type="success"></v-alert>
+            <v-alert :title="$t('spotEvent.actions.created')" :text="$t('spotEvent.created')" type="success"></v-alert>
           </v-col>
           <v-col cols="12">
             <v-btn :to="{name:'dashboard'}" block>
-              Go to list
+              {{$t('common.btn.go_to_list')}}
             </v-btn>
           </v-col>
         </v-row>
@@ -211,6 +212,7 @@ import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";
 
+
 const {t} = useI18n()
 const firestore = inject('firestore')
 const nomenclatures = useNomenclaturesStore()
@@ -219,6 +221,10 @@ const step = ref(1)
 const step1Form = ref(null);
 const step2Form = ref(null);
 const isSaved = ref(false)
+
+const currentDate = computed(function(){
+  return moment().format('YYYY-MM-DD HH:mm')
+})
 
 const rules = ref({
   'required': [
@@ -238,11 +244,11 @@ watch(step, function () {
 const currentTitle = computed(() => {
   switch (step.value) {
     case 1:
-      return 'General info';
+      return t('spotEvent.step1.title');
     case 2:
-      return 'Date & Location';
+      return t('spotEvent.step2.title');
     case 3:
-      return 'Review'
+      return t('spotEvent.step3.title');
   }
 })
 

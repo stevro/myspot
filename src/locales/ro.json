@@ -2,7 +2,13 @@
   "common": {
     "btn": {
       "back": "Înapoi",
-      "close": "Închide"
+      "close": "Închide",
+      "submit": "Salveaza",
+      "cancel": "Renunta",
+      "next": "Urmator",
+      "new": "Adauga",
+      "go_to_list": "Mergi la lista",
+      "back_to_list": "Inapoi la lista"
     }
   },
   "login": {
@@ -21,10 +27,47 @@
     "title": "Schimbă limba"
   },
   "spotEvent": {
-
+    "category": "Categoria",
+    "title": "Titlu",
+    "description": "Descriere",
+    "date": "Data",
+    "location": "Locatia",
+    "duration": "Durata",
+    "totalSpots": "Locuri disponibile",
+    "allowReserves": "Permite lista de așteptare",
+    "doNotAllowReserves": "Lista de asteptare dezactivata",
+    "allowReserves_hint": "Lista de așteptare permite inregistrarea mai multor persoane decat numarul de locuri disponibile si in caz de retragere a unui participant, prima persoana de pe lista de așteptare primeste locul liber.",
+    "actions": {
+      "updated": "Actualizare cu success",
+      "created": "Eveniment adaugat"
+    },
+    "updated": "Evenimentul a fost actualizat cu succes",
+    "created": "Evenimentul a fost adăugat cu succes",
+    "not_found": "Evenimentul nu a fost gasit!",
+    "reserves_allowed": "Lista de asteptare permisa",
+    "reserves_not_allowed": "Fara lista de asteptare",
+    "step1": {
+      "title": "Informatii generale"
+    },
+    "step2": {
+      "title": "Data & Locatia"
+    },
+    "step3": {
+      "title": "Revizuire"
+    }
   },
   "notifications": {
     "empty": "Nimic nou"
+  },
+  "eventItem": {
+    "fully_booked": "Complet ocupat",
+    "create_one_now": "Adaugă unul nou",
+    "not_found": "Nu am gasit nici un eveniment :(",
+    "book_spot": "Vreau si eu",
+    "is_participant": "Ai un loc rezervat",
+    "is_reserve": "Esti pe lista de asteptare",
+    "withdraw": "Retrage-te",
+    "search": "Cauta un eveniment"
   }
 }
 

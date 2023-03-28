@@ -2,17 +2,18 @@
   "common": {
     "btn": {
       "back": "Back",
-      "close": "Close"
+      "close": "Close",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "next": "Next",
+      "new": "New",
+      "go_to_list": "Go to list",
+      "back_to_list": "Back to list"
     },
-    "calendar": {
-      "today": "Today",
-      "this_week": "This week",
-      "last_week": "Last week",
-      "last_7_days": "Last 7 days",
-      "this_month": "This month",
-      "last_month": "Last month",
-      "this_year": "This year",
-      "last_year": "Last year"
+    "confirm": {
+      "title": "Are you sure?",
+      "delete_confirm": "Yes, delete it!",
+      "withdraw_confirm": "Yes, withdraw!"
     }
   },
   "login": {
@@ -23,18 +24,55 @@
   "sidebar": {
     "hello": "Hello",
     "dashboard": "Events",
+    "profile": "Profil",
     "logout": "Logout",
     "language_switch": "Change language"
-
   },
   "languageSwitcher": {
     "title": "Change language"
   },
   "spotEvent": {
-
+    "category": "Category",
+    "title": "Title",
+    "description": "Description",
+    "date": "Date",
+    "location": "Location",
+    "duration": "Duration",
+    "totalSpots": "Total spots",
+    "allowReserves": "Enable waiting list",
+    "doNotAllowReserves": "Waiting list not enabled",
+    "allowReserves_hint": "Enabling waiting list will let people join your event even if it\\'s fully booked and if any of the participants resigns then the system will automatically notify the first reserve about the open spot.",
+    "actions": {
+      "updated": "Event updated",
+      "created": "Event created"
+    },
+    "updated": "Your event has been updated successfully",
+    "created": "Your event has been created successfully",
+    "not_found": "Event not found!",
+    "reserves_allowed": "Waiting list enabled",
+    "reserves_not_allowed": "No waiting list",
+    "step1": {
+      "title": "General info"
+    },
+    "step2": {
+      "title": "Date & Location"
+    },
+    "step3": {
+      "title": "Review"
+    }
   },
   "notifications": {
     "empty": "Nothing new"
+  },
+  "eventItem": {
+    "fully_booked": "Fully booked",
+    "create_one_now": "Create one now",
+    "not_found": "No events found :(",
+    "book_spot": "Book my spot",
+    "is_participant": "You have a spot",
+    "is_reserve": "You are on waiting list",
+    "withdraw": "Withdraw",
+    "search": "Search for an event"
   }
 }
 

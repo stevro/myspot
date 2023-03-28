@@ -14,7 +14,7 @@
         <v-form ref="spotEventForm">
           <v-row>
             <v-col cols="12" md="3">
-              <v-autocomplete v-model="spotEvent.category" clearable :label="$t('event.category')"
+              <v-autocomplete v-model="spotEvent.category" clearable :label="$t('spotEvent.category')"
                               :items="nomenclatures.categories" item-title="name" return-object
                               :rules="rules.required"
               >
@@ -24,16 +24,16 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="3">
-              <v-text-field v-model="spotEvent.title" :label="$t('event.title')"
-                            :hint="$t('event.titleHint')"
+              <v-text-field v-model="spotEvent.title" :label="$t('spotEvent.title')"
+
                             :rules="rules.required"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="spotEvent.description" :label="$t('event.description')"
-                            :hint="$t('event.descriptionHint')"></v-text-field>
+              <v-text-field v-model="spotEvent.description" :label="$t('spotEvent.description')"
+                            ></v-text-field>
             </v-col>
 
           </v-row>
@@ -45,29 +45,32 @@
                   v-model="spotEvent.date"
               >
 
-                <vue-ctk-date-time-picker v-model="spotEvent.date"
-                                          :label="$t('event.date')"
-                                          minute-interval="5"
-                                          min-date="now"
-                                          :first-day-of-week="1"
-                                          format="YYYY-MM-DD HH:mm"
-                                          formatted="DD-MM-YYYY HH:mm"
-                                          output-format="YYYY-MM-DD HH:mm"
+                <VueDatePicker
+                    :placeholder="$t('spotEvent.date')"
+                    v-model="spotEvent.date"
+                    model-type="yyyy-MM-dd HH:mm"
+                    format="dd-MM-yyyy HH:mm"
+                    :is-24="true"
+                    :min-date="currentDate"
+                    teleport="body"
+                    :locale="userStore.locale"
+                    required
+                >
 
-                ></vue-ctk-date-time-picker>
+                </VueDatePicker>
               </v-validation>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="spotEvent.location" :label="$t('event.location')"
+              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"
                             :rules="rules.required"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-select :items="nomenclatures.durations" v-model="spotEvent.duration" :label="$t('event.duration')"
+              <v-select :items="nomenclatures.durations" v-model="spotEvent.duration" :label="$t('spotEvent.duration')"
                         item-title="name"
                         item-value="value"
                         :return-object="false"
@@ -76,17 +79,15 @@
             </v-col>
             <v-col cols="12">
               <v-text-field type="number" v-model="spotEvent.totalSpots"
-                            :label="$t('event.totalSpots')"
+                            :label="$t('spotEvent.totalSpots')"
                             :rules="[rules.required, rules.greaterThan0]"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-switch inset color="primary" v-model="spotEvent.allowReserves"
-                        :label=" spotEvent.allowReserves ? $t('event.allowReserves') : $t('event.doNotAllowReserves')"
+                        :label=" spotEvent.allowReserves ? $t('spotEvent.allowReserves') : $t('spotEvent.doNotAllowReserves')"
               ></v-switch>
-              <small>{{
-                  $t("Allowing reserves will let people join your event even if it\'s fully booked and if any of the participants resigns then the system will automatically notify the first reserve about the open spot.")
-                }}</small>
+              <small>{{$t("spotEvent.allowReserves_hint")}}</small>
             </v-col>
 
           </v-row>
@@ -102,7 +103,7 @@
                 @click="cancel"
                 block
             >
-              Cancel
+              {{ $t('common.btn.cancel') }}
             </v-btn>
           </v-col>
           <v-col cols="12" md="2">
@@ -112,7 +113,7 @@
                 @click="submitEvent"
                 block
             >
-              Submit
+              {{ $t('common.btn.submit') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -120,11 +121,11 @@
 
         <v-row v-if="isSaved">
           <v-col cols="12">
-            <v-alert title="Event updated" text="Your event has been updated successfully" type="success"></v-alert>
+            <v-alert :title="$t('spotEvent.actions.updated')" :text="$t('spotEvent.updated')" type="success"></v-alert>
           </v-col>
           <v-col cols="12">
             <v-btn :to="{name:'dashboard'}" block>
-              Go to list
+              {{$t('common.btn.go_to_list')}}
             </v-btn>
           </v-col>
         </v-row>
@@ -134,14 +135,14 @@
 
     </v-card>
     <v-card v-else>
-      <v-card-text>Event not found!</v-card-text>
+      <v-card-text>{{$('spotEvent.not_found')}}</v-card-text>
     </v-card>
   </v-container>
 </template>
 
 <script setup>
 
-import {inject, onMounted, ref} from "vue";
+import {computed, inject, onMounted, ref} from "vue";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {useRoute, useRouter} from "vue-router";
@@ -169,6 +170,10 @@ const rules = ref({
   ],
   'greaterThan0': v => v > 0 || 'Must be greater than 0',
 },)
+
+const currentDate = computed(function(){
+  return moment().format('YYYY-MM-DD HH:mm')
+})
 
 async function getEvent() {
   isLoading.value = true;

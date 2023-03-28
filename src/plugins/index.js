@@ -9,8 +9,9 @@ import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
 import router from '../router'
 import { createPinia } from 'pinia'
-import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
-import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 import {initFirebase} from "@/plugins/firebase";
 import i18n from './i18n'
 
@@ -25,7 +26,7 @@ export function registerPlugins (app) {
     .use(pinia)
     .use(i18n)
 
-  app.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
+  app.component('VueDatePicker', VueDatePicker);
 
   try{
     initFirebase(app)

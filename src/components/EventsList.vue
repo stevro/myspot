@@ -10,13 +10,13 @@
             label=""
             append-inner-icon="mdi-magnify"
             variant="solo"
-            placeholder="Search for an event"
+            :placeholder="$t('eventItem.search')"
             density="compact"
             :loading="isSearching"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="3">
-        <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">New</v-btn>
+        <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">{{$t('common.btn.new')}}</v-btn>
       </v-col>
     </v-row>
 
@@ -33,7 +33,7 @@
           <v-card-text>
             <v-row>
               <v-col cols="12" class="text-center">
-                <h3>No events found :(</h3>
+                <h3>{{$t('eventItem.not_found')}}</h3>
               </v-col>
             </v-row>
           </v-card-text>
@@ -82,14 +82,8 @@
 
           <v-card-actions>
             <v-row>
-              <v-col cols="12" v-if="hasSpotsAvailable(eventItem.spotEvent)">
+              <v-col cols="12">
                 <book-spot :spot-event="eventItem.spotEvent"></book-spot>
-              </v-col>
-              <v-col cols="12" v-else>
-                <v-btn size="small" color="primary" variant="flat" disabled block>{{
-                    $t('eventItem.fully_booked')
-                  }}
-                </v-btn>
               </v-col>
               <v-col cols="12" v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
                 <withdraw :spot-event="eventItem.spotEvent"></withdraw>
@@ -210,12 +204,6 @@ onMounted(() => {
 })
 
 
-function hasSpotsAvailable(spotEvent) {
-
-  return !spotEvent.isFull()
-}
-
-
 function searchEvents() {
   let now = moment().format('YYYY-MM-DD HH:mm')
 
@@ -245,13 +233,13 @@ function deleteSpotEvent(spotEvent) {
   }
 
   Swal.fire({
-    title: 'Are you sure?',
+    title: t('common.confirm.title'),
     //text: "You won't be able to revert this!",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
+    confirmButtonText: t('common.confirm.delete_confirm'),
   }).then((result) => {
     if (result.isConfirmed) {
       deleteDoc(doc(firestore, "spot_events", spotEvent.id));

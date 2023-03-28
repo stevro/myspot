@@ -70,9 +70,9 @@ export default class SpotEvent {
     }
 
     isParticipant(userId) {
-        return this.participants.filter(function (p) {
+        return this.participants.some(function (p) {
             return p.id === userId
-        }).length > 0;
+        });
     }
 
     isReserve(userId) {

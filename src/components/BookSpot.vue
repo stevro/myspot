@@ -1,18 +1,27 @@
 <template>
-  <v-btn size="small" color="primary" variant="flat" block
-         @click="bookSpot"
-         v-if="!props.spotEvent.hasBookedSpot(userStore.id)"
-  >
-    {{ $t('eventItem.book_spot') }}
-  </v-btn>
-  <v-btn v-else-if="spotEvent.isParticipant(userStore.id)" size="small" color="success" disabled variant="flat" block>{{
+
+  <v-btn v-if="spotEvent.isParticipant(userStore.id)" size="small" color="success" disabled variant="flat" block>{{
       $t('eventItem.is_participant')
     }}
   </v-btn>
-  <v-btn v-else-if="spotEvent.isReserve(userStore.id)" size="small" color="warning" disabled variant="flat" block>{{
+  <v-btn v-else-if="spotEvent.isReserve(userStore.id)" size="small" color="purple" disabled variant="flat" block>{{
       $t('eventItem.is_reserve')
     }}
   </v-btn>
+  <v-btn size="small" color="primary" variant="flat" disabled block
+      v-else-if="props.spotEvent.isFull()"
+  >
+    {{$t('eventItem.fully_booked')}}
+  </v-btn>
+
+  <v-btn size="small" color="primary" variant="flat" block
+         @click="bookSpot"
+         v-else-if="!props.spotEvent.hasBookedSpot(userStore.id)"
+  >
+    {{ $t('eventItem.book_spot') }}
+  </v-btn>
+
+
 </template>
 
 <script setup>
