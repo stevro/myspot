@@ -2,7 +2,7 @@
 import {initializeApp} from "firebase/app";
 
 import {getAnalytics} from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,6 +19,11 @@ export const initFirebase = (Vue) => {
     const firebase = initializeApp(firebaseConfig)
     const analytics = getAnalytics(firebase);
     const firestore = getFirestore(firebase);
+
+    // if(process.env.NODE_ENV !== "production") {
+    //     connectFirestoreEmulator(firestore, 'localhost', 8080);
+    // }
+
     Vue.provide('firebase', firebase)
     Vue.provide('firestore', firestore)
 };

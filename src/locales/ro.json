@@ -22,6 +22,9 @@
   },
   "spotEvent": {
 
+  },
+  "notifications": {
+    "empty": "Nimic nou"
   }
 }
 

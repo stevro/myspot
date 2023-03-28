@@ -32,6 +32,9 @@
   },
   "spotEvent": {
 
+  },
+  "notifications": {
+    "empty": "Nothing new"
   }
 }
 

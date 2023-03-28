@@ -4,11 +4,15 @@
 
 
     <v-responsive class="d-flex align-center text-center fill-height">
-      <v-row justify="center">
-        <v-col cols="12" lg="4" sm="6">
-          <h1>{{ $t('login.welcome') }}</h1>
+      <v-row justify="center" align="center">
+        <v-col cols="12" lg="4" md="4" sm="6" >
+          <v-img src="../assets/img/logo-no-background.png"></v-img>
+<!--          <h1>{{ $t('login.welcome') }}</h1>-->
         </v-col>
-        <v-col cols="12" md="4" sm="6">
+        <v-col cols="1" class="d-none d-md-flex justify-center" style="height: 300px" >
+          <v-divider vertical></v-divider>
+        </v-col>
+        <v-col cols="12" lg="4" sm="6">
           <v-form @submit.prevent="signIn('email')" ref="loginForm">
             <v-row>
               <v-col cols="12">
@@ -63,12 +67,14 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signInWithRedirect
+  signInWithRedirect,
+  connectAuthEmulator
 } from "firebase/auth";
 import {inject, ref} from "vue";
 import {useAuthenticationStore} from "@/stores/auth";
 import {useUserStore} from "@/stores/user";
 import router from "@/router";
+import {useFirebaseStore} from "@/stores/firebase";
 
 const {t} = useI18n()
 const authStore = useAuthenticationStore()
@@ -84,6 +90,11 @@ provider.addScope('public_profile');
 provider.addScope('email');
 // provider.addScope('user_friends');
 const auth = getAuth();
+const firebaseStore = useFirebaseStore()
+
+// if(process.env.NODE_ENV !== "production") {
+//   connectAuthEmulator(auth, "http://localhost:9099");
+// }
 
 auth.useDeviceLanguage();
 
@@ -109,11 +120,12 @@ onAuthStateChanged(auth, (user) => {
     authStore.authenticate(user)
     userStore.setUser(user)
 
-    console.log('push')
     router.push({'name': 'dashboard'})
   } else {
     authStore.clearAuthToken()
     userStore.clearUserData()
+    firebaseStore.clearFirebaseToken()
+
     router.push({'name': 'login'})
   }
 });

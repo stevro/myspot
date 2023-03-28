@@ -24,7 +24,8 @@
 
       <v-toolbar-title><span id="pageTitle">App</span></v-toolbar-title>
 
-
+      <v-spacer/>
+      <notifications></notifications>
     </v-app-bar>
 
     <v-main>
@@ -42,6 +43,7 @@ import {useUserStore} from "@/stores/user";
 import router from "@/router";
 import SideMenu from "@/components/SideMenu.vue";
 import {useDisplay} from "vuetify";
+import Notifications from "@/components/Notifications.vue";
 
 const authStore = useAuthenticationStore()
 const userStore = useUserStore()

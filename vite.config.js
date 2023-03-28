@@ -17,7 +17,36 @@ export default defineConfig({
               configFile: 'src/styles/settings.scss',
           },
       }),
-      VitePWA({ registerType: 'autoUpdate' })
+      VitePWA({
+          registerType: 'autoUpdate',
+          // devOptions: {
+          //     enabled: process.env.NODE_ENV === 'development'
+          // },
+          workbox: {
+              globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+          },
+          includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+          manifest: {
+              name: 'My Spot App',
+              short_name: 'My Spot App',
+              description: 'App to help people manage booking on various events',
+              theme_color: '#ffffff',
+              background_color: "#ffffff",
+              display: "standalone",
+              icons: [
+                  {
+                      src: 'android-chrome-192x192.png',
+                      sizes: '192x192',
+                      type: 'image/png'
+                  },
+                  {
+                      src: 'android-chrome-512x512.png',
+                      sizes: '512x512',
+                      type: 'image/png'
+                  }
+              ]
+          }
+      })
   ],
   resolve: {
     alias: {

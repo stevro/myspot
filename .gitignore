@@ -1,3 +1,5 @@
+*.cache
+brand
 # Logs
 logs
 *.log
@@ -13,7 +15,7 @@ dist
 dist-ssr
 coverage
 *.local
-
+dev-dist
 /cypress/videos/
 /cypress/screenshots/
 
