@@ -1,7 +1,7 @@
 # myspot
 An app for booking a spot in a team / to an event / etc.
 
-# To do
+# To do for MVP
 - [x] Authentication
 - [x] Add new event
 - [x] Show events list
@@ -9,10 +9,15 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Delete event
 - [x] Book spot/withdraw
 - [x] Search events
-- [ ] Archive old events
 - [x] Auto promote reserve to first team on withdrawal
-- [ ] Notify users about new event
-- [ ] Notify reserves about open spot
+- [x] Notify users about new event
+- [x] Notify reserves about open spot 
+- [x] Notify participants about deleted event 
+- [x] Add minimum security on backend, e.g. check event author on update
+
+# To do for v1
+- [ ] Archive old events
 - [ ] Share event on FB/Whatsapp
+- [ ] Locations autocomplete with GMaps or ORS
 - [ ] Show directions to event place
-- [ ] Add minimum security on backend, e.g. check event author on update
+- [ ] Extend security on backend
