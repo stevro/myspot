@@ -46,6 +46,11 @@ export default defineConfig({
                       src: 'android-chrome-256x256.png',
                       sizes: '256x256',
                       type: 'image/png'
+                  },
+                  {
+                      src: 'android-chrome-512x512.png',
+                      sizes: '512x512',
+                      type: 'image/png'
                   }
               ]
           }

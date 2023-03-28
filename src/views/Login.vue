@@ -7,16 +7,27 @@
       <v-row justify="center" align="center">
         <v-col cols="12" lg="4" md="4" sm="6" >
           <v-img src="../assets/img/logo-no-background.png"></v-img>
-<!--          <h1>{{ $t('login.welcome') }}</h1>-->
         </v-col>
         <v-col cols="1" class="d-none d-md-flex justify-center" style="height: 300px" >
           <v-divider vertical></v-divider>
         </v-col>
+
         <v-col cols="12" lg="4" sm="6">
+
+          <v-row>
+            <v-col cols="12">
+              <h3>Modern sign in with</h3>
+            </v-col>
+            <v-col cols="12">
+              <v-btn variant="flat" block prepend-icon="mdi-facebook" @click="signIn('facebook')">Facebook</v-btn>
+            </v-col>
+
+          </v-row>
+
           <v-form @submit.prevent="signIn('email')" ref="loginForm">
             <v-row>
               <v-col cols="12">
-                <h3>Sign in</h3>
+                <h3>or use</h3>
               </v-col>
               <v-col cols="12">
                 <v-text-field variant="underlined" prepend-icon="mdi-email" v-model="email"
@@ -34,22 +45,14 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn variant="flat" color="accent" block @click="signIn('email')">Sign in</v-btn>
+                <v-btn variant="flat" color="accent" block @click="signIn('email')">go old men mode</v-btn>
               </v-col>
-              <!--            <v-col cols="12">-->
-              <!--              <v-btn variant="text" size="small" block :to="{name:'register'}">No account? Register!</v-btn>-->
-              <!--            </v-col>-->
+                          <v-col cols="12">
+                            <v-btn variant="text" size="small" block :to="{name:'register'}">No account? Register!</v-btn>
+                          </v-col>
             </v-row>
           </v-form>
-          <v-row>
-            <v-col cols="12">
-              <h3>or use</h3>
-            </v-col>
-            <v-col cols="12">
-              <v-btn variant="flat" block prepend-icon="mdi-facebook" @click="signIn('facebook')">Facebook</v-btn>
-            </v-col>
 
-          </v-row>
         </v-col>
       </v-row>
 
