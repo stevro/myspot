@@ -30,7 +30,8 @@ export const useUserStore = defineStore('user', {
         },
         setUserProfile(user) {
 
-            this.displayName = user.displayName
+            this.id = user.uid;
+            this.displayName = user.displayName || user.email.split('@',1).pop()
             this.email = user.email
             this.locale = user.locale || 'en'
 

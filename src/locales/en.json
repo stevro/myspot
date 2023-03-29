@@ -19,7 +19,9 @@
   "login": {
     "welcome": "Welcome",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "password_repeat": "Repeat password",
+    "display_name": "Display name"
   },
   "sidebar": {
     "hello": "Hello",

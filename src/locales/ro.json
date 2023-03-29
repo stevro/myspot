@@ -14,7 +14,9 @@
   "login": {
     "welcome": "Bine ați venit",
     "email": "Email",
-    "password": "Parola"
+    "password": "Parola",
+    "password_repeat": "Repeta parola",
+    "display_name": "Nume"
   },
   "sidebar": {
     "hello": "Salut",
