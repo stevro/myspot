@@ -18,6 +18,7 @@ An app for booking a spot in a team / to an event / etc.
 # To do for v1
 - [x] Allow searching on category/ownership
 - [ ] Allow searching on booked events
+- [ ] Show participants and reserves list to each event
 - [ ] Create a landing page
 - [ ] Create T&C and Privacy Policy pages
 - [ ] Archive old events

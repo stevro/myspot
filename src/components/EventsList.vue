@@ -63,7 +63,7 @@
     <v-row v-for="eventItem in visibleEventsList" v-bind:key="eventItem.id">
       <v-col>
         <v-card :prepend-icon="eventItem.spotEvent.category.icon" :title="eventItem.spotEvent.title"
-                :subtitle="eventItem.spotEvent.category.name">
+                :subtitle="eventItem.spotEvent.category.name + ' ' + $t('common.by') + ' ' + eventItem.spotEvent.author">
           <template v-slot:prepend>
             <v-icon size="x-large"></v-icon>
           </template>
@@ -82,12 +82,16 @@
                 <v-icon>mdi-map-marker</v-icon>
                 {{ eventItem.spotEvent.location }}
               </v-col>
+              <v-col cols="12" class="py-1">
+                <v-icon>mdi-account-group</v-icon>
+                {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}
+              </v-col>
 
 
             </v-row>
           </v-card-text>
 
-
+          <v-divider></v-divider>
           <v-card-actions>
             <v-row>
               <v-col cols="12">
@@ -97,51 +101,52 @@
                      v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
                 <withdraw :spot-event="eventItem.spotEvent"></withdraw>
               </v-col>
-              <v-col cols="6" class="text-left pt-0">
+              <v-col cols="12" class="text-left pt-0" v-if="eventItem.spotEvent.isAuthor(userStore.id)">
+                <v-divider></v-divider>
                 <v-btn
                     color="accent"
                     icon="mdi-note-edit-outline"
                     :to="{name:'edit-event',params:{'eventId':eventItem.spotEvent.id}}"
                     variant="plain"
-                    v-if="eventItem.spotEvent.isAuthor(userStore.id)"
+
                 ></v-btn>
                 <v-btn
                     color="red"
                     icon="mdi-delete"
                     @click="deleteSpotEvent(eventItem.spotEvent)"
                     variant="plain"
-                    v-if="eventItem.spotEvent.isAuthor(userStore.id)"
+
                 ></v-btn>
               </v-col>
-              <v-col cols="6" class="text-right pt-0">
-                <v-btn
-                    color="accent"
-                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-                    @click="eventItem.showDetails = !eventItem.showDetails"
-                ></v-btn>
-              </v-col>
+<!--              <v-col cols="6" class="text-right pt-0">-->
+<!--                <v-btn-->
+<!--                    color="accent"-->
+<!--                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"-->
+<!--                    @click="eventItem.showDetails = !eventItem.showDetails"-->
+<!--                ></v-btn>-->
+<!--              </v-col>-->
             </v-row>
           </v-card-actions>
-          <v-expand-transition>
-            <div v-show="eventItem.showDetails">
-              <v-divider></v-divider>
+<!--          <v-expand-transition>-->
+<!--            <div v-show="eventItem.showDetails">-->
+<!--              <v-divider></v-divider>-->
 
-              <v-card-text>
-                <v-row no-gutters>
+<!--              <v-card-text>-->
+<!--                <v-row no-gutters>-->
 
-                  <v-col cols="12" class="py-1">
-                    <v-icon>mdi-account-group</v-icon>
-                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}
-                  </v-col>
-                  <v-col cols="12" class="py-1">
-                    <v-icon>mdi-account</v-icon>
-                    {{ eventItem.spotEvent.author }}
-                  </v-col>
-                </v-row>
+<!--                  <v-col cols="12" class="py-1">-->
+<!--                    <v-icon>mdi-account-group</v-icon>-->
+<!--                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}-->
+<!--                  </v-col>-->
+<!--                  <v-col cols="12" class="py-1">-->
+<!--                    <v-icon>mdi-account</v-icon>-->
+<!--                    {{ eventItem.spotEvent.author }}-->
+<!--                  </v-col>-->
+<!--                </v-row>-->
 
-              </v-card-text>
-            </div>
-          </v-expand-transition>
+<!--              </v-card-text>-->
+<!--            </div>-->
+<!--          </v-expand-transition>-->
         </v-card>
       </v-col>
     </v-row>

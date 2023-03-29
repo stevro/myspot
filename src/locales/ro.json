@@ -9,7 +9,13 @@
       "new": "Adauga",
       "go_to_list": "Mergi la lista",
       "back_to_list": "Inapoi la lista"
-    }
+    },
+    "confirm": {
+      "title": "Esti sigur?",
+      "delete_confirm": "Da, sterge!",
+      "withdraw_confirm": "Da, ma retrag!"
+    },
+    "by": "adaugat de"
   },
   "login": {
     "welcome": "Bine ați venit",

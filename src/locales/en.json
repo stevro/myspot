@@ -14,7 +14,8 @@
       "title": "Are you sure?",
       "delete_confirm": "Yes, delete it!",
       "withdraw_confirm": "Yes, withdraw!"
-    }
+    },
+    "by": "by"
   },
   "login": {
     "welcome": "Welcome",

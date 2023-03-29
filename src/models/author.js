@@ -8,6 +8,6 @@ export default class Author {
     }
 
     toString() {
-        return this.displayName;
+        return this.displayName || 'N/A';
     }
 }
