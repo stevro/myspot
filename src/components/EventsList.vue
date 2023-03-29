@@ -303,6 +303,8 @@ function searchEvents() {
       events.value.push(new EventListItem(data))
     });
 
+    filterEvents()
+
   });
 }
 
