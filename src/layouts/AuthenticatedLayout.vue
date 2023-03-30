@@ -46,12 +46,14 @@ import router from "@/router";
 import SideMenu from "@/components/SideMenu.vue";
 import {useDisplay} from "vuetify";
 import Notifications from "@/components/Notifications.vue";
+import {useFirebaseStore} from "@/stores/firebase";
 
 const authStore = useAuthenticationStore()
 const userStore = useUserStore()
 const firebase = inject('firebase')
 const auth = getAuth();
 
+const firebaseStore = useFirebaseStore()
 auth.useDeviceLanguage();
 onAuthStateChanged(auth, (user) => {
   if (user) {

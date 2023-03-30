@@ -9,6 +9,11 @@
             <v-col cols="12" class="text-center">
               <h3>Register if you are sure you don't have facebook!</h3>
             </v-col>
+
+            <v-col cols="12" v-if="hasRegisterErrors">
+              <v-alert type="error" density="compact">{{registerError}}</v-alert>
+            </v-col>
+
             <v-col cols="12">
               <v-text-field variant="underlined" prepend-icon="mdi-account" v-model="displayName"
                             :label="t('login.display_name')"
@@ -39,7 +44,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-btn variant="flat" color="accent" block @click="register()">Register</v-btn>
+              <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="register()">Register</v-btn>
             </v-col>
             <v-col cols="12">
               <v-btn variant="text" size="small" block :to="{name:'login'}">Go to login</v-btn>
@@ -68,25 +73,39 @@ const authStore = useAuthenticationStore()
 const userStore = useUserStore()
 const auth = getAuth();
 
+const isSubmitting = ref(false)
+const hasRegisterErrors = ref(false)
+const registerError = ref('')
+
 function register() {
 
+  isSubmitting.value = true;
+  hasRegisterErrors.value = false
+
   if (password.value !== repeatPassword.value) {
+    hasRegisterErrors.value = true;
+    registerError.value = 'Password mismatch'
+
     return false;
   }
 
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
+        isSubmitting.value = false;
         // Signed in
         const user = userCredential.user;
         authStore.authenticate(user)
         userStore.setUser(user)
 
+
+
         router.push({'name': 'dashboard'})
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        isSubmitting.value = false;
+        hasRegisterErrors.value = true;
+        registerError.value = error.code.split('/').pop().split('-').join(' ')
+
       });
 
 }
