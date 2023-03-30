@@ -15,7 +15,7 @@ export const useFirebaseStore = defineStore('firebase', {
     actions: {
         // no context as first argument, use `this` instead
         init(authToken, firebase) {
-            console.log('init FCM')
+
             const messaging = getMessaging(firebase);
 
             const notificationStore = useNotificationStore()

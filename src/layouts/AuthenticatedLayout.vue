@@ -62,8 +62,10 @@ onAuthStateChanged(auth, (user) => {
 
     router.push({name: 'dashboard'})
   } else {
+
     authStore.clearAuthToken()
     userStore.clearUserData()
+    firebaseStore.clearFirebaseToken()
 
     router.push({'name': 'login'})
   }

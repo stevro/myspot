@@ -37,6 +37,26 @@ export const useNomenclaturesStore = defineStore('nomenclatures', {
                     name: 'Handball',
                     icon: 'mdi-handball'
                 },
+                {
+                    id: 7,
+                    name: 'Climbing',
+                    icon: 'mdi-carabiner'
+                },
+                {
+                    id: 8,
+                    name: 'Hiking',
+                    icon: 'mdi-hiking'
+                },
+                {
+                    id: 9,
+                    name: 'Biking',
+                    icon: 'mdi-bike'
+                },
+                {
+                    id: 10,
+                    name: 'Cycling',
+                    icon: 'mdi-bicycle'
+                },
             ]
 
         categories.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);

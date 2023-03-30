@@ -26,3 +26,9 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Locations autocomplete with GMaps or ORS
 - [ ] Show directions to event place
 - [ ] Extend security on backend
+- [ ] Integration with AI platform to fetch cover images when sharing on FB
+- [ ] History of participants registration and withdrawal
+- [ ] Adding new categories (hiking, biking, climbing)
+- [ ] Allow users to have a profile (displayName, phone, etc)
+- [ ] Allow users to control if their contact details are visible to other participants
+- [ ] Comments section on the event to allow users to ask questions/share details

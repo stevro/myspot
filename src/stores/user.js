@@ -47,7 +47,7 @@ export const useUserStore = defineStore('user', {
             localStorage.removeItem('user-displayName');
             localStorage.removeItem('user-email');
             localStorage.removeItem('user-locale');
-            localStorage.removeItem('user-id');
+            localStorage.removeItem('user-uid');
 
             this.$reset()
         }
