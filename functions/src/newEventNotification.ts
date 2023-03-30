@@ -32,7 +32,7 @@ exports.sendNewEventNotifications = functions.firestore.document("spot_events/{m
       // Send notifications to all tokens.
       const response = await admin.messaging().sendToDevice(tokens, payload);
       await cleanupTokens(response, tokens);
-      functions.logger.log("Notifications have been sent and tokens cleaned up.");
+      functions.logger.log(`${tokens.length} notifications have been sent and tokens cleaned up.`);
     } else {
       functions.logger.log("No tokens found.");
     }
