@@ -28,7 +28,10 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Extend security on backend
 - [ ] Integration with AI platform to fetch cover images when sharing on FB
 - [ ] History of participants registration and withdrawal
-- [ ] Adding new categories (hiking, biking, climbing)
+- [x] Adding new categories (hiking, biking, climbing)
 - [ ] Allow users to have a profile (displayName, phone, etc)
 - [ ] Allow users to control if their contact details are visible to other participants
 - [ ] Comments section on the event to allow users to ask questions/share details
+
+# To do for v2
+- [ ] Show weather updates
