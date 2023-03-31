@@ -75,7 +75,10 @@
     "is_participant": "Ai un loc rezervat",
     "is_reserve": "Esti pe lista de asteptare",
     "withdraw": "Retrage-te",
-    "search": "Cauta dupa categorie sau titlu"
+    "search": "Cauta dupa categorie sau titlu",
+    "search_all": "Toate",
+    "search_my_own": "Ale mele",
+    "search_i_go": "Inscris"
   }
 }
 

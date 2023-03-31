@@ -75,7 +75,10 @@
     "is_participant": "You have a spot",
     "is_reserve": "You are on waiting list",
     "withdraw": "Withdraw",
-    "search": "Search by category or title"
+    "search": "Search by category or title",
+    "search_all": "All",
+    "search_my_own": "My own",
+    "search_i_go": "I want to go"
   }
 }
 

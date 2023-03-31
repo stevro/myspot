@@ -17,13 +17,29 @@
             :loading="isSearching"
         ></v-combobox>
       </v-col>
-      <v-col cols="6" md="2">
-        <v-switch color="primary" label="Created by me" inset v-model="showOnlyCreatedByMe"></v-switch>
-      </v-col>
-<!--      <v-col cols="6" md="2">-->
-<!--        <v-switch color="primary" label="Booked by me" inset v-model="showOnlyBookedByMe"></v-switch>-->
-<!--      </v-col>-->
       <v-col cols="12" md="3">
+        <v-btn-toggle
+            v-model="viewOnly"
+            color="accent"
+            group
+            density="compact"
+        >
+          <v-btn value="all">
+            {{ $t('eventItem.search_all') }}
+          </v-btn>
+
+          <v-btn value="createdByMe">
+            {{ $t('eventItem.search_my_own') }}
+          </v-btn>
+
+          <v-btn value="bookedByMe">
+            {{ $t('eventItem.search_i_go') }}
+          </v-btn>
+
+
+        </v-btn-toggle>
+      </v-col>
+      <v-col cols="12" md="2">
         <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">{{ $t('common.btn.new') }}</v-btn>
       </v-col>
     </v-row>
@@ -118,35 +134,35 @@
 
                 ></v-btn>
               </v-col>
-<!--              <v-col cols="6" class="text-right pt-0">-->
-<!--                <v-btn-->
-<!--                    color="accent"-->
-<!--                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"-->
-<!--                    @click="eventItem.showDetails = !eventItem.showDetails"-->
-<!--                ></v-btn>-->
-<!--              </v-col>-->
+              <!--              <v-col cols="6" class="text-right pt-0">-->
+              <!--                <v-btn-->
+              <!--                    color="accent"-->
+              <!--                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"-->
+              <!--                    @click="eventItem.showDetails = !eventItem.showDetails"-->
+              <!--                ></v-btn>-->
+              <!--              </v-col>-->
             </v-row>
           </v-card-actions>
-<!--          <v-expand-transition>-->
-<!--            <div v-show="eventItem.showDetails">-->
-<!--              <v-divider></v-divider>-->
+          <!--          <v-expand-transition>-->
+          <!--            <div v-show="eventItem.showDetails">-->
+          <!--              <v-divider></v-divider>-->
 
-<!--              <v-card-text>-->
-<!--                <v-row no-gutters>-->
+          <!--              <v-card-text>-->
+          <!--                <v-row no-gutters>-->
 
-<!--                  <v-col cols="12" class="py-1">-->
-<!--                    <v-icon>mdi-account-group</v-icon>-->
-<!--                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}-->
-<!--                  </v-col>-->
-<!--                  <v-col cols="12" class="py-1">-->
-<!--                    <v-icon>mdi-account</v-icon>-->
-<!--                    {{ eventItem.spotEvent.author }}-->
-<!--                  </v-col>-->
-<!--                </v-row>-->
+          <!--                  <v-col cols="12" class="py-1">-->
+          <!--                    <v-icon>mdi-account-group</v-icon>-->
+          <!--                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}-->
+          <!--                  </v-col>-->
+          <!--                  <v-col cols="12" class="py-1">-->
+          <!--                    <v-icon>mdi-account</v-icon>-->
+          <!--                    {{ eventItem.spotEvent.author }}-->
+          <!--                  </v-col>-->
+          <!--                </v-row>-->
 
-<!--              </v-card-text>-->
-<!--            </div>-->
-<!--          </v-expand-transition>-->
+          <!--              </v-card-text>-->
+          <!--            </div>-->
+          <!--          </v-expand-transition>-->
         </v-card>
       </v-col>
     </v-row>
@@ -159,7 +175,7 @@
 <script setup>
 
 import {useI18n} from "vue-i18n";
-import {computed, inject, nextTick, onMounted, ref, watch} from "vue";
+import {computed, inject, onMounted, ref, watch} from "vue";
 import moment from 'moment';
 import {collection, deleteDoc, doc, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
@@ -177,23 +193,28 @@ const search = ref('')
 const isSearching = ref(false);
 const nomenclatures = useNomenclaturesStore()
 const userStore = useUserStore()
-const showOnlyCreatedByMe = ref(false)
-const showOnlyBookedByMe = ref(false)
+const showOnlyCreatedByMe = computed(function () {
+  return viewOnly.value === 'createdByMe'
+})
+const showOnlyBookedByMe = computed(function () {
+  return viewOnly.value === 'bookedByMe'
+})
+const viewOnly = ref('all')
 const events = ref([])
 
 watch(showOnlyCreatedByMe, function () {
-  setTimeout(function(){
+  setTimeout(function () {
     filterEvents()
   }, 50)
 })
 watch(showOnlyBookedByMe, function () {
-  setTimeout(function(){
+  setTimeout(function () {
     filterEvents()
   }, 50)
 })
 
 watch(search, function (newSearch, oldSearch) {
-  setTimeout(function(){
+  setTimeout(function () {
     filterEvents()
   }, 50)
 })
@@ -205,12 +226,17 @@ function filterEvents() {
   if (!newSearch || typeof newSearch === 'undefined' || newSearch.length === 0) {
     events.value.map(function (eventListItem) {
 
-      if (showOnlyCreatedByMe.value === false) {
+      if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
         eventListItem.isVisible = true;
         return;
       }
 
       if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
+        eventListItem.isVisible = true;
+        return;
+      }
+
+      if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
         eventListItem.isVisible = true;
         return;
       }
@@ -234,7 +260,7 @@ function filterEvents() {
 
       if (eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)) {
 
-        if (showOnlyCreatedByMe.value === false) {
+        if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
           eventListItem.isVisible = true;
           return;
         }
@@ -244,6 +270,10 @@ function filterEvents() {
           return;
         }
 
+        if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
+          eventListItem.isVisible = true;
+          return;
+        }
 
       }
 
@@ -257,12 +287,17 @@ function filterEvents() {
     events.value.map(function (eventListItem) {
 
       if (eventListItem.spotEvent.category.id === newSearch.id) {
-        if (showOnlyCreatedByMe.value === false) {
+        if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
           eventListItem.isVisible = true;
           return;
         }
 
         if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
+          eventListItem.isVisible = true;
+          return;
+        }
+
+        if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
           eventListItem.isVisible = true;
           return;
         }
