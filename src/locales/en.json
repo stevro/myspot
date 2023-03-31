@@ -78,7 +78,9 @@
     "search": "Search by category or title",
     "search_all": "All",
     "search_my_own": "My own",
-    "search_i_go": "I want to go"
+    "search_i_go": "I want to go",
+    "participants": "Participants",
+    "reserves": "Waiting list"
   }
 }
 

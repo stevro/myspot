@@ -3,7 +3,7 @@
   <v-container>
 
     <v-row>
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="6">
         <v-combobox
             :placeholder="$t('eventItem.search')"
             v-model="search"
@@ -17,7 +17,7 @@
             :loading="isSearching"
         ></v-combobox>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="4">
         <v-btn-toggle
             v-model="viewOnly"
             color="accent"
@@ -85,26 +85,39 @@
           </template>
 
           <v-card-text>
-            <v-row no-gutters>
-              <v-col cols="12" class="py-1">
-                {{ eventItem.spotEvent.description }}
-              </v-col>
-
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-calendar-month</v-icon>
-                {{ eventItem.spotEvent.displayDate() }}
-              </v-col>
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-map-marker</v-icon>
-                {{ eventItem.spotEvent.location }}
-              </v-col>
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-account-group</v-icon>
-                {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}
-              </v-col>
 
 
-            </v-row>
+            <v-list density="compact">
+              <v-list-item
+                  v-if="eventItem.spotEvent.description"
+                  density="compact"
+              >
+                <v-list-item-title>
+                  {{ eventItem.spotEvent.description }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                  density="compact"
+                  prepend-icon="mdi-calendar-month"
+              >
+                <v-list-item-title>
+                  {{ eventItem.spotEvent.displayDate() }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                  density="compact"
+                  prepend-icon="mdi-map-marker"
+              >
+                <v-list-item-title>
+                  {{ eventItem.spotEvent.location }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+
+
+            <participants-list :event-item="eventItem"></participants-list>
+
+
           </v-card-text>
 
           <v-divider></v-divider>
@@ -185,6 +198,7 @@ import EventListItem from "@/models/eventListItem";
 import BookSpot from "@/components/BookSpot.vue";
 import Withdraw from "@/components/Withdraw.vue";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
+import ParticipantsList from "@/components/participantsList.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
