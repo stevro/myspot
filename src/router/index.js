@@ -8,7 +8,64 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: 'dashboard',
+            redirect: 'homepage',
+            component: () => import('@/layouts/PublicLayout.vue'),
+            children: [
+                {
+                    path: '/',
+                    name: 'homepage',
+                    component: () => import('@/views/Homepage.vue'),
+                    meta: {
+                        requiresAuth: false,
+                        title: 'Homepage',
+                    }
+
+                },
+                {
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('@/views/Login.vue'),
+                    meta: {
+                        requiresAuth: false,
+                        title: 'Login',
+                    }
+
+                },
+                {
+                    path: '/register',
+                    name: 'register',
+                    component: () => import('@/views/Register.vue'),
+                    meta: {
+                        requiresAuth: false,
+                        title: 'Register',
+                    }
+
+                },
+                {
+                    path: '/terms-of-service',
+                    name: 'terms-of-service',
+                    component: () => import('@/views/TermsOfService.vue'),
+                    meta: {
+                        requiresAuth: false,
+                        title: 'Terms of service',
+                    }
+
+                },
+                {
+                    path: '/privacy-policy',
+                    name: 'privacy-policy',
+                    component: () => import('@/views/PrivacyPolicy.vue'),
+                    meta: {
+                        requiresAuth: false,
+                        title: 'Privacy policy',
+                    }
+
+                },
+            ]
+        },
+        {
+            path: '/',
+
             component: () => import('@/layouts/AuthenticatedLayout.vue'),
             children: [
                 {
@@ -52,52 +109,7 @@ const router = createRouter({
             ],
 
         },
-        {
-            path: '/',
-            component: () => import('@/layouts/PublicLayout.vue'),
-            children: [
-                {
-                    path: '/login',
-                    name: 'login',
-                    component: () => import('@/views/Login.vue'),
-                    meta: {
-                        requiresAuth: false,
-                        title: 'Login',
-                    }
 
-                },
-                {
-                    path: '/register',
-                    name: 'register',
-                    component: () => import('@/views/Register.vue'),
-                    meta: {
-                        requiresAuth: false,
-                        title: 'Register',
-                    }
-
-                },
-                {
-                    path: '/terms-of-service',
-                    name: 'terms-of-service',
-                    component: () => import('@/views/TermsOfService.vue'),
-                    meta: {
-                        requiresAuth: false,
-                        title: 'Terms of service',
-                    }
-
-                },
-                {
-                    path: '/privacy-policy',
-                    name: 'privacy-policy',
-                    component: () => import('@/views/PrivacyPolicy.vue'),
-                    meta: {
-                        requiresAuth: false,
-                        title: 'Privacy policy',
-                    }
-
-                },
-            ]
-        }
     ]
 })
 

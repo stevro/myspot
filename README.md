@@ -36,3 +36,4 @@ An app for booking a spot in a team / to an event / etc.
 # To do for v2
 - [ ] Show weather updates
 - [ ] Reminder to all participants with X hours before the event
+- [ ] Recurrent events

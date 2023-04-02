@@ -124,17 +124,17 @@ async function signIn(providerType) {
     isSubmitting.value = true;
     if (true === await isLoginFormValid()) {
 
-      signInWithEmailAndPassword(auth, email.value, password.value).then(function (user) {
+      signInWithEmailAndPassword(auth, email.value, password.value).then(function (userCred) {
         //signed in
         isSubmitting.value = false;
 
-        authStore.authenticate(user)
-        userStore.setUser(user)
+        authStore.authenticate(userCred.user)
+        userStore.setUser(userCred.user)
 
         router.push({'name': 'dashboard'})
 
       }).catch(function (error) {
-
+        console.error(error)
         hasLoginErrors.value = true;
         loginError.value = 'Invalid credentials'
         isSubmitting.value = false;
