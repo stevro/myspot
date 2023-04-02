@@ -6,21 +6,20 @@ import {nextTick} from 'vue';
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        // {
+        //     path: '/',
+        //     name: 'homepage',
+        //     component: () => import('@/views/Homepage.vue'),
+        //     meta: {
+        //         requiresAuth: false,
+        //         title: 'Homepage',
+        //     }
+        // },
         {
             path: '/',
-            redirect: 'homepage',
+            redirect: 'dashboard',
             component: () => import('@/layouts/PublicLayout.vue'),
             children: [
-                {
-                    path: '/',
-                    name: 'homepage',
-                    component: () => import('@/views/Homepage.vue'),
-                    meta: {
-                        requiresAuth: false,
-                        title: 'Homepage',
-                    }
-
-                },
                 {
                     path: '/login',
                     name: 'login',
