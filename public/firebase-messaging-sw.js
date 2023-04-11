@@ -90,12 +90,12 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js')
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
 const firebaseConfig = {
-    apiKey: "AIzaSyCTGjg4n-tbjw4FnGOqNt5SFmqRepXzam8",
-    authDomain: "myspot-346e8.firebaseapp.com",
-    projectId: "myspot-346e8",
-    storageBucket: "myspot-346e8.appspot.com",
-    messagingSenderId: "61211815199",
-    appId: "1:61211815199:web:6a4c3e726c1dcc2271542a"
+    apiKey: "AIzaSyBDrWNuu2m_ewFAxrFXDPYf_Q4eFvS19ao",
+    authDomain: "yaleemba23.firebaseapp.com",
+    projectId: "yaleemba23",
+    storageBucket: "yaleemba23.appspot.com",
+    messagingSenderId: "749301824759",
+    appId: "1:749301824759:web:e30d064d8b0efe0de3a7f2"
 };
 
 firebase.initializeApp(firebaseConfig);
