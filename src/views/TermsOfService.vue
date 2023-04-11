@@ -6,7 +6,7 @@
       <h1>1. Service Description</h1>
       <p>Our software is a SaaS (Software as a Service) application that allows you to find people interested in the same activities as you.</p>
       <h1>2. User Accounts</h1>
-      <p>You must create a user account to use our service, either by using login with facebook or by registering your own account. You agree to provide accurate and complete information when registering for an account. You are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer and devices. You agree to accept responsibility for all activities that occur under your account or password.</p>
+      <p>You must create a user account to use our service, by registering your own account. You agree to provide accurate and complete information when registering for an account. You are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer and devices. You agree to accept responsibility for all activities that occur under your account or password.</p>
       <h1>3. Fees and Payment</h1>
       <p>At the moment our service is free of charge.</p>
       <p>In the future, our service may be available for a fee. You agree to pay all fees and charges incurred in connection with your use of our service. We reserve the right to change our pricing at any time. All fees are exclusive of taxes, levies, or duties imposed by taxing authorities, and you are responsible for payment of all such taxes.</p>
@@ -21,8 +21,9 @@
       <p>To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenue, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from your access to or use of our service, or any content or transactions entered into through our service.</p>
       <h1>8. Termination</h1>
       <p>We may terminate your access to our service at any time, without cause or notice, which may result in the forfeiture and destruction of all information associated with your account. All provisions of these terms and conditions that by their nature should survive termination shall survive termination, including but not limited to ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
-      <h1>9. Governing Law and Jurisdiction</h1>
-      <p>These terms and conditions shall be governed by and construed in accordance with the laws of Romania (European Union), without giving effect to any principles of conflicts of law. You agree to submit to the exclusive jurisdiction of the courts of Romania for any dispute arising out of or relating to these terms and conditions or your use of our</p>
+      <h1>9. Membership</h1>
+      <p>This software runs for a closed group of members, specifically Yale EMBA '23 alumni. Any other person trying to register or use this software in any way may be blocked.</p>
+
 
   </v-container>
 </template>

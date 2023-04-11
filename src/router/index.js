@@ -73,7 +73,7 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue'),
                     meta: {
                         requiresAuth: true,
-                        title: 'Events',
+                        title: 'Yale EMBA \'23 events',
                     }
 
                 },

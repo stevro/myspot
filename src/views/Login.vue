@@ -6,7 +6,8 @@
     <v-responsive class="d-flex align-center text-center fill-height">
       <v-row justify="center" align="center">
         <v-col cols="12" lg="4" md="4" sm="6">
-          <v-img src="../assets/img/logo-no-background.png"></v-img>
+            <h1>Yale EMBA '23</h1>
+<!--          <v-img src="../assets/img/logo-no-background.png"></v-img>-->
         </v-col>
         <v-col cols="1" class="d-none d-md-flex justify-center" style="height: 300px">
           <v-divider vertical></v-divider>
@@ -14,23 +15,23 @@
 
         <v-col cols="12" lg="4" sm="6">
 
-          <v-row>
-            <v-col cols="12">
-              <h3>Modern sign in with</h3>
-            </v-col>
-            <v-col cols="12">
-              <v-btn :loading="isSubmittingFacebook" variant="flat" block prepend-icon="mdi-facebook"
-                     @click="signIn('facebook')">Facebook
-              </v-btn>
-            </v-col>
+<!--          <v-row>-->
+<!--            <v-col cols="12">-->
+<!--              <h3>Modern sign in with</h3>-->
+<!--            </v-col>-->
+<!--            <v-col cols="12">-->
+<!--              <v-btn :loading="isSubmittingFacebook" variant="flat" block prepend-icon="mdi-facebook"-->
+<!--                     @click="signIn('facebook')">Facebook-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
 
-          </v-row>
+<!--          </v-row>-->
 
           <v-form @submit.prevent="signIn('email')" ref="loginForm">
             <v-row>
-              <v-col cols="12">
-                <h3>or use</h3>
-              </v-col>
+<!--              <v-col cols="12">-->
+<!--                <h3>or use</h3>-->
+<!--              </v-col>-->
 
               <v-col cols="12" v-if="hasLoginErrors">
                 <v-alert type="error" density="compact">{{ loginError }}</v-alert>
@@ -52,8 +53,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="signIn('email')">go old men
-                  mode
+                <v-btn :loading="isSubmitting" variant="flat" color="primary" block @click="signIn('email')">Login
                 </v-btn>
               </v-col>
               <v-col cols="12">
@@ -97,11 +97,11 @@ const loginForm = ref(null)
 const email = ref('')
 const password = ref('')
 const isSubmitting = ref(false)
-const isSubmittingFacebook = ref(false)
+// const isSubmittingFacebook = ref(false)
 
-const provider = new FacebookAuthProvider();
-provider.addScope('public_profile');
-provider.addScope('email');
+// const provider = new FacebookAuthProvider();
+// provider.addScope('public_profile');
+// provider.addScope('email');
 // provider.addScope('user_friends');
 const auth = getAuth();
 const firebaseStore = useFirebaseStore()
@@ -145,21 +145,21 @@ async function signIn(providerType) {
       isSubmitting.value = false
     }
   } else {
-    isSubmittingFacebook.value = true;
-    await signInWithRedirect(auth, provider)
-    const result = await getRedirectResult(auth);
-
-    isSubmittingFacebook.value = false
-
-    if (result) {
-      // This is the signed-in user
-      const user = result.user;
-
-      authStore.authenticate(user)
-      userStore.setUser(user)
-
-      router.push({'name': 'dashboard'})
-    }
+    // isSubmittingFacebook.value = true;
+    // await signInWithRedirect(auth, provider)
+    // const result = await getRedirectResult(auth);
+    //
+    // isSubmittingFacebook.value = false
+    //
+    // if (result) {
+    //   // This is the signed-in user
+    //   const user = result.user;
+    //
+    //   authStore.authenticate(user)
+    //   userStore.setUser(user)
+    //
+    //   router.push({'name': 'dashboard'})
+    // }
   }
 
 }

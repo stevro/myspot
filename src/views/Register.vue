@@ -44,7 +44,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="register()">Register</v-btn>
+              <v-btn :loading="isSubmitting" variant="flat" color="primary" block @click="register()">Register</v-btn>
             </v-col>
             <v-col cols="12">
               <v-btn variant="text" size="small" block :to="{name:'login'}">Go to login</v-btn>

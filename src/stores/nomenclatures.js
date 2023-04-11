@@ -7,55 +7,80 @@ export const useNomenclaturesStore = defineStore('nomenclatures', {
         let categories =
             [
 
+                // {
+                //     id: 1,
+                //     name: 'Volleyball',
+                //     icon: 'mdi-volleyball'
+                // },
+                // {
+                //     id: 2,
+                //     name: 'Basketball',
+                //     icon: 'mdi-basketball'
+                // },
+                // {
+                //     id: 3,
+                //     name: 'Football',
+                //     icon: 'mdi-soccer'
+                // },
+                // {
+                //     id: 4,
+                //     name: 'Tennis',
+                //     icon: 'mdi-tennis'
+                // },
+                // {
+                //     id: 5,
+                //     name: 'Billiards',
+                //     icon: 'mdi-billiards'
+                // },
+                // {
+                //     id: 6,
+                //     name: 'Handball',
+                //     icon: 'mdi-handball'
+                // },
+                // {
+                //     id: 7,
+                //     name: 'Climbing',
+                //     icon: 'mdi-carabiner'
+                // },
+                // {
+                //     id: 8,
+                //     name: 'Hiking',
+                //     icon: 'mdi-hiking'
+                // },
+                // {
+                //     id: 9,
+                //     name: 'Biking',
+                //     icon: 'mdi-bike'
+                // },
+                // {
+                //     id: 10,
+                //     name: 'Cycling',
+                //     icon: 'mdi-bicycle'
+                // },
                 {
-                    id: 1,
-                    name: 'Volleyball',
-                    icon: 'mdi-volleyball'
-                },
-                {
-                    id: 2,
-                    name: 'Basketball',
-                    icon: 'mdi-basketball'
-                },
-                {
-                    id: 3,
-                    name: 'Football',
-                    icon: 'mdi-soccer'
-                },
-                {
-                    id: 4,
-                    name: 'Tennis',
-                    icon: 'mdi-tennis'
-                },
-                {
-                    id: 5,
-                    name: 'Billiards',
-                    icon: 'mdi-billiards'
-                },
-                {
-                    id: 6,
-                    name: 'Handball',
-                    icon: 'mdi-handball'
-                },
-                {
-                    id: 7,
-                    name: 'Climbing',
-                    icon: 'mdi-carabiner'
-                },
-                {
-                    id: 8,
-                    name: 'Hiking',
+                    id: 11,
+                    name: 'Outings',
                     icon: 'mdi-hiking'
                 },
                 {
-                    id: 9,
-                    name: 'Biking',
-                    icon: 'mdi-bike'
+                    id: 12,
+                    name: 'Travel',
+                    icon: 'mdi-train-car'
                 },
                 {
-                    id: 10,
-                    name: 'Cycling',
-                    icon: 'mdi-bicycle'
+                    id: 13,
+                    name: 'Sports',
+                    icon: 'mdi-basketball'
+                },
+                {
+                    id: 14,
+                    name: 'Entertainment',
+                    icon: 'mdi-theater'
+                },
+                {
+                    id: 14,
+                    name: 'Other',
+                    icon: 'mdi-account-group'
                 },
             ]
 

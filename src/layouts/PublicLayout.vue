@@ -2,7 +2,7 @@
   <v-app id="my-spot-app">
     <v-app-bar
         prominent
-        class=" bg-blue-darken-1"
+        class="yale-background"
     >
 
     </v-app-bar>
@@ -11,7 +11,7 @@
       <router-view/>
     </v-main>
 
-    <v-footer class="bg-blue-darken-3 text-center d-flex flex-column">
+    <v-footer class="yale-background text-center d-flex flex-column">
       <v-row justify="center" no-gutters>
         <v-col class="text-center mt-4" cols="12">
           <strong>&copy; {{ appName }}</strong> with &hearts; since 2023

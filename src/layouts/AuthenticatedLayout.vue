@@ -2,7 +2,7 @@
   <v-app id="my-spot-app">
 
     <v-navigation-drawer v-model="drawer"
-                         class="bg-blue-darken-3"
+                         class="yale-background"
 
     >
 
@@ -25,7 +25,6 @@
       <v-toolbar-title><span id="pageTitle">App</span></v-toolbar-title>
 
       <v-spacer/>
-      <v-btn size="small" href="https://forms.gle/4FyaqZRTN5MctdPu5" target="_blank" prepend-icon="mdi-lightbulb-question">Feedback</v-btn>
 
       <notifications></notifications>
     </v-app-bar>
@@ -102,4 +101,5 @@ const items = [
 
 
 </script>
+
 

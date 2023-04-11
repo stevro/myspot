@@ -49,3 +49,9 @@ firebaseStore.$subscribe(function (mutation, state) {
 <style scoped>
 
 </style>
+<style>
+.yale-background{
+    background-image: linear-gradient(310deg,#141727,#3a416f)!important;
+    color: white!important;
+}
+</style>

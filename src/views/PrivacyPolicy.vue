@@ -1,6 +1,6 @@
 <template>
   <v-container class="text-justify">
-    <p>Thank you for considering our software for your needs. At "My Spot", we take your privacy and data protection
+    <p>Thank you for considering our software for your needs. At "Yale EMBA '23", we take your privacy and data protection
       seriously, and we want to make sure you feel safe and secure while using our service. Therefore, we have created
       this privacy policy to explain how we collect, use, and protect your personal information.</p>
 

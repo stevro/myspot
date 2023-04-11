@@ -40,3 +40,10 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Teams. Create teams to register to your event and then let public only the remaining spots
 - [ ] History of participants registration and withdrawal
 - [ ] Locations autocomplete with GMaps or ORS
+
+# To do for Yale
+- [x] location - autocomplete GMaps ( sa salvam orasul/tara separat)
+- [x] categorii: Outings, Travel, Sports, Entertainment, Other
+- [x] culorile: sa fie cele de la Yale (TPF)
+- [x] Titlu aplicatia Yale EMBA '23
+- [x] domeniu yaleemba23.mba
