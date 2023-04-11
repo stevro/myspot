@@ -43,8 +43,8 @@ async function bookSpot() {
 
   let spotEvent = props.spotEvent
 
-  if (spotEvent.isParticipant(userStore.id)) {
-    alert('already in')
+  if (spotEvent.hasBookedSpot(userStore.id)) {
+    console.error('already booked')
     return false;
   }
 

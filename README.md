@@ -20,14 +20,13 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Allow searching on booked events
 - [x] Show participants and reserves list to each event
 - [ ] Create a landing page
+- [ ] Recurrent events
 - [x] Create T&C and Privacy Policy pages
 - [ ] Archive old events
 - [ ] Share event on FB/Whatsapp
-- [ ] Locations autocomplete with GMaps or ORS
-- [ ] Show directions to event place
+- [ ] Allow booking spot from the new event notification
+- [ ] Give user a feedback notification when booking from the "new event" notification, like booking successful or not
 - [ ] Extend security on backend
-- [ ] Teams. Create teams to register to your event and then let public only the remaining spots
-- [ ] History of participants registration and withdrawal
 - [x] Adding new categories (hiking, biking, climbing)
 - [ ] Allow users to have a profile (displayName, phone, etc)
 - [ ] Allow users to control if their contact details are visible to other participants
@@ -36,5 +35,8 @@ An app for booking a spot in a team / to an event / etc.
 # To do for v2
 - [ ] Show weather updates
 - [ ] Reminder to all participants with X hours before the event
-- [ ] Recurrent events
 - [ ] Integration with AI platform to fetch cover images when sharing on FB
+- [ ] Show directions to event place
+- [ ] Teams. Create teams to register to your event and then let public only the remaining spots
+- [ ] History of participants registration and withdrawal
+- [ ] Locations autocomplete with GMaps or ORS
