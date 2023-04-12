@@ -24,7 +24,7 @@
 
       <v-toolbar-title><span id="pageTitle">App</span></v-toolbar-title>
 
-      <v-spacer/>
+
 
       <notifications></notifications>
     </v-app-bar>
