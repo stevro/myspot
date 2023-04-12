@@ -21,7 +21,7 @@
     </template>
     <v-card theme="light">
       <v-toolbar
-          class="bg-blue-darken-3"
+          class="yale-background"
       >
         <v-toolbar-title>{{ eventItem.spotEvent.title }}</v-toolbar-title>
 

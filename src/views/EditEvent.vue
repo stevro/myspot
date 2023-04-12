@@ -63,9 +63,11 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"
-                            :rules="rules.required"
-              ></v-text-field>
+                <vue-google-autocomplete v-if="spotEvent.location" :initialValue="spotEvent.location" country="us" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
+                </vue-google-autocomplete>
+<!--              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"-->
+<!--                            :rules="rules.required"-->
+<!--              ></v-text-field>-->
             </v-col>
           </v-row>
           <v-row>
@@ -152,6 +154,7 @@ import moment from "moment";
 import SpotEvent from "@/models/spotEvent";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
+import VueGoogleAutocomplete from "@/components/GoogleAutocomplete.vue";
 
 const firestore = inject('firestore')
 const spotEvent = ref(new SpotEvent())
@@ -217,6 +220,21 @@ async function submitEvent() {
     isSaved.value = false
     console.error("Error adding document: ", e);
   }
+}
+
+function getLocation(location){
+
+    spotEvent.value.location = '';
+
+    if(typeof location === 'string'){
+        spotEvent.value.location = location;
+    }
+
+
+    if(typeof location === 'object' && typeof location.target !== 'undefined'){
+        spotEvent.value.location = location.target.value;
+    }
+
 }
 
 </script>

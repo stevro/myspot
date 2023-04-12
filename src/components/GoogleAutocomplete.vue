@@ -90,10 +90,15 @@ export default {
         geolocationOptions: {
             type: Object,
             default: null
+        },
+        initialValue: {
+            type: String,
+            default: ''
         }
     },
 
     data() {
+
         return {
             /**
              * The Autocomplete object.
@@ -107,7 +112,7 @@ export default {
              * Autocomplete input text
              * @type {String}
              */
-            autocompleteText: '',
+            autocompleteText: this.initialValue,
 
             geolocation: {
                 /**
