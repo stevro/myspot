@@ -81,9 +81,11 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"
-                                :rules="rules.required"
-                  ></v-text-field>
+                    <vue-google-autocomplete country="us" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
+                    </vue-google-autocomplete>
+<!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
+<!--                                :rules="rules.required"-->
+<!--                  ></v-text-field>-->
                 </v-col>
               </v-row>
               <v-row>
@@ -211,6 +213,7 @@ import moment from "moment/moment";
 import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";
+import VueGoogleAutocomplete from "../components/GoogleAutocomplete.vue";
 
 
 const {t} = useI18n()
@@ -293,7 +296,9 @@ async function submitEvent() {
   }
 }
 
-
+function getLocation(location){
+    newEvent.value.location = location;
+}
 </script>
 
 <style scoped>
