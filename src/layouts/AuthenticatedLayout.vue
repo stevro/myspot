@@ -24,8 +24,8 @@
 
       <v-toolbar-title><span id="pageTitle">App</span></v-toolbar-title>
 
-      <v-spacer/>
-      <v-btn size="small" href="https://forms.gle/4FyaqZRTN5MctdPu5" target="_blank" prepend-icon="mdi-lightbulb-question">Feedback</v-btn>
+
+<!--      <v-btn size="small" href="https://forms.gle/4FyaqZRTN5MctdPu5" target="_blank" prepend-icon="mdi-lightbulb-question">Feedback</v-btn>-->
 
       <notifications></notifications>
     </v-app-bar>
