@@ -81,7 +81,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                    <vue-google-autocomplete country="us" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
+                    <vue-google-autocomplete country="ro" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
                     </vue-google-autocomplete>
 <!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
 <!--                                :rules="rules.required"-->
