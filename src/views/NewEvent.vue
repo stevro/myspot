@@ -28,7 +28,7 @@
                 <v-col cols="12" md="3">
                   <v-autocomplete v-model="newEvent.category" clearable :label="$t('spotEvent.category')"
                                   :items="nomenclatures.categories" item-title="name" return-object
-                                  :rules="rules.required"
+                                  :rules="[rules.required]"
                   >
 
                   </v-autocomplete>
@@ -37,7 +37,7 @@
               <v-row>
                 <v-col cols="12" md="3">
                   <v-text-field v-model="newEvent.title" :label="$t('spotEvent.title')"
-                                :rules="rules.required"
+                                :rules="[rules.required]"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -58,7 +58,7 @@
               <v-row>
                 <v-col cols="12">
                   <v-validation
-                      :rules="rules.required"
+                          :rules="[rules.required]"
                       v-model="newEvent.date"
                   >
 
@@ -72,6 +72,7 @@
                         teleport="body"
                         :locale="userStore.locale"
                         required
+                        :rules="[rules.required]"
                     >
 
                     </VueDatePicker>
@@ -81,7 +82,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                    <vue-google-autocomplete country="ro" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
+                    <vue-google-autocomplete country="ro" :rules="[rules.required]" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
                     </vue-google-autocomplete>
 <!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
 <!--                                :rules="rules.required"-->
@@ -94,7 +95,7 @@
                             item-title="name"
                             item-value="value"
                             :return-object="false"
-                            :rules="rules.required"
+                            :rules="[rules.required]"
                   ></v-select>
                 </v-col>
                 <v-col cols="12">
@@ -230,9 +231,7 @@ const currentDate = computed(function(){
 })
 
 const rules = ref({
-  'required': [
-    v => !!v || 'Is required',
-  ],
+  'required': v => !!v || 'Is required',
   'greaterThan0': v => v > 0 || 'Must be greater than 0',
 },)
 

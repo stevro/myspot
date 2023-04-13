@@ -12,6 +12,7 @@
             @change="onChange"
             @keypress="onKeyPress"
             @keyup="onKeyUp"
+            :rules="rules"
     >
 
     </v-text-field>
@@ -94,6 +95,10 @@ export default {
         initialValue: {
             type: String,
             default: ''
+        },
+        rules:{
+            type: Array,
+            default: []
         }
     },
 
