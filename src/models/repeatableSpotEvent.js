@@ -1,4 +1,5 @@
 import SpotEvent from "@/models/spotEvent";
+import moment from "moment";
 
 
 export default class RepeatableSpotEvent extends SpotEvent {
@@ -10,7 +11,6 @@ export default class RepeatableSpotEvent extends SpotEvent {
     endsOn = 0 //0 - never, 1 - fixed ending Date, 2 - after X occurrences
     endingDate = null
     endingOccurrences = null
-    startDate = null
 
 
     static shortcuts() {
@@ -64,30 +64,69 @@ export default class RepeatableSpotEvent extends SpotEvent {
         ]
     }
 
+    __toString() {
+        //in functie de ce e selectat formatam intr-un string util
+        return "Repeats every week on Sunday at 10:00"
+    }
 
-    setFrequencyFromShortcut(shortcut, selectedDate){
+    applyDefaultFrequencyType(frequencyType, selectedDate) {
 
-        this.startDate = selectedDate
+        this.startDate = selectedDate ? selectedDate : this.date
 
-        switch (shortcut){
-            case 'daily':
-                this.frequency = 1
-                this.frequencyType = 'day'
+        if (!this.startDate) {
+            return
+        }
+
+        switch (frequencyType) {
+            case 'day':
+
+                if (this.endsOn !== 2) {
+                    this.endingOccurrences = 30
+                }
+                if (this.endsOn !== 1) {
+                    this.endingDate = moment( this.startDate).add(30, 'days').format('YYYY-MM-DD')
+                }
+
+                if (!this.repeatOn) {
+                    this.repeatOn = [0, 1, 2, 3, 4, 5, 6]
+                }
                 break;
-            case 'weekly':
-                this.frequency = 1
-                this.frequencyType = 'week'
+            case 'week':
+
+                if (this.endsOn !== 2) {
+                    this.endingOccurrences = 16
+                }
+                if (this.endsOn !== 1) {
+                    this.endingDate = moment( this.startDate).add(16, 'weeks').format('YYYY-MM-DD')
+                }
+                if (!this.repeatOn) {
+                    this.repeatOn = [moment( this.startDate).isoWeekday()]
+                }
                 break;
-            case 'monthly':
-                this.frequency = 1
-                this.frequencyType = 'month'
+            case 'month':
+
+                // this.frequencyType = 'month'
+                if (this.endsOn !== 2) {
+                    this.endingOccurrences = 12
+                }
+                if (this.endsOn !== 1) {
+                    this.endingDate = moment( this.startDate).add(12, 'months').format('YYYY-MM-DD')
+                }
+                this.repeatOn = []
                 break;
-            case 'annually':
-                this.frequency = 1
-                this.frequencyType = 'year'
+            case 'year':
+
+                if (this.endsOn !== 2) {
+                    this.endingOccurrences = 5
+                }
+                if (this.endsOn !== 1) {
+                    this.endingDate = moment( this.startDate).add(5, 'years').format('YYYY-MM-DD')
+                }
+                this.repeatOn = []
                 break;
 
         }
+        console.log(this.endingDate);
     }
 
 }

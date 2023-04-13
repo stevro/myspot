@@ -64,6 +64,8 @@
                                             model-type="yyyy-MM-dd HH:mm"
                                             format="dd-MM-yyyy HH:mm"
                                             :is-24="true"
+                                            :minutes-increment="5"
+                                            :minutes-grid-increment="10"
                                             :min-date="currentDate"
                                             teleport="body"
                                             :locale="userStore.locale"
@@ -92,9 +94,10 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-select :items="RepeatableSpotEvent.shortcuts()" v-model="newEvent.shortcut"></v-select>
+                                    <v-select :items="RepeatableSpotEvent.shortcuts()"
+                                              v-model="newEvent.shortcut"></v-select>
                                 </v-col>
-                                <v-col cols="3" v-if="newEvent.shortcut == 'custom'" class="text-truncate" >
+                                <v-col cols="3" v-if="newEvent.shortcut == 'custom'" class="text-truncate">
                                     {{ $t('repeatableSpotEvent.repeatEvery') }}
                                 </v-col>
                                 <v-col cols="4" v-if="newEvent.shortcut == 'custom'">
@@ -103,14 +106,16 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="5" v-if="newEvent.shortcut == 'custom'">
-                                    <v-select :items="RepeatableSpotEvent.frequencies()" v-model="newEvent.frequencyType"></v-select>
+                                    <v-select :items="RepeatableSpotEvent.frequencies()"
+                                              @update:model-value="changeFrequencyType()"
+                                              v-model="newEvent.frequencyType"></v-select>
                                 </v-col>
 
                                 <v-col cols="12" v-if="newEvent.shortcut == 'custom'">
-                                    {{$t('repeatableSpotEvent.ends')}}
+                                    {{ $t('repeatableSpotEvent.ends') }}
                                 </v-col>
                                 <v-col cols="12" v-if="newEvent.shortcut == 'custom'">
-                                    <v-radio-group v-model="newEvent.endsOn">
+                                    <v-radio-group v-model="newEvent.endsOn" @change="changeFrequencyType()">
                                         <v-radio label="Never" :value="0"></v-radio>
                                         <v-radio label="On" :value="1">
                                             <template v-slot:label>
@@ -120,15 +125,15 @@
                                                     </v-col>
                                                     <v-col cols="9" :disabled="newEvent.endsOn !== 1">
                                                         <VueDatePicker
-                                                            :readonly="newEvent.endsOn !== 1"
-                                                            v-model="newEvent.endingDate"
-                                                            :clearable="false"
-                                                            :enable-time-picker="false"
-                                                            model-type="yyyy-MM-dd"
-                                                            format="dd-MM-yyyy"
-                                                            :min-date="currentDate"
-                                                            teleport="body"
-                                                            :locale="userStore.locale"
+
+                                                                v-model="newEvent.endingDate"
+                                                                :clearable="false"
+                                                                :enable-time-picker="false"
+                                                                model-type="yyyy-MM-dd"
+                                                                format="dd-MM-yyyy"
+                                                                :min-date="currentDate"
+                                                                teleport="body"
+                                                                :locale="userStore.locale"
                                                         >
 
                                                         </VueDatePicker>
@@ -144,7 +149,9 @@
                                                         After
                                                     </v-col>
                                                     <v-col cols="9" :disabled="newEvent.endsOn !== 2">
-                                                        <v-text-field :readonly="newEvent.endsOn !== 2" type="number" v-model="newEvent.endingOccurrences" :suffix="$t('repeatableSpotEvent.occurrences')"></v-text-field>
+                                                        <v-text-field :readonly="newEvent.endsOn !== 2" type="number"
+                                                                      v-model="newEvent.endingOccurrences"
+                                                                      :suffix="$t('repeatableSpotEvent.occurrences')"></v-text-field>
                                                     </v-col>
                                                 </v-row>
                                             </template>
@@ -283,7 +290,7 @@
 
 <script setup>
 
-import {computed, inject, ref, watch} from "vue";
+import {computed, inject, nextTick, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import {addDoc, collection} from "firebase/firestore";
@@ -322,6 +329,7 @@ watch(step, function () {
         step.value = 3;
     }
 })
+
 const currentTitle = computed(() => {
     switch (step.value) {
         case 1:
@@ -335,6 +343,18 @@ const currentTitle = computed(() => {
 
 const newEvent = ref(new SpotEvent())
 
+function changeFrequencyType() {
+
+    if (!isRepeatableEvent(newEvent.value)) {
+        return
+    }
+    nextTick(function(){
+        newEvent.value.applyDefaultFrequencyType(newEvent.value.frequencyType)
+    })
+
+
+
+}
 
 async function isStepValid(stepForm) {
     const {valid} = await stepForm.validate()
@@ -389,6 +409,8 @@ function initRepeatableEvent() {
     Object.assign(repeatableEvent, newEvent.value);
 
     newEvent.value = repeatableEvent;
+
+    changeFrequencyType()
 }
 
 function disableRepeatableEvent() {
@@ -405,6 +427,7 @@ function disableRepeatableEvent() {
 function isRepeatableEvent(spotEvent) {
     return spotEvent instanceof RepeatableSpotEvent
 }
+
 
 </script>
 
