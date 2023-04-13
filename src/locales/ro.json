@@ -64,6 +64,11 @@
       "title": "Revizuire"
     }
   },
+  "repeatableSpotEvent" : {
+    "repeatEvery": "Frecventa",
+    "ends": "Se termina la",
+    "occurrences": "evenimente"
+  },
   "notifications": {
     "empty": "Nimic nou"
   },

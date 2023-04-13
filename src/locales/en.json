@@ -64,6 +64,11 @@
       "title": "Review"
     }
   },
+  "repeatableSpotEvent" : {
+    "repeatEvery": "Every",
+    "ends": "Ends",
+    "occurrences": "Occurrences"
+  },
   "notifications": {
     "empty": "Nothing new"
   },
