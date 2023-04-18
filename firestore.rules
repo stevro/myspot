@@ -1,22 +1,27 @@
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-  
-  	// function canUpdateSpotEvent(request, resource){
-  	// return request.auth.uid == resource.data.author.id
-  	// || (request.resource.data.diff(resource.data).affectedKeys()
-  	// .hasOnly(['participants', 'reserves']));
-  	// }
-  
-    match /spot_events/{document=**} {
-      allow read,create, update: if request.auth != null;
-      // allow update: if canUpdateSpotEvent(request, resource);
-      allow delete: if request.auth.uid == resource.data.author.id;
+    match /databases/{database}/documents {
+
+        // function canUpdateSpotEvent(request, resource){
+        // return request.auth.uid == resource.data.author.id
+        // || (request.resource.data.diff(resource.data).affectedKeys()
+        // .hasOnly(['participants', 'reserves']));
+        // }
+
+        match /spot_events/{document=**} {
+            allow read, create, update: if request.auth != null;
+            // allow update: if canUpdateSpotEvent(request, resource);
+            allow delete: if request.auth.uid == resource.data.author.id;
+        }
+        match /recurrent_events/{document=**} {
+            allow create: if request.auth != null;
+            // allow update: if canUpdateSpotEvent(request, resource);
+            allow read, delete, update: if request.auth.uid == resource.data.author.id;
+        }
+        match /fcm_tokens/{document=**} {
+            allow read: if request.auth != null;
+            // allow update: if canUpdateSpotEvent(request, resource);
+            allow create, update, delete: if true;
+        }
     }
-    match /fcm_tokens/{document=**} {
-      allow read: if request.auth != null;
-      // allow update: if canUpdateSpotEvent(request, resource);
-      allow create, update,delete: if true;
-    }
-  }
 }

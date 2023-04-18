@@ -79,11 +79,24 @@
                                 </v-col>
                                 <v-col cols="2">
                                     <v-btn icon="mdi-repeat" variant="text" size="small"
-                                           @click="initRepeatableEvent"></v-btn>
+                                           @click="initRecurrentEvent"></v-btn>
                                 </v-col>
                             </v-row>
 
-                            <v-row v-if="isRepeatableEvent(newEvent)" align="center" justify="center">
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-switch inset color="primary" v-model="newEvent.availableImmediatelyForBooking"
+                                              :label=" newEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
+                                    ></v-switch>
+                                </v-col>
+                                <v-col cols="12" v-if="!newEvent.availableImmediatelyForBooking">
+                                    <v-select v-model="newEvent.minutesAvailableForBooking" item-title="name" item-value="value" :items="minutesAvailableForBooking"
+                                              :label="$t('spotEvent.minutesAvailableForBooking')"
+                                    ></v-select>
+                                </v-col>
+                            </v-row>
+
+                            <v-row v-if="isRecurrentEvent(newEvent)" align="center" justify="center">
 
                                 <v-col cols="6">
                                     Repeat event
@@ -94,7 +107,7 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="12">
-                                    <v-select :items="RepeatableSpotEvent.shortcuts()"
+                                    <v-select :items="RecurrentSpotEvent.shortcuts()"
                                               v-model="newEvent.shortcut"></v-select>
                                 </v-col>
                                 <v-col cols="3" v-if="newEvent.shortcut == 'custom'" class="text-truncate">
@@ -106,11 +119,27 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="5" v-if="newEvent.shortcut == 'custom'">
-                                    <v-select :items="RepeatableSpotEvent.frequencies()"
+                                    <v-select :items="RecurrentSpotEvent.frequencies()"
                                               @update:model-value="changeFrequencyType()"
                                               v-model="newEvent.frequencyType"></v-select>
                                 </v-col>
 
+
+                                <v-col cols="12" v-if="newEvent.shortcut == 'custom' && newEvent.frequencyType == 'week'">
+                                    {{ $t('repeatableSpotEvent.repeatOn') }}
+                                </v-col>
+                                <v-col cols="12" v-if="newEvent.shortcut == 'custom' && newEvent.frequencyType == 'week'">
+                                    <v-select
+                                        chips
+                                        label="Days of week"
+                                        item-title="name"
+                                        item-value="value"
+                                        :items="nomenclatures.daysOfWeek"
+                                        multiple
+                                        v-model="newEvent.repeatOn"
+                                    ></v-select>
+
+                                </v-col>
                                 <v-col cols="12" v-if="newEvent.shortcut == 'custom'">
                                     {{ $t('repeatableSpotEvent.ends') }}
                                 </v-col>
@@ -174,7 +203,7 @@
                             </v-row>
                             <v-row>
                                 <v-col cols="12">
-                                    <v-select :items="nomenclatures.durations" v-model="newEvent.duration"
+                                    <v-select :items="durationOptions" v-model="newEvent.duration"
                                               :label="$t('spotEvent.duration')"
                                               item-title="name"
                                               item-value="value"
@@ -300,7 +329,8 @@ import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";
 import VueGoogleAutocomplete from "../components/GoogleAutocomplete.vue";
-import RepeatableSpotEvent from "@/models/repeatableSpotEvent";
+import RecurrentSpotEvent from "@/models/recurrentSpotEvent";
+import recurrentEventConverter from "@/converters/recurrentEventConverter";
 
 
 const {t} = useI18n()
@@ -345,13 +375,12 @@ const newEvent = ref(new SpotEvent())
 
 function changeFrequencyType() {
 
-    if (!isRepeatableEvent(newEvent.value)) {
+    if (!isRecurrentEvent(newEvent.value)) {
         return
     }
-    nextTick(function(){
+    nextTick(function () {
         newEvent.value.applyDefaultFrequencyType(newEvent.value.frequencyType)
     })
-
 
 
 }
@@ -386,7 +415,12 @@ async function submitEvent() {
         newEvent.value.createdAt = moment().format('YYYY-MM-DD HH:mm Z')
         newEvent.value.author = new Author(userStore.id, userStore.displayName)
 
-        const docRef = (await addDoc(collection(firestore, "spot_events").withConverter(eventConverter), newEvent.value));
+        let docRef = null;
+        if (isRecurrentEvent(newEvent.value)) {
+            docRef = (await addDoc(collection(firestore, "recurrent_events").withConverter(recurrentEventConverter), newEvent.value));
+        } else {
+            docRef = (await addDoc(collection(firestore, "spot_events").withConverter(eventConverter), newEvent.value));
+        }
         console.log("Document written with ID: ", docRef.id);
         isSaved.value = true
     } catch (e) {
@@ -398,13 +432,13 @@ function getLocation(location) {
     newEvent.value.location = location;
 }
 
-function initRepeatableEvent() {
+function initRecurrentEvent() {
 
-    if (isRepeatableEvent(newEvent.value)) {
+    if (isRecurrentEvent(newEvent.value)) {
         return;
     }
 
-    const repeatableEvent = new RepeatableSpotEvent()
+    const repeatableEvent = new RecurrentSpotEvent()
 
     Object.assign(repeatableEvent, newEvent.value);
 
@@ -415,7 +449,7 @@ function initRepeatableEvent() {
 
 function disableRepeatableEvent() {
 
-    if (!isRepeatableEvent(newEvent.value)) {
+    if (!isRecurrentEvent(newEvent.value)) {
         return;
     }
 
@@ -424,10 +458,72 @@ function disableRepeatableEvent() {
     newEvent.value = newObj;
 }
 
-function isRepeatableEvent(spotEvent) {
-    return spotEvent instanceof RepeatableSpotEvent
+function isRecurrentEvent(spotEvent) {
+    return spotEvent instanceof RecurrentSpotEvent
 }
 
+watch(() => newEvent.value.repeatOn, function(){
+    newEvent.value.repeatOn.sort()
+})
+
+const minutesAvailableForBooking = computed(()=>{
+    return buildListOfDurationOptions()
+})
+const durationOptions = computed(()=>{
+    return buildListOfDurationOptions(30, 1440)
+})
+
+function buildListOfDurationOptions(start  = 30, max = 2880 ){
+
+    let list = [];
+
+    for(let i=start;i<=max;i+=30){
+
+        let name = '';
+        let hour = Math.floor(i/60);
+        let minutes = i%60;
+        if(hour === 1){
+            name = `${hour} hour `;
+        }else if(hour > 1){
+            name = `${hour} hours `;
+        }
+
+        // if(i > 1440){
+        //
+        //     let days = Math.floor(i/1440)
+        //     name = `${days} days`;
+        //     list.push({
+        //         name: name,
+        //         value: i,
+        //     })
+        //     continue
+        // }
+
+        if(hour >= 6){
+
+            if(minutes > 0){
+                continue
+            }
+
+            list.push({
+                name: name,
+                value: i,
+            })
+            continue
+        }
+
+        if(minutes > 0) {
+            name += `${minutes} min`
+        }
+
+        list.push({
+            name: name,
+            value: i,
+        })
+    }
+
+    return list;
+}
 
 </script>
 

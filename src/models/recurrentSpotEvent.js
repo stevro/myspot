@@ -2,13 +2,14 @@ import SpotEvent from "@/models/spotEvent";
 import moment from "moment";
 
 
-export default class RepeatableSpotEvent extends SpotEvent {
+export default class RecurrentSpotEvent extends SpotEvent {
 
     shortcut = 'daily'
     frequency = 1
     frequencyType = 'day'
     repeatOn = [] //days of week. 0 -> Monday, 6 -> Sunday
     endsOn = 0 //0 - never, 1 - fixed ending Date, 2 - after X occurrences
+    startDate = null //should be identical with 'date' from SpotEvent
     endingDate = null
     endingOccurrences = null
 
@@ -33,7 +34,7 @@ export default class RepeatableSpotEvent extends SpotEvent {
             },
             {
                 value: 'every_weekday',
-                title: "Every Weekday",
+                title: "Every Weekday (Mon-Fri)",
             },
             {
                 value: 'custom',
@@ -84,12 +85,12 @@ export default class RepeatableSpotEvent extends SpotEvent {
                     this.endingOccurrences = 30
                 }
                 if (this.endsOn !== 1) {
-                    this.endingDate = moment( this.startDate).add(30, 'days').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(30, 'days').format('YYYY-MM-DD')
                 }
 
-                if (!this.repeatOn) {
-                    this.repeatOn = [0, 1, 2, 3, 4, 5, 6]
-                }
+
+                this.repeatOn = [0, 1, 2, 3, 4, 5, 6]
+
                 break;
             case 'week':
 
@@ -97,11 +98,11 @@ export default class RepeatableSpotEvent extends SpotEvent {
                     this.endingOccurrences = 16
                 }
                 if (this.endsOn !== 1) {
-                    this.endingDate = moment( this.startDate).add(16, 'weeks').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(16, 'weeks').format('YYYY-MM-DD')
                 }
-                if (!this.repeatOn) {
-                    this.repeatOn = [moment( this.startDate).isoWeekday()]
-                }
+
+               this.repeatOn = [moment(this.startDate).isoWeekday()]
+
                 break;
             case 'month':
 
@@ -110,7 +111,7 @@ export default class RepeatableSpotEvent extends SpotEvent {
                     this.endingOccurrences = 12
                 }
                 if (this.endsOn !== 1) {
-                    this.endingDate = moment( this.startDate).add(12, 'months').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(12, 'months').format('YYYY-MM-DD')
                 }
                 this.repeatOn = []
                 break;
@@ -120,13 +121,21 @@ export default class RepeatableSpotEvent extends SpotEvent {
                     this.endingOccurrences = 5
                 }
                 if (this.endsOn !== 1) {
-                    this.endingDate = moment( this.startDate).add(5, 'years').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(5, 'years').format('YYYY-MM-DD')
                 }
                 this.repeatOn = []
                 break;
 
         }
-        console.log(this.endingDate);
+
     }
+
+    // computeMinutesForBooking() {
+    //     if (!this.startDate) {
+    //         return 0;
+    //     }
+    //
+    //     return moment(this.startDate).diff(moment(), 'minutes')
+    // }
 
 }

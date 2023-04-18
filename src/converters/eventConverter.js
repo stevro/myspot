@@ -16,6 +16,7 @@ const eventConverter = {
             author: authorConverter.toFirestore(event.author),
             allowReserves: event.allowReserves,
             participants: event.participants,
+            minutesAvailableForBooking: event.computeMinutesForBookingSinceNow(),
             reserves: event.reserves,
             createdAt: event.createdAt,
             updatedAt: event.updatedAt,

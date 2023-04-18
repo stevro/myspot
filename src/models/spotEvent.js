@@ -14,8 +14,10 @@ export default class SpotEvent {
     totalSpots = null
     author = Author
     allowReserves = true
-    participants = []
-    reserves = []
+    participants = []//refactor this to a subcollection
+    reserves = []//refactor this to a subcollection
+    minutesAvailableForBooking = null
+    availableImmediatelyForBooking = true
     createdAt = null
     updatedAt = null
 
@@ -93,6 +95,14 @@ export default class SpotEvent {
             return p.id !== userId
         })
 
+    }
+
+    computeMinutesForBookingSinceNow() {
+        if (!this.date) {
+            return 0;
+        }
+
+        return moment(this.date).diff(moment(), 'minutes')
     }
 
     toString() {
