@@ -1,6 +1,7 @@
 import SpotEvent from "@/models/spotEvent";
 import categoryConverter from "@/converters/categoryConverter";
 import authorConverter from "@/converters/authorConverter";
+import coordinatesConverter from "@/converters/coordinatesConverter";
 
 const eventConverter = {
     toFirestore: (event) => {
@@ -9,6 +10,7 @@ const eventConverter = {
             title: event.title,
             category: categoryConverter.toFirestore(event.category),
             location: event.location,
+            coordinates: coordinatesConverter.toFirestore(event.coordinates),
             date: event.date,
             duration: event.duration,
             description: event.description,
@@ -27,7 +29,7 @@ const eventConverter = {
 
         data.category = categoryConverter.init(data.category);
         data.author = authorConverter.init(data.author);
-
+        data.coordinates = coordinatesConverter.init(data.coordinates)
         let event = new SpotEvent();
         event.id = snapshot.id
         Object.assign(event, data);

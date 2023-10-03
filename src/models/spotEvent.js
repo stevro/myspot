@@ -2,12 +2,14 @@ import Category from "@/models/category";
 import moment from "moment";
 import Author from "@/models/author";
 
+
 export default class SpotEvent {
 
     id = null
     title = ''
     category = Category
     location = ''
+    coordinates = null
     date = null
     duration = null
     description = ''
@@ -16,7 +18,7 @@ export default class SpotEvent {
     allowReserves = true
     participants = []//refactor this to a subcollection
     reserves = []//refactor this to a subcollection
-    minutesAvailableForBooking = null
+    minutesAvailableForBooking = null//Bookings start timeframe = Intervalul de incepere a rezervarilor
     availableImmediatelyForBooking = true
     createdAt = null
     updatedAt = null

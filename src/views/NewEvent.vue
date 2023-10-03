@@ -58,6 +58,7 @@
                         <v-card-text>
                             <v-row>
                                 <v-col cols="10">
+
                                     <VueDatePicker
                                             :placeholder="$t('spotEvent.date')"
                                             v-model="newEvent.date"
@@ -70,7 +71,10 @@
                                             teleport="body"
                                             :locale="userStore.locale"
                                             required
-                                            :rules="[rules.required]"
+                                            :rules="[rules.required()]"
+                                            auto-apply
+                                            :close-on-auto-apply="false"
+                                            :clearable="true"
                                     >
 
                                     </VueDatePicker>
@@ -80,19 +84,6 @@
                                 <v-col cols="2">
                                     <v-btn icon="mdi-repeat" variant="text" size="small"
                                            @click="initRecurrentEvent"></v-btn>
-                                </v-col>
-                            </v-row>
-
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-switch inset color="primary" v-model="newEvent.availableImmediatelyForBooking"
-                                              :label=" newEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
-                                    ></v-switch>
-                                </v-col>
-                                <v-col cols="12" v-if="!newEvent.availableImmediatelyForBooking">
-                                    <v-select v-model="newEvent.minutesAvailableForBooking" item-title="name" item-value="value" :items="minutesAvailableForBooking"
-                                              :label="$t('spotEvent.minutesAvailableForBooking')"
-                                    ></v-select>
                                 </v-col>
                             </v-row>
 
@@ -108,45 +99,19 @@
                                 </v-col>
                                 <v-col cols="12">
                                     <v-select :items="RecurrentSpotEvent.shortcuts()"
-                                              v-model="newEvent.shortcut"></v-select>
-                                </v-col>
-                                <v-col cols="3" v-if="newEvent.shortcut == 'custom'" class="text-truncate">
-                                    {{ $t('repeatableSpotEvent.repeatEvery') }}
-                                </v-col>
-                                <v-col cols="4" v-if="newEvent.shortcut == 'custom'">
-                                    <v-text-field type="number" v-model="newEvent.frequency"
-                                                  :rules="[rules.required, rules.greaterThan0]"
-                                    ></v-text-field>
-                                </v-col>
-                                <v-col cols="5" v-if="newEvent.shortcut == 'custom'">
-                                    <v-select :items="RecurrentSpotEvent.frequencies()"
-                                              @update:model-value="changeFrequencyType()"
-                                              v-model="newEvent.frequencyType"></v-select>
-                                </v-col>
+                                              v-model="newEvent.shortcut"
+                                              @update:model-value="newEvent.shortcutUpdated()"
 
-
-                                <v-col cols="12" v-if="newEvent.shortcut == 'custom' && newEvent.frequencyType == 'week'">
-                                    {{ $t('repeatableSpotEvent.repeatOn') }}
-                                </v-col>
-                                <v-col cols="12" v-if="newEvent.shortcut == 'custom' && newEvent.frequencyType == 'week'">
-                                    <v-select
-                                        chips
-                                        label="Days of week"
-                                        item-title="name"
-                                        item-value="value"
-                                        :items="nomenclatures.daysOfWeek"
-                                        multiple
-                                        v-model="newEvent.repeatOn"
                                     ></v-select>
-
                                 </v-col>
-                                <v-col cols="12" v-if="newEvent.shortcut == 'custom'">
+
+
+                                <v-col cols="12" >
                                     {{ $t('repeatableSpotEvent.ends') }}
                                 </v-col>
-                                <v-col cols="12" v-if="newEvent.shortcut == 'custom'">
-                                    <v-radio-group v-model="newEvent.endsOn" @change="changeFrequencyType()">
-                                        <v-radio label="Never" :value="0"></v-radio>
-                                        <v-radio label="On" :value="1">
+                                <v-col cols="12">
+                                    <v-radio-group v-model="newEvent.endsOn"  @change="changeFrequencyType()">
+                                        <v-radio label="On" :value="ENDS_ON_FIXED_DATE">
                                             <template v-slot:label>
                                                 <v-row align="center" justify="center">
                                                     <v-col cols="3">
@@ -170,15 +135,15 @@
                                                 </v-row>
                                             </template>
                                         </v-radio>
-                                        <v-radio :value="2">
+                                        <v-radio :value="ENDS_ON_X_OCCURRENCES">
                                             <template v-slot:label>
 
                                                 <v-row align="center" justify="center">
                                                     <v-col cols="3">
                                                         After
                                                     </v-col>
-                                                    <v-col cols="9" :disabled="newEvent.endsOn !== 2">
-                                                        <v-text-field :readonly="newEvent.endsOn !== 2" type="number"
+                                                    <v-col cols="9" :disabled="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES">
+                                                        <v-text-field :readonly="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES" type="number"
                                                                       v-model="newEvent.endingOccurrences"
                                                                       :suffix="$t('repeatableSpotEvent.occurrences')"></v-text-field>
                                                     </v-col>
@@ -190,10 +155,26 @@
 
                             </v-row>
 
+                          <v-row>
+                            <v-col cols="12">
+                              <v-switch inset color="primary" v-model="newEvent.availableImmediatelyForBooking"
+                                        :label=" newEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
+                                        :disabled="isRecurrentEvent(newEvent)"
+                                        :rules="[rules.availableImmediatelyForBooking]"
+                              ></v-switch>
+                            </v-col>
+                            <v-col cols="12" v-if="!newEvent.availableImmediatelyForBooking">
+                              <v-select v-model="newEvent.minutesAvailableForBooking" item-title="name" item-value="value" :items="minutesAvailableForBooking"
+                                        :label="$t('spotEvent.minutesAvailableForBooking')"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+
                             <v-row>
                                 <v-col cols="12">
                                     <vue-google-autocomplete country="ro" :rules="[rules.required]" id="location"
                                                              placeholder="Search a location" @change="getLocation"
+                                                             @placechanged="onLocationChange"
                                                              enable-geolocation>
                                     </vue-google-autocomplete>
                                     <!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
@@ -329,8 +310,9 @@ import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";
 import VueGoogleAutocomplete from "../components/GoogleAutocomplete.vue";
-import RecurrentSpotEvent from "@/models/recurrentSpotEvent";
+import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE, ENDS_ON_X_OCCURRENCES} from "@/models/recurrentSpotEvent";
 import recurrentEventConverter from "@/converters/recurrentEventConverter";
+import Coordinates from "@/models/coordinates";
 
 
 const {t} = useI18n()
@@ -349,6 +331,12 @@ const currentDate = computed(function () {
 const rules = ref({
     'required': v => !!v || 'Is required',
     'greaterThan0': v => v > 0 || 'Must be greater than 0',
+    'availableImmediatelyForBooking': function(v){
+      if(!isRecurrentEvent(newEvent.value)){
+        return true;
+      }
+      return !v || 'A recurrent event cannot be available for booking immediately';
+    }
 },)
 
 watch(step, function () {
@@ -382,7 +370,6 @@ function changeFrequencyType() {
         newEvent.value.applyDefaultFrequencyType(newEvent.value.frequencyType)
     })
 
-
 }
 
 async function isStepValid(stepForm) {
@@ -409,6 +396,8 @@ async function validateStep() {
 
 }
 
+
+
 async function submitEvent() {
     try {
 
@@ -432,6 +421,11 @@ function getLocation(location) {
     newEvent.value.location = location;
 }
 
+function onLocationChange(formattedLocation){
+
+  newEvent.value.coordinates = new Coordinates(formattedLocation.latitude, formattedLocation.longitude);
+}
+
 function initRecurrentEvent() {
 
     if (isRecurrentEvent(newEvent.value)) {
@@ -445,6 +439,9 @@ function initRecurrentEvent() {
     newEvent.value = repeatableEvent;
 
     changeFrequencyType()
+
+    newEvent.value.availableImmediatelyForBooking = false
+    newEvent.value.minutesAvailableForBooking = 1440
 }
 
 function disableRepeatableEvent() {
@@ -467,10 +464,10 @@ watch(() => newEvent.value.repeatOn, function(){
 })
 
 const minutesAvailableForBooking = computed(()=>{
-    return buildListOfDurationOptions()
+    return buildListOfDurationOptions(30, 1440*7)
 })
 const durationOptions = computed(()=>{
-    return buildListOfDurationOptions(30, 1440)
+    return buildListOfDurationOptions(30, 1440*7)
 })
 
 function buildListOfDurationOptions(start  = 30, max = 2880 ){
@@ -488,16 +485,21 @@ function buildListOfDurationOptions(start  = 30, max = 2880 ){
             name = `${hour} hours `;
         }
 
-        // if(i > 1440){
-        //
-        //     let days = Math.floor(i/1440)
-        //     name = `${days} days`;
-        //     list.push({
-        //         name: name,
-        //         value: i,
-        //     })
-        //     continue
-        // }
+        if(hour > 12 && hour % 12 > 0){
+          continue;
+        }
+
+      if(hour >= 24){
+
+        let days = Math.floor(hour/24)
+        name = `${days} days`;
+        list.push({
+          name: name,
+          value: i,
+        })
+        i+=1410;//because we already have i+=30
+        continue
+      }
 
         if(hour >= 6){
 

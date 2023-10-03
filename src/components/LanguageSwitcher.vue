@@ -8,7 +8,7 @@
     <template v-slot:activator="{ props }">
 
       <v-list-item
-        active-color="white"
+        color="white"
         prepend-icon="mdi-translate"
         v-bind="props"
       >
