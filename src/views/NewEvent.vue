@@ -1,211 +1,306 @@
 <template>
-  <v-container>
+    <v-container>
 
 
-    <v-card
-        class="mx-auto"
+        <v-card
+                class="mx-auto"
 
-    >
-
-      <template v-slot:prepend>
-        <span class="text-h6 font-weight-regular justify-space-between">{{ currentTitle }}</span>
-      </template>
-      <template v-slot:append>
-        <v-avatar
-            color="primary"
-            size="36"
-            density="compact"
-            v-text="step + '/3'"
-        ></v-avatar>
-      </template>
-
-
-      <v-window v-model="step">
-        <v-window-item :value="1">
-          <v-form ref="step1Form">
-            <v-card-text>
-              <v-row>
-                <v-col cols="12" md="3">
-                  <v-autocomplete v-model="newEvent.category" clearable :label="$t('spotEvent.category')"
-                                  :items="nomenclatures.categories" item-title="name" return-object
-                                  :rules="[rules.required]"
-                  >
-
-                  </v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="newEvent.title" :label="$t('spotEvent.title')"
-                                :rules="[rules.required]"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field v-model="newEvent.description" :label="$t('spotEvent.description')"
-                                ></v-text-field>
-                </v-col>
-
-              </v-row>
-            </v-card-text>
-          </v-form>
-        </v-window-item>
-
-        <v-window-item :value="2">
-          <v-form ref="step2Form">
-            <v-card-text>
-              <v-row>
-                <v-col cols="12">
-                  <v-validation
-                          :rules="[rules.required]"
-                      v-model="newEvent.date"
-                  >
-
-                    <VueDatePicker
-                        :placeholder="$t('spotEvent.date')"
-                        v-model="newEvent.date"
-                        model-type="yyyy-MM-dd HH:mm"
-                        format="dd-MM-yyyy HH:mm"
-                        :is-24="true"
-                        :min-date="currentDate"
-                        teleport="body"
-                        :locale="userStore.locale"
-                        required
-                        :rules="[rules.required]"
-                    >
-
-                    </VueDatePicker>
-
-                  </v-validation>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                    <vue-google-autocomplete country="ro" :rules="[rules.required]" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
-                    </vue-google-autocomplete>
-<!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
-<!--                                :rules="rules.required"-->
-<!--                  ></v-text-field>-->
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-select :items="nomenclatures.durations" v-model="newEvent.duration" :label="$t('spotEvent.duration')"
-                            item-title="name"
-                            item-value="value"
-                            :return-object="false"
-                            :rules="[rules.required]"
-                  ></v-select>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field type="number" v-model="newEvent.totalSpots"
-                                :label="$t('spotEvent.totalSpots')"
-                                :rules="[rules.required, rules.greaterThan0]"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-switch inset color="primary" v-model="newEvent.allowReserves"
-                            :label=" newEvent.allowReserves ? $t('spotEvent.allowReserves') : $t('spotEvent.doNotAllowReserves')"
-                  ></v-switch>
-                  <small>{{$t("spotEvent.allowReserves_hint")}}</small>
-                </v-col>
-
-              </v-row>
-            </v-card-text>
-          </v-form>
-        </v-window-item>
-
-        <v-window-item :value="3">
-
-          <v-card-text>
-            <v-row no-gutters>
-              <v-col cols="12" class="py-1">
-                <v-icon>{{ newEvent.category.icon }}</v-icon>
-                {{ newEvent.title }}
-              </v-col>
-              <v-col cols="12" class="py-1">
-                {{ newEvent.description }}
-              </v-col>
-
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-calendar-month</v-icon>
-                {{ newEvent.displayDate() }}
-              </v-col>
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-map-marker</v-icon>
-                {{ newEvent.location }}
-              </v-col>
-              <v-col cols="12" class="py-1">
-                <v-icon>mdi-account-group</v-icon>
-                {{ newEvent.totalSpots }} (<span
-                  v-if="newEvent.allowReserves">{{ $t('spotEvent.reserves_allowed') }}</span><span
-                  v-else>{{ $t('spotEvent.reserves_not_allowed') }}</span>)
-              </v-col>
-
-
-            </v-row>
-          </v-card-text>
-        </v-window-item>
-      </v-window>
-
-      <v-divider></v-divider>
-
-      <v-card-actions v-if="!isSaved">
-        <v-btn
-            v-if="step > 1"
-            variant="text"
-            @click="step--"
         >
-          {{ $t('common.btn.back') }}
-        </v-btn>
-        <v-btn
-            v-if="step === 1"
-            variant="text"
-            :to="{name:'dashboard'}"
-        >
-          {{ $t('common.btn.back_to_list') }}
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn
-            v-if="step < 3"
-            color="primary"
-            variant="flat"
-            @click="validateStep"
-        >
-          {{ $t('common.btn.next') }}
-        </v-btn>
-        <v-btn
-            v-if="step === 3"
-            color="primary"
-            variant="flat"
-            @click="submitEvent"
-        >
-          {{ $t('common.btn.submit') }}
-        </v-btn>
-      </v-card-actions>
-      <v-card-actions v-else>
 
-        <v-row>
-          <v-col cols="12">
-            <v-alert :title="$t('spotEvent.actions.created')" :text="$t('spotEvent.created')" type="success"></v-alert>
-          </v-col>
-          <v-col cols="12">
-            <v-btn :to="{name:'dashboard'}" block>
-              {{$t('common.btn.go_to_list')}}
-            </v-btn>
-          </v-col>
-        </v-row>
+            <template v-slot:prepend>
+                <span class="text-h6 font-weight-regular justify-space-between">{{ currentTitle }}</span>
+            </template>
+            <template v-slot:append>
+                <v-avatar
+                        color="primary"
+                        size="36"
+                        density="compact"
+                        v-text="step + '/3'"
+                ></v-avatar>
+            </template>
 
-      </v-card-actions>
-    </v-card>
 
-  </v-container>
+            <v-window v-model="step">
+                <v-window-item :value="1">
+                    <v-form ref="step1Form">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="12" md="3">
+                                    <v-autocomplete v-model="newEvent.category" clearable
+                                                    :label="$t('spotEvent.category')"
+                                                    :items="nomenclatures.categories" item-title="name" return-object
+                                                    :rules="[rules.required]"
+                                    >
+
+                                    </v-autocomplete>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" md="3">
+                                    <v-text-field v-model="newEvent.title" :label="$t('spotEvent.title')"
+                                                  :rules="[rules.required]"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field v-model="newEvent.description" :label="$t('spotEvent.description')"
+                                    ></v-text-field>
+                                </v-col>
+
+                            </v-row>
+                        </v-card-text>
+                    </v-form>
+                </v-window-item>
+
+                <v-window-item :value="2">
+                    <v-form ref="step2Form">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="10">
+
+                                    <VueDatePicker
+                                            :placeholder="$t('spotEvent.date')"
+                                            v-model="newEvent.date"
+                                            model-type="yyyy-MM-dd HH:mm"
+                                            format="dd-MM-yyyy HH:mm"
+                                            :is-24="true"
+                                            :minutes-increment="5"
+                                            :minutes-grid-increment="10"
+                                            :min-date="currentDate"
+                                            teleport="body"
+                                            :locale="userStore.locale"
+                                            required
+                                            :rules="[rules.required()]"
+                                            auto-apply
+                                            :close-on-auto-apply="false"
+                                            :clearable="true"
+                                    >
+
+                                    </VueDatePicker>
+
+
+                                </v-col>
+                                <v-col cols="2">
+                                    <v-btn icon="mdi-repeat" variant="text" size="small"
+                                           @click="initRecurrentEvent"></v-btn>
+                                </v-col>
+                            </v-row>
+
+                            <v-row v-if="isRecurrentEvent(newEvent)" align="center" justify="center">
+
+                                <v-col cols="6">
+                                    Repeat event
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-btn prepend-icon="mdi-repeat-off" block variant="text" color="orange"
+                                           size="small" @click="disableRepeatableEvent">Does not repeat
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-select :items="RecurrentSpotEvent.shortcuts()"
+                                              v-model="newEvent.shortcut"
+                                              @update:model-value="newEvent.shortcutUpdated()"
+
+                                    ></v-select>
+                                </v-col>
+
+
+                                <v-col cols="12" >
+                                    {{ $t('repeatableSpotEvent.ends') }}
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-radio-group v-model="newEvent.endsOn"  @change="changeFrequencyType()">
+                                        <v-radio label="On" :value="ENDS_ON_FIXED_DATE">
+                                            <template v-slot:label>
+                                                <v-row align="center" justify="center">
+                                                    <v-col cols="3">
+                                                        On
+                                                    </v-col>
+                                                    <v-col cols="9" :disabled="newEvent.endsOn !== 1">
+                                                        <VueDatePicker
+
+                                                                v-model="newEvent.endingDate"
+                                                                :clearable="false"
+                                                                :enable-time-picker="false"
+                                                                model-type="yyyy-MM-dd"
+                                                                format="dd-MM-yyyy"
+                                                                :min-date="currentDate"
+                                                                teleport="body"
+                                                                :locale="userStore.locale"
+                                                        >
+
+                                                        </VueDatePicker>
+                                                    </v-col>
+                                                </v-row>
+                                            </template>
+                                        </v-radio>
+                                        <v-radio :value="ENDS_ON_X_OCCURRENCES">
+                                            <template v-slot:label>
+
+                                                <v-row align="center" justify="center">
+                                                    <v-col cols="3">
+                                                        After
+                                                    </v-col>
+                                                    <v-col cols="9" :disabled="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES">
+                                                        <v-text-field :readonly="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES" type="number"
+                                                                      v-model="newEvent.endingOccurrences"
+                                                                      :suffix="$t('repeatableSpotEvent.occurrences')"></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </template>
+                                        </v-radio>
+                                    </v-radio-group>
+                                </v-col>
+
+                            </v-row>
+
+                          <v-row>
+                            <v-col cols="12">
+                              <v-switch inset color="primary" v-model="newEvent.availableImmediatelyForBooking"
+                                        :label=" newEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
+                                        :disabled="isRecurrentEvent(newEvent)"
+                                        :rules="[rules.availableImmediatelyForBooking]"
+                              ></v-switch>
+                            </v-col>
+                            <v-col cols="12" v-if="!newEvent.availableImmediatelyForBooking">
+                              <v-select v-model="newEvent.minutesAvailableForBooking" item-title="name" item-value="value" :items="minutesAvailableForBooking"
+                                        :label="$t('spotEvent.minutesAvailableForBooking')"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+
+                            <v-row>
+                                <v-col cols="12">
+                                    <vue-google-autocomplete country="ro" :rules="[rules.required]" id="location"
+                                                             placeholder="Search a location" @change="getLocation"
+                                                             @placechanged="onLocationChange"
+                                                             enable-geolocation>
+                                    </vue-google-autocomplete>
+                                    <!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
+                                    <!--                                :rules="rules.required"-->
+                                    <!--                  ></v-text-field>-->
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-select :items="durationOptions" v-model="newEvent.duration"
+                                              :label="$t('spotEvent.duration')"
+                                              item-title="name"
+                                              item-value="value"
+                                              :return-object="false"
+                                              :rules="[rules.required]"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field type="number" v-model="newEvent.totalSpots"
+                                                  :label="$t('spotEvent.totalSpots')"
+                                                  :rules="[rules.required, rules.greaterThan0]"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-switch inset color="primary" v-model="newEvent.allowReserves"
+                                              :label=" newEvent.allowReserves ? $t('spotEvent.allowReserves') : $t('spotEvent.doNotAllowReserves')"
+                                    ></v-switch>
+                                    <small>{{ $t("spotEvent.allowReserves_hint") }}</small>
+                                </v-col>
+
+                            </v-row>
+                        </v-card-text>
+                    </v-form>
+                </v-window-item>
+
+                <v-window-item :value="3">
+
+                    <v-card-text>
+                        <v-row no-gutters>
+                            <v-col cols="12" class="py-1">
+                                <v-icon>{{ newEvent.category.icon }}</v-icon>
+                                {{ newEvent.title }}
+                            </v-col>
+                            <v-col cols="12" class="py-1">
+                                {{ newEvent.description }}
+                            </v-col>
+
+                            <v-col cols="12" class="py-1">
+                                <v-icon>mdi-calendar-month</v-icon>
+                                {{ newEvent.displayDate() }}
+                            </v-col>
+                            <v-col cols="12" class="py-1">
+                                <v-icon>mdi-map-marker</v-icon>
+                                {{ newEvent.location }}
+                            </v-col>
+                            <v-col cols="12" class="py-1">
+                                <v-icon>mdi-account-group</v-icon>
+                                {{ newEvent.totalSpots }} (<span
+                                    v-if="newEvent.allowReserves">{{ $t('spotEvent.reserves_allowed') }}</span><span
+                                    v-else>{{ $t('spotEvent.reserves_not_allowed') }}</span>)
+                            </v-col>
+
+
+                        </v-row>
+                    </v-card-text>
+                </v-window-item>
+            </v-window>
+
+            <v-divider></v-divider>
+
+            <v-card-actions v-if="!isSaved">
+                <v-btn
+                        v-if="step > 1"
+                        variant="text"
+                        @click="step--"
+                >
+                    {{ $t('common.btn.back') }}
+                </v-btn>
+                <v-btn
+                        v-if="step === 1"
+                        variant="text"
+                        :to="{name:'dashboard'}"
+                >
+                    {{ $t('common.btn.back_to_list') }}
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                        v-if="step < 3"
+                        color="primary"
+                        variant="flat"
+                        @click="validateStep"
+                >
+                    {{ $t('common.btn.next') }}
+                </v-btn>
+                <v-btn
+                        v-if="step === 3"
+                        color="primary"
+                        variant="flat"
+                        @click="submitEvent"
+                >
+                    {{ $t('common.btn.submit') }}
+                </v-btn>
+            </v-card-actions>
+            <v-card-actions v-else>
+
+                <v-row>
+                    <v-col cols="12">
+                        <v-alert :title="$t('spotEvent.actions.created')" :text="$t('spotEvent.created')"
+                                 type="success"></v-alert>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-btn :to="{name:'dashboard'}" block>
+                            {{ $t('common.btn.go_to_list') }}
+                        </v-btn>
+                    </v-col>
+                </v-row>
+
+            </v-card-actions>
+        </v-card>
+
+    </v-container>
 </template>
 
 <script setup>
 
-import {computed, inject, ref, watch} from "vue";
+import {computed, inject, nextTick, ref, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import {addDoc, collection} from "firebase/firestore";
@@ -215,6 +310,9 @@ import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";
 import VueGoogleAutocomplete from "../components/GoogleAutocomplete.vue";
+import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE, ENDS_ON_X_OCCURRENCES} from "@/models/recurrentSpotEvent";
+import recurrentEventConverter from "@/converters/recurrentEventConverter";
+import Coordinates from "@/models/coordinates";
 
 
 const {t} = useI18n()
@@ -226,78 +324,209 @@ const step1Form = ref(null);
 const step2Form = ref(null);
 const isSaved = ref(false)
 
-const currentDate = computed(function(){
-  return moment().format('YYYY-MM-DD HH:mm')
+const currentDate = computed(function () {
+    return moment().format('YYYY-MM-DD HH:mm')
 })
 
 const rules = ref({
-  'required': v => !!v || 'Is required',
-  'greaterThan0': v => v > 0 || 'Must be greater than 0',
+    'required': v => !!v || 'Is required',
+    'greaterThan0': v => v > 0 || 'Must be greater than 0',
+    'availableImmediatelyForBooking': function(v){
+      if(!isRecurrentEvent(newEvent.value)){
+        return true;
+      }
+      return !v || 'A recurrent event cannot be available for booking immediately';
+    }
 },)
 
 watch(step, function () {
-  if (step.value < 1) {
-    step.value = 1
-  }
-  if (step.value > 3) {
-    step.value = 3;
-  }
+    if (step.value < 1) {
+        step.value = 1
+    }
+    if (step.value > 3) {
+        step.value = 3;
+    }
 })
+
 const currentTitle = computed(() => {
-  switch (step.value) {
-    case 1:
-      return t('spotEvent.step1.title');
-    case 2:
-      return t('spotEvent.step2.title');
-    case 3:
-      return t('spotEvent.step3.title');
-  }
+    switch (step.value) {
+        case 1:
+            return t('spotEvent.step1.title');
+        case 2:
+            return t('spotEvent.step2.title');
+        case 3:
+            return t('spotEvent.step3.title');
+    }
 })
 
 const newEvent = ref(new SpotEvent())
 
+function changeFrequencyType() {
+
+    if (!isRecurrentEvent(newEvent.value)) {
+        return
+    }
+    nextTick(function () {
+        newEvent.value.applyDefaultFrequencyType(newEvent.value.frequencyType)
+    })
+
+}
 
 async function isStepValid(stepForm) {
-  const {valid} = await stepForm.validate()
+    const {valid} = await stepForm.validate()
 
-  return valid;
+    return valid;
 }
 
 async function validateStep() {
 
 
-  switch (step.value) {
-    case 1:
-      if (await isStepValid(step1Form.value)) step.value++
-      break;
-    case 2:
-      if (await isStepValid(step2Form.value)) step.value++
-      break;
-    case 3:
-    default:
-      //do nothing
-  }
+    switch (step.value) {
+        case 1:
+            if (await isStepValid(step1Form.value)) step.value++
+            break;
+        case 2:
+            if (await isStepValid(step2Form.value)) step.value++
+            break;
+        case 3:
+        default:
+        //do nothing
+    }
 
 
 }
+
+
 
 async function submitEvent() {
-  try {
+    try {
 
-    newEvent.value.createdAt = moment().format('YYYY-MM-DD HH:mm Z')
-    newEvent.value.author = new Author(userStore.id, userStore.displayName)
+        newEvent.value.createdAt = moment().format('YYYY-MM-DD HH:mm Z')
+        newEvent.value.author = new Author(userStore.id, userStore.displayName)
 
-    const docRef = (await addDoc(collection(firestore, "spot_events").withConverter(eventConverter), newEvent.value));
-    console.log("Document written with ID: ", docRef.id);
-    isSaved.value = true
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
+        let docRef = null;
+        if (isRecurrentEvent(newEvent.value)) {
+            docRef = (await addDoc(collection(firestore, "recurrent_events").withConverter(recurrentEventConverter), newEvent.value));
+        } else {
+            docRef = (await addDoc(collection(firestore, "spot_events").withConverter(eventConverter), newEvent.value));
+        }
+        console.log("Document written with ID: ", docRef.id);
+        isSaved.value = true
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-function getLocation(location){
+function getLocation(location) {
     newEvent.value.location = location;
 }
+
+function onLocationChange(formattedLocation){
+
+  newEvent.value.coordinates = new Coordinates(formattedLocation.latitude, formattedLocation.longitude);
+}
+
+function initRecurrentEvent() {
+
+    if (isRecurrentEvent(newEvent.value)) {
+        return;
+    }
+
+    const repeatableEvent = new RecurrentSpotEvent()
+
+    Object.assign(repeatableEvent, newEvent.value);
+
+    newEvent.value = repeatableEvent;
+
+    changeFrequencyType()
+
+    newEvent.value.availableImmediatelyForBooking = false
+    newEvent.value.minutesAvailableForBooking = 1440
+}
+
+function disableRepeatableEvent() {
+
+    if (!isRecurrentEvent(newEvent.value)) {
+        return;
+    }
+
+    const newObj = new SpotEvent()
+    Object.assign(newObj, newEvent.value);
+    newEvent.value = newObj;
+}
+
+function isRecurrentEvent(spotEvent) {
+    return spotEvent instanceof RecurrentSpotEvent
+}
+
+watch(() => newEvent.value.repeatOn, function(){
+    newEvent.value.repeatOn.sort()
+})
+
+const minutesAvailableForBooking = computed(()=>{
+    return buildListOfDurationOptions(30, 1440*7)
+})
+const durationOptions = computed(()=>{
+    return buildListOfDurationOptions(30, 1440*7)
+})
+
+function buildListOfDurationOptions(start  = 30, max = 2880 ){
+
+    let list = [];
+
+    for(let i=start;i<=max;i+=30){
+
+        let name = '';
+        let hour = Math.floor(i/60);
+        let minutes = i%60;
+        if(hour === 1){
+            name = `${hour} hour `;
+        }else if(hour > 1){
+            name = `${hour} hours `;
+        }
+
+        if(hour > 12 && hour % 12 > 0){
+          continue;
+        }
+
+      if(hour >= 24){
+
+        let days = Math.floor(hour/24)
+        name = `${days} days`;
+        list.push({
+          name: name,
+          value: i,
+        })
+        i+=1410;//because we already have i+=30
+        continue
+      }
+
+        if(hour >= 6){
+
+            if(minutes > 0){
+                continue
+            }
+
+            list.push({
+                name: name,
+                value: i,
+            })
+            continue
+        }
+
+        if(minutes > 0) {
+            name += `${minutes} min`
+        }
+
+        list.push({
+            name: name,
+            value: i,
+        })
+    }
+
+    return list;
+}
+
 </script>
 
 <style scoped>

@@ -2,20 +2,24 @@ import Category from "@/models/category";
 import moment from "moment";
 import Author from "@/models/author";
 
+
 export default class SpotEvent {
 
     id = null
     title = ''
     category = Category
     location = ''
+    coordinates = null
     date = null
     duration = null
     description = ''
     totalSpots = null
     author = Author
     allowReserves = true
-    participants = []
-    reserves = []
+    participants = []//refactor this to a subcollection
+    reserves = []//refactor this to a subcollection
+    minutesAvailableForBooking = null//Bookings start timeframe = Intervalul de incepere a rezervarilor
+    availableImmediatelyForBooking = true
     createdAt = null
     updatedAt = null
 
@@ -93,6 +97,14 @@ export default class SpotEvent {
             return p.id !== userId
         })
 
+    }
+
+    computeMinutesForBookingSinceNow() {
+        if (!this.date) {
+            return 0;
+        }
+
+        return moment(this.date).diff(moment(), 'minutes')
     }
 
     toString() {

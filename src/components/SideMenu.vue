@@ -18,7 +18,7 @@
         v-for="(item, i) in items"
         :key="i"
         :value="item"
-        active-color="white"
+        color="white"
         :to="item.href"
         :prepend-icon="item.props.prependIcon"
         @click="$emit('menuClicked', item)"

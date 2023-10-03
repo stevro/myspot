@@ -8,7 +8,7 @@
     <template v-slot:activator="{ props }">
 
       <v-list-item
-          active-color="white"
+          color="white"
           density="compact"
           prepend-icon="mdi-account"
           v-bind="props"

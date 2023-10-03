@@ -56,6 +56,9 @@
                     :locale="userStore.locale"
                     required
                     :rules="[rules.required]"
+                    auto-apply
+                    :close-on-auto-apply="false"
+                    :clearable="true"
                 >
 
                 </VueDatePicker>
@@ -64,7 +67,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" enable-geolocation>
+                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" @placechanged="onLocationChange" enable-geolocation>
                 </vue-google-autocomplete>
 <!--              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"-->
 <!--                            :rules="rules.required"-->
@@ -156,6 +159,7 @@ import SpotEvent from "@/models/spotEvent";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
 import VueGoogleAutocomplete from "@/components/GoogleAutocomplete.vue";
+import Coordinates from "@/models/coordinates";
 
 const firestore = inject('firestore')
 const spotEvent = ref(new SpotEvent())
@@ -234,6 +238,10 @@ function getLocation(location){
         spotEvent.value.location = location.target.value;
     }
 
+}
+
+function onLocationChange(formattedLocation){
+  spotEvent.value.coordinates = new Coordinates(formattedLocation.latitude, formattedLocation.longitude);
 }
 
 </script>

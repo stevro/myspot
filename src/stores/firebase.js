@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {getMessaging, getToken, onMessage} from "@firebase/messaging";
+import {getMessaging, getToken, onMessage} from "firebase/messaging";
 
 
 import {useNotificationStore} from "@/stores/notification";
