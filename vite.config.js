@@ -30,7 +30,7 @@ export default defineConfig({
           manifest: {
               name: 'My Spot App',
               short_name: 'My Spot App',
-              description: 'App to help people manage booking on various events',
+              description: 'App to help people manage bookings on various events',
               theme_color: '#ffffff',
               background_color: "#ffffff",
               display: "standalone",
