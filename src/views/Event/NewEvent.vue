@@ -62,7 +62,7 @@
                   <VueDatePicker
                       :placeholder="$t('spotEvent.date')"
                       v-model="newEvent.date"
-                      model-type="yyyy-MM-dd HH:mm"
+                      model-type="timestamp"
                       format="dd-MM-yyyy HH:mm"
                       :is-24="true"
                       :minutes-increment="5"
@@ -123,7 +123,7 @@
                                 v-model="newEvent.endingDate"
                                 :clearable="false"
                                 :enable-time-picker="false"
-                                model-type="yyyy-MM-dd"
+                                model-type="timestamp"
                                 format="dd-MM-yyyy"
                                 :min-date="minDateForEvent"
                                 teleport="body"
@@ -400,7 +400,12 @@ async function validateStep() {
       if (await isStepValid(step1Form.value)) step.value++
       break;
     case 2:
-      if (await isStepValid(step2Form.value)) step.value++
+      if (await isStepValid(step2Form.value)){
+        if(newEvent.value.isRecurring()) {
+          newEvent.value.computeEndDate()
+        }
+        step.value++
+      }
       break;
     case 3:
     default:

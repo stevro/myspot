@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 const admin = require("firebase-admin");
 
 
-exports.promoteReserve = functions.firestore.document("spot_events/{messageId}").onUpdate(
+exports.promoteReserve = functions.region('europe-west3').firestore.document("spot_events/{messageId}").onUpdate(
     async (change) => {
         // Notification details.
         const spotEvent = change.after.data();

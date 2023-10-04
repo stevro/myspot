@@ -10,8 +10,8 @@ export default class SpotEvent {
     category = Category
     location = ''
     coordinates = null
-    date = null
-    duration = null
+    date = null //timestamp in milliseconds
+    duration = null //minutes
     description = ''
     totalSpots = null
     author = Author

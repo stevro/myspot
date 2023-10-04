@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 const admin = require("firebase-admin");
 
 
-exports.sendNewEventNotifications = functions.firestore.document("spot_events/{messageId}").onCreate(
+exports.sendNewEventNotifications = functions.region('europe-west3').firestore.document("spot_events/{messageId}").onCreate(
   async (snapshot) => {
     // Notification details.
     const spotEvent = snapshot.data();

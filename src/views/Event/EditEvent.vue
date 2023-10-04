@@ -48,7 +48,7 @@
                 <VueDatePicker
                     :placeholder="$t('spotEvent.date')"
                     v-model="spotEvent.date"
-                    model-type="yyyy-MM-dd HH:mm"
+                    model-type="timestamp"
                     format="dd-MM-yyyy HH:mm"
                     :is-24="true"
                     :min-date="currentDate"

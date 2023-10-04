@@ -190,7 +190,7 @@
 import {useI18n} from "vue-i18n";
 import {computed, inject, onMounted, ref, watch} from "vue";
 import moment from 'moment';
-import {collection, deleteDoc, doc, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import {collection, deleteDoc, doc, onSnapshot, orderBy, query, Timestamp, where} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
@@ -339,7 +339,7 @@ onMounted(() => {
 
 
 function searchEvents() {
-  let now = moment().format('YYYY-MM-DD HH:mm')
+  let now = Timestamp.now().toMillis()
 
   const q = query(collection(firestore, "spot_events"), where('date', '>=', now), orderBy('date', 'asc')).withConverter(eventConverter);
   const unsubscribe = onSnapshot(q, (querySnapshot) => {

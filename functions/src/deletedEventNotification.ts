@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 
 const admin = require("firebase-admin");
 
-exports.sendDeletedEventNotifications = functions.firestore.document("spot_events/{messageId}").onDelete(
+exports.sendDeletedEventNotifications = functions.region('europe-west3').firestore.document("spot_events/{messageId}").onDelete(
     async (snapshot) => {
         // Notification details.
         const spotEvent = snapshot.data();

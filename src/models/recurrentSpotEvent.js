@@ -13,8 +13,8 @@ export default class RecurrentSpotEvent extends SpotEvent {
     frequencyType = 'day'
     repeatOn = [] //days of week. 0 -> Monday, 6 -> Sunday
     endsOn = ENDS_ON_X_OCCURRENCES
-    startDate = null //should be identical with 'date' from SpotEvent
-    endingDate = null
+    startDate = null //should be identical with 'date' from SpotEvent - timestamp in milliseconds
+    endingDate = null //timestamp in milliseconds
     endingOccurrences = 30
 
 
@@ -91,37 +91,38 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 break;
         }
 
-
-        txt += " until"
-        if (this.endsOn === ENDS_ON_FIXED_DATE) {
-            txt += " " + moment(this.endingDate).format('DD-MM-YYYY')
-        } else if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
-            txt += " " + this.computeEndDate().format('DD-MM-YYYY')
-        }
+        txt += " until "  + moment(this.endingDate).format('DD-MM-YYYY')
 
         return txt
     }
 
     computeEndDate() {
         if (this.endsOn === ENDS_ON_FIXED_DATE) {
-            return this.endsOn
+            return this.endingDate
         }
 
         switch (this.shortcut) {
             case 'daily':
-                return moment(this.startDate).add(this.endingOccurrences, 'days')
+                this.endingDate = moment(this.startDate).add(this.endingOccurrences-1, 'days').valueOf()
+                break;
             case 'weekly':
-                return moment(this.startDate).add(this.endingOccurrences, 'weeks')
+                this.endingDate = moment(this.startDate).add(this.endingOccurrences, 'weeks').valueOf()
+                break;
             case 'monthly':
-                return moment(this.startDate).add(this.endingOccurrences, 'months')
+                this.endingDate = moment(this.startDate).add(this.endingOccurrences, 'months').valueOf()
+                break;
             case 'annually':
-                return moment(this.startDate).add(this.endingOccurrences, 'years')
+                this.endingDate = moment(this.startDate).add(this.endingOccurrences, 'years').valueOf()
+                break;
             case 'every_weekday':
 
                 //This library uses inclusive start, exclusive end intervals. What this means is that the start day is included in the result, but the end day is not.
-                return business.addWeekDays(moment(this.startDate), this.endingOccurrences-1);
+                this.endingDate = business.addWeekDays(moment(this.startDate), this.endingOccurrences-1).valueOf()
+                break;
 
         }
+
+        return this.endingDate;
     }
 
     shortcutUpdated() {
@@ -168,7 +169,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 30
                 } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
-                    this.endingDate = moment(this.startDate).add(30, 'days').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(30, 'days').valueOf()
                 }
 
                 this.repeatOn = [0, 1, 2, 3, 4, 5, 6]
@@ -179,7 +180,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 16
                 } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
-                    this.endingDate = moment(this.startDate).add(16, 'weeks').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(16, 'weeks').valueOf()
                 }
 
                 this.repeatOn = [moment(this.startDate).isoWeekday()]
@@ -191,7 +192,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 12
                 } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
-                    this.endingDate = moment(this.startDate).add(12, 'months').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(12, 'months').valueOf()
                 }
                 this.repeatOn = []
                 break;
@@ -200,7 +201,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 5
                 } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
-                    this.endingDate = moment(this.startDate).add(5, 'years').format('YYYY-MM-DD')
+                    this.endingDate = moment(this.startDate).add(5, 'years').valueOf()
                 }
                 this.repeatOn = []
                 break;
