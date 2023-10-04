@@ -158,6 +158,7 @@
               <v-row>
                 <v-col cols="12">
                   <v-switch inset color="primary" v-model="newEvent.availableImmediatelyForBooking"
+                            @update:model-value="newEvent.availableImmediatelyForBooking ? newEvent.minutesAvailableForBooking = null : ''"
                             :label=" newEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
                             :disabled="newEvent.isRecurring()"
                             :rules="[rules.availableImmediatelyForBooking]"
@@ -244,10 +245,16 @@
                   v-if="newEvent.allowReserves">{{ $t('spotEvent.reserves_allowed') }}</span><span
                   v-else>{{ $t('spotEvent.reserves_not_allowed') }}</span>)
               </v-col>
-              <v-col cols="12" class="py-1">
+              <v-col cols="12" class="py-1" v-if="newEvent.minutesAvailableForBooking">
                 <v-icon>mdi-calendar-clock</v-icon>
                 {{
                   $t('spotEvent.step3.availableTimeForBookingDisplay', {'time': newEvent.displayTimeAvailableForBooking()})
+                }}
+              </v-col>
+              <v-col cols="12" class="py-1" v-else>
+                <v-icon>mdi-calendar-clock</v-icon>
+                {{
+                  $t('spotEvent.step3.availableImmediatelyForBookingDisplay')
                 }}
               </v-col>
 

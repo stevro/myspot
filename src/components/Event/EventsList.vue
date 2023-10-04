@@ -341,6 +341,8 @@ onMounted(() => {
 function searchEvents() {
   let now = Timestamp.now().toMillis()
 
+  //add where minutesAvailableForBooking*60000 + now > date
+
   const q = query(collection(firestore, "spot_events"), where('date', '>=', now), orderBy('date', 'asc')).withConverter(eventConverter);
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     isLoading.value = false;

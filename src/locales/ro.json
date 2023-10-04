@@ -63,7 +63,8 @@
     },
     "step3": {
       "title": "Revizuire",
-      "availableTimeForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare cu {time} inainte"
+      "availableTimeForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare cu {time} inainte",
+      "availableImmediatelyForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare imediat"
     }
   },
   "repeatableSpotEvent" : {

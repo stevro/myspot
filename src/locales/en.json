@@ -63,7 +63,8 @@
     },
     "step3": {
       "title": "Review",
-      "availableTimeForBookingDisplay": "Event will be available for registration with {time} before"
+      "availableTimeForBookingDisplay": "Event will be available for registration with {time} before",
+      "availableImmediatelyForBookingDisplay": "Event will be available for registration immediately"
     }
   },
   "repeatableSpotEvent" : {
