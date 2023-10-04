@@ -90,6 +90,14 @@ const items = [
     href: {'name': 'dashboard'},
     active: true,
   },
+  {
+    props: {
+      prependIcon: 'mdi-repeat',
+    },
+    title: 'sidebar.recurring_events',
+    href: {'name': 'recurring-events'},
+    active: true,
+  },
   // {
   //   props: {
   //     prependIcon: 'mdi-account-box',

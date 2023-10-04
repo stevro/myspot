@@ -5,7 +5,6 @@ import coordinatesConverter from "@/converters/coordinatesConverter";
 
 const eventConverter = {
     toFirestore: (event) => {
-
         return {
             title: event.title,
             category: categoryConverter.toFirestore(event.category),

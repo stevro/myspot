@@ -29,7 +29,8 @@
     "dashboard": "Events",
     "profile": "Profil",
     "logout": "Logout",
-    "language_switch": "Change language"
+    "language_switch": "Change language",
+    "recurring_events": "Recurring events"
   },
   "languageSwitcher": {
     "title": "Change language"
@@ -61,7 +62,8 @@
       "title": "Date & Location"
     },
     "step3": {
-      "title": "Review"
+      "title": "Review",
+      "availableTimeForBookingDisplay": "Event will be available for registration with {time} before"
     }
   },
   "repeatableSpotEvent" : {

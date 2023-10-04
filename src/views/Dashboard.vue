@@ -7,7 +7,7 @@
 
 <script setup>
 
-import EventsList from "@/components/EventsList.vue";
+import EventsList from "@/components/Event/EventsList.vue";
 </script>
 
 <style scoped>

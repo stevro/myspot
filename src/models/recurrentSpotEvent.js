@@ -1,5 +1,6 @@
 import SpotEvent from "@/models/spotEvent";
 import moment from "moment";
+import business from 'moment-business';
 
 export const ENDS_ON_FIXED_DATE = 'fixed_date';
 export const ENDS_ON_X_OCCURRENCES = 'x_occurrences';
@@ -65,14 +66,67 @@ export default class RecurrentSpotEvent extends SpotEvent {
         ]
     }
 
-    __toString() {
-        //in functie de ce e selectat formatam intr-un string util
-        return "Repeats every week on Sunday at 10:00"
+    displayFrequency() {
+        let $this = this;
+        let txt = "Repeats" + " " + RecurrentSpotEvent.shortcuts().filter(function (shortcut) {
+            return shortcut.value === $this.shortcut
+        }).pop().title.toLowerCase()
+
+
+        switch (this.shortcut) {
+            case 'daily':
+
+                break;
+            case 'weekly':
+                txt += " on " + moment(this.startDate).format('dddd') + " at " + moment(this.startDate).format('HH:mm');
+                break;
+            case 'monthly':
+                txt += " on " + moment(this.startDate).format('Do') + " at " + moment(this.startDate).format('HH:mm');
+                break;
+            case 'annually':
+                txt += " on " + moment(this.startDate).format('Do MMM') + " at " + moment(this.startDate).format('HH:mm');
+                break;
+            case 'every_weekday':
+                txt += " at " + moment(this.startDate).format('HH:mm');
+                break;
+        }
+
+
+        txt += " until"
+        if (this.endsOn === ENDS_ON_FIXED_DATE) {
+            txt += " " + moment(this.endingDate).format('DD-MM-YYYY')
+        } else if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
+            txt += " " + this.computeEndDate().format('DD-MM-YYYY')
+        }
+
+        return txt
     }
 
-    shortcutUpdated(){
+    computeEndDate() {
+        if (this.endsOn === ENDS_ON_FIXED_DATE) {
+            return this.endsOn
+        }
 
-        switch (this.shortcut){
+        switch (this.shortcut) {
+            case 'daily':
+                return moment(this.startDate).add(this.endingOccurrences, 'days')
+            case 'weekly':
+                return moment(this.startDate).add(this.endingOccurrences, 'weeks')
+            case 'monthly':
+                return moment(this.startDate).add(this.endingOccurrences, 'months')
+            case 'annually':
+                return moment(this.startDate).add(this.endingOccurrences, 'years')
+            case 'every_weekday':
+
+                //This library uses inclusive start, exclusive end intervals. What this means is that the start day is included in the result, but the end day is not.
+                return business.addWeekDays(moment(this.startDate), this.endingOccurrences-1);
+
+        }
+    }
+
+    shortcutUpdated() {
+
+        switch (this.shortcut) {
             case 'daily':
                 this.frequencyType = 'day';
                 break;
@@ -95,7 +149,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
     applyDefaultFrequencyType(frequencyType, selectedDate) {
 
-        if(!frequencyType){
+        if (!frequencyType) {
             console.error('You must pass a frequency type to applyDefaultFrequencyType');
         }
 
@@ -113,7 +167,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 30
-                }else if (this.endsOn === ENDS_ON_FIXED_DATE) {
+                } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
                     this.endingDate = moment(this.startDate).add(30, 'days').format('YYYY-MM-DD')
                 }
 
@@ -124,11 +178,11 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 16
-                }else if (this.endsOn === ENDS_ON_FIXED_DATE) {
+                } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
                     this.endingDate = moment(this.startDate).add(16, 'weeks').format('YYYY-MM-DD')
                 }
 
-               this.repeatOn = [moment(this.startDate).isoWeekday()]
+                this.repeatOn = [moment(this.startDate).isoWeekday()]
 
                 break;
             case 'month':
@@ -136,7 +190,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 // this.frequencyType = 'month'
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 12
-                }else if (this.endsOn === ENDS_ON_FIXED_DATE) {
+                } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
                     this.endingDate = moment(this.startDate).add(12, 'months').format('YYYY-MM-DD')
                 }
                 this.repeatOn = []
@@ -145,7 +199,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
                 if (this.endsOn === ENDS_ON_X_OCCURRENCES) {
                     this.endingOccurrences = 5
-                }else if (this.endsOn === ENDS_ON_FIXED_DATE) {
+                } else if (this.endsOn === ENDS_ON_FIXED_DATE) {
                     this.endingDate = moment(this.startDate).add(5, 'years').format('YYYY-MM-DD')
                 }
                 this.repeatOn = []
@@ -155,12 +209,9 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
     }
 
-    // computeMinutesForBooking() {
-    //     if (!this.startDate) {
-    //         return 0;
-    //     }
-    //
-    //     return moment(this.startDate).diff(moment(), 'minutes')
-    // }
+    isRecurring() {
+        return true;
+    }
+
 
 }

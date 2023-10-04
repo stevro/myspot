@@ -43,7 +43,7 @@ const router = createRouter({
                 {
                     path: '/terms-of-service',
                     name: 'terms-of-service',
-                    component: () => import('@/views/TermsOfService.vue'),
+                    component: () => import('@/views/PublicPages/TermsOfService.vue'),
                     meta: {
                         requiresAuth: false,
                         title: 'Terms of service',
@@ -53,7 +53,7 @@ const router = createRouter({
                 {
                     path: '/privacy-policy',
                     name: 'privacy-policy',
-                    component: () => import('@/views/PrivacyPolicy.vue'),
+                    component: () => import('@/views/PublicPages/PrivacyPolicy.vue'),
                     meta: {
                         requiresAuth: false,
                         title: 'Privacy policy',
@@ -80,7 +80,7 @@ const router = createRouter({
                 {
                     path: '/event/new',
                     name: 'new-event',
-                    component: () => import('@/views/NewEvent.vue'),
+                    component: () => import('@/views/Event/NewEvent.vue'),
                     meta: {
                         requiresAuth: true,
                         title: 'New event',
@@ -89,7 +89,7 @@ const router = createRouter({
                 {
                     path: '/event/:eventId/edit',
                     name: 'edit-event',
-                    component: () => import('@/views/EditEvent.vue'),
+                    component: () => import('@/views/Event/EditEvent.vue'),
                     meta: {
                         requiresAuth: true,
                         title: 'Edit event',
@@ -102,6 +102,26 @@ const router = createRouter({
                     meta: {
                         requiresAuth: true,
                         title: 'Profile',
+                    }
+
+                },
+                {
+                    path: '/events/recurrent',
+                    name: 'recurring-events',
+                    component: () => import('@/views/RecurringEvent/List.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        title: 'Recurring events',
+                    }
+
+                },
+                {
+                    path: '/events/recurrent/:eventId/edit',
+                    name: 'edit-recurrent-event',
+                    component: () => import('@/views/RecurringEvent/EditRecurrentEvent.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        title: 'Edit recurring event',
                     }
 
                 },

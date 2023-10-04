@@ -29,7 +29,8 @@
     "dashboard": "Evenimente",
     "profile": "Profil",
     "logout": "Deconectare",
-    "language_switch": "Limbă"
+    "language_switch": "Limbă",
+    "recurring_events": "Evenimente recurente"
   },
   "languageSwitcher": {
     "title": "Schimbă limba"
@@ -61,7 +62,8 @@
       "title": "Data & Locatia"
     },
     "step3": {
-      "title": "Revizuire"
+      "title": "Revizuire",
+      "availableTimeForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare cu {time} inainte"
     }
   },
   "repeatableSpotEvent" : {

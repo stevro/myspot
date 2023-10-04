@@ -100,12 +100,45 @@ export default class SpotEvent {
     }
 
     computeMinutesForBookingSinceNow() {
+
+        if(this.minutesAvailableForBooking){
+            return this.minutesAvailableForBooking;
+        }
+
         if (!this.date) {
             return 0;
         }
 
         return moment(this.date).diff(moment(), 'minutes')
     }
+
+    displayTimeAvailableForBooking(){
+
+        let duration = moment.duration(this.minutesAvailableForBooking, 'minute');
+
+        let m = duration.minutes()
+        let h = duration.hours()
+        let d = duration.days()
+
+        let txt = ''
+        if(d > 0){
+            txt += d + ' days '
+        }
+        if(h > 0){
+            txt += h + ' hours '
+        }
+        if(m > 0){
+            txt += m + ' minutes '
+        }
+
+        return txt;
+    }
+
+    isRecurring(){
+        return false;
+    }
+
+
 
     toString() {
         return this.title;

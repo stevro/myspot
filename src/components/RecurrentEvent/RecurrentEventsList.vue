@@ -17,28 +17,7 @@
             :loading="isSearching"
         ></v-combobox>
       </v-col>
-      <v-col cols="12" md="4">
-        <v-btn-toggle
-            v-model="viewOnly"
-            color="accent"
-            group
-            density="compact"
-        >
-          <v-btn value="all">
-            {{ $t('eventItem.search_all') }}
-          </v-btn>
 
-          <v-btn value="createdByMe">
-            {{ $t('eventItem.search_my_own') }}
-          </v-btn>
-
-          <v-btn value="bookedByMe">
-            {{ $t('eventItem.search_i_go') }}
-          </v-btn>
-
-
-        </v-btn-toggle>
-      </v-col>
       <v-col cols="12" md="2">
         <v-btn prepend-icon="mdi-plus" block :to="{'name':'new-event'}">{{ $t('common.btn.new') }}</v-btn>
       </v-col>
@@ -112,70 +91,43 @@
                   {{ eventItem.spotEvent.location }}
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item
+                  density="compact"
+                  prepend-icon="mdi-repeat"
+              >
+                <v-list-item-title>
+                  {{ eventItem.spotEvent.displayFrequency() }}
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
-
-
-            <participants-list :event-item="eventItem"></participants-list>
-
 
           </v-card-text>
 
           <v-divider></v-divider>
           <v-card-actions>
             <v-row>
-              <v-col cols="12">
-                <book-spot :spot-event="eventItem.spotEvent"></book-spot>
-              </v-col>
-              <v-col cols="12"
-                     v-if="eventItem.spotEvent.isParticipant(userStore.id) || eventItem.spotEvent.isReserve(userStore.id)">
-                <withdraw :spot-event="eventItem.spotEvent"></withdraw>
-              </v-col>
+
               <v-col cols="12" class="text-left pt-0" v-if="eventItem.spotEvent.isAuthor(userStore.id)">
                 <v-divider></v-divider>
                 <v-btn
                     color="accent"
                     icon="mdi-note-edit-outline"
-                    :to="{name:'edit-event',params:{'eventId':eventItem.spotEvent.id}}"
+                    :to="{name:'edit-recurrent-event',params:{'eventId':eventItem.spotEvent.id}}"
                     variant="plain"
 
                 ></v-btn>
                 <v-btn
                     color="red"
                     icon="mdi-delete"
-                    @click="deleteSpotEvent(eventItem.spotEvent)"
+                    @click="deleteRecurrentEvent(eventItem.spotEvent)"
                     variant="plain"
 
                 ></v-btn>
               </v-col>
-              <!--              <v-col cols="6" class="text-right pt-0">-->
-              <!--                <v-btn-->
-              <!--                    color="accent"-->
-              <!--                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"-->
-              <!--                    @click="eventItem.showDetails = !eventItem.showDetails"-->
-              <!--                ></v-btn>-->
-              <!--              </v-col>-->
+
             </v-row>
           </v-card-actions>
-          <!--          <v-expand-transition>-->
-          <!--            <div v-show="eventItem.showDetails">-->
-          <!--              <v-divider></v-divider>-->
 
-          <!--              <v-card-text>-->
-          <!--                <v-row no-gutters>-->
-
-          <!--                  <v-col cols="12" class="py-1">-->
-          <!--                    <v-icon>mdi-account-group</v-icon>-->
-          <!--                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}-->
-          <!--                  </v-col>-->
-          <!--                  <v-col cols="12" class="py-1">-->
-          <!--                    <v-icon>mdi-account</v-icon>-->
-          <!--                    {{ eventItem.spotEvent.author }}-->
-          <!--                  </v-col>-->
-          <!--                </v-row>-->
-
-          <!--              </v-card-text>-->
-          <!--            </div>-->
-          <!--          </v-expand-transition>-->
         </v-card>
       </v-col>
     </v-row>
@@ -189,16 +141,12 @@
 
 import {useI18n} from "vue-i18n";
 import {computed, inject, onMounted, ref, watch} from "vue";
-import moment from 'moment';
 import {collection, deleteDoc, doc, onSnapshot, orderBy, query, where} from "firebase/firestore";
-import eventConverter from "@/converters/eventConverter";
+import recurrentEventConverter from "@/converters/recurrentEventConverter";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
 import EventListItem from "@/models/eventListItem";
-import BookSpot from "@/components/BookSpot.vue";
-import Withdraw from "@/components/Withdraw.vue";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
-import ParticipantsList from "@/components/participantsList.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
@@ -207,25 +155,10 @@ const search = ref('')
 const isSearching = ref(false);
 const nomenclatures = useNomenclaturesStore()
 const userStore = useUserStore()
-const showOnlyCreatedByMe = computed(function () {
-  return viewOnly.value === 'createdByMe'
-})
-const showOnlyBookedByMe = computed(function () {
-  return viewOnly.value === 'bookedByMe'
-})
-const viewOnly = ref('all')
+
+
 const events = ref([])
 
-watch(showOnlyCreatedByMe, function () {
-  setTimeout(function () {
-    filterEvents()
-  }, 50)
-})
-watch(showOnlyBookedByMe, function () {
-  setTimeout(function () {
-    filterEvents()
-  }, 50)
-})
 
 watch(search, function (newSearch, oldSearch) {
   setTimeout(function () {
@@ -238,28 +171,7 @@ function filterEvents() {
 
   let newSearch = search.value;
   if (!newSearch || typeof newSearch === 'undefined' || newSearch.length === 0) {
-    events.value.map(function (eventListItem) {
-
-      if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
-        eventListItem.isVisible = true;
-        return;
-      }
-
-      if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
-        eventListItem.isVisible = true;
-        return;
-      }
-
-      if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
-        eventListItem.isVisible = true;
-        return;
-      }
-
-      eventListItem.isVisible = false;
-    })
-
     isSearching.value = false;
-
     return;
   }
 
@@ -271,56 +183,14 @@ function filterEvents() {
     }
 
     events.value.map(function (eventListItem) {
-
-      if (eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)) {
-
-        if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-        if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-        if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-      }
-
-      eventListItem.isVisible = false
+      eventListItem.isVisible = eventListItem.spotEvent.title.includes(newSearch) || eventListItem.spotEvent.description.includes(newSearch)
     })
-
   }
 
   if (typeof newSearch === 'object') {
-
     events.value.map(function (eventListItem) {
-
-      if (eventListItem.spotEvent.category.id === newSearch.id) {
-        if (showOnlyCreatedByMe.value === false && showOnlyBookedByMe.value === false) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-        if (showOnlyCreatedByMe.value === true && eventListItem.spotEvent.author.id === userStore.id) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-        if (showOnlyBookedByMe.value === true && eventListItem.spotEvent.hasBookedSpot(userStore.id)) {
-          eventListItem.isVisible = true;
-          return;
-        }
-
-      }
-
-      eventListItem.isVisible = false
+      eventListItem.isVisible = eventListItem.spotEvent.category.id === newSearch.id
     })
-
   }
 
   isSearching.value = false;
@@ -339,9 +209,8 @@ onMounted(() => {
 
 
 function searchEvents() {
-  let now = moment().format('YYYY-MM-DD HH:mm')
 
-  const q = query(collection(firestore, "spot_events"), where('date', '>=', now), orderBy('date', 'asc')).withConverter(eventConverter);
+  const q = query(collection(firestore, "recurrent_events"), where('author.id', '==', userStore.id), orderBy('createdAt', 'desc')).withConverter(recurrentEventConverter);
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     isLoading.value = false;
     events.value = [];
@@ -357,9 +226,9 @@ function searchEvents() {
   });
 }
 
-function deleteSpotEvent(spotEvent) {
+function deleteRecurrentEvent(recurrentEvent) {
 
-  if (!spotEvent.isAuthor(userStore.id)) {
+  if (!recurrentEvent.isAuthor(userStore.id)) {
     Swal.fire({
       icon: 'warning',
       title: 'Permission denied',
@@ -378,7 +247,7 @@ function deleteSpotEvent(spotEvent) {
     confirmButtonText: t('common.confirm.delete_confirm'),
   }).then((result) => {
     if (result.isConfirmed) {
-      deleteDoc(doc(firestore, "spot_events", spotEvent.id));
+      deleteDoc(doc(firestore, "recurrent_events", recurrentEvent.id));
     }
   })
 
