@@ -11,7 +11,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
     shortcut = 'daily'
     frequency = 1
     frequencyType = 'day'
-    repeatOn = [] //days of week. 0 -> Monday, 6 -> Sunday
+    repeatOn = [] //days of week. 1 -> Monday, 7-> Sunday
     endsOn = ENDS_ON_X_OCCURRENCES
     startDate = null //should be identical with 'date' from SpotEvent - timestamp in milliseconds
     endingDate = null //timestamp in milliseconds

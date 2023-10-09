@@ -12,4 +12,4 @@ exports.sendNewEventNotifications = newEventNotification.sendNewEventNotificatio
 exports.sendDeletedEventNotifications = deletedEventNotification.sendDeletedEventNotifications;
 exports.sendUpdatedEventNotifications = updatedEventNotification.sendUpdatedEventNotifications;
 exports.promoteReserve = promoteReserve.promoteReserve;
-exports.checkRecurrentEvents = createNewEventFromRecurringEvent.createNewEventFromRecurringEvent;
+exports.createNewEventFromRecurringEvent = createNewEventFromRecurringEvent.createNewEventFromRecurringEvent;

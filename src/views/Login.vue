@@ -80,7 +80,8 @@ import {
   getRedirectResult,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signInWithRedirect
+  signInWithRedirect,
+  connectAuthEmulator
 } from "firebase/auth";
 import {inject, ref} from "vue";
 import {useAuthenticationStore} from "@/stores/auth";
@@ -107,9 +108,9 @@ const auth = getAuth();
 const firebaseStore = useFirebaseStore()
 const hasLoginErrors = ref(false)
 const loginError = ref('')
-// if(process.env.NODE_ENV !== "production") {
-//   connectAuthEmulator(auth, "http://localhost:9099");
-// }
+if(!import.meta.env.PROD) {
+  connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 auth.useDeviceLanguage();
 

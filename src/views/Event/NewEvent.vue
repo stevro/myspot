@@ -326,7 +326,7 @@ import {useI18n} from "vue-i18n";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import {addDoc, collection} from "firebase/firestore";
 import {useUserStore} from "@/stores/user";
-import moment from "moment/moment";
+import moment from "moment-timezone";
 import eventConverter from "@/converters/eventConverter";
 import SpotEvent from "@/models/spotEvent";
 import Author from "@/models/author";

@@ -1,5 +1,5 @@
 import Category from "@/models/category";
-import moment from "moment";
+import moment from "moment-timezone";
 import Author from "@/models/author";
 
 
@@ -11,6 +11,7 @@ export default class SpotEvent {
     location = ''
     coordinates = null
     date = null //timestamp in milliseconds
+    timezone = null
     duration = null //minutes
     description = ''
     totalSpots = null
@@ -18,7 +19,7 @@ export default class SpotEvent {
     allowReserves = true
     participants = []//refactor this to a subcollection
     reserves = []//refactor this to a subcollection
-    minutesAvailableForBooking = null//Bookings start timeframe = Intervalul de incepere a rezervarilor
+    minutesAvailableForBooking = null//Bookings start timeframe = Intervalul de incepere a rezervarilor, in minute
     availableImmediatelyForBooking = true
     createdAt = null
     updatedAt = null
@@ -30,7 +31,8 @@ export default class SpotEvent {
     }
 
     displayDate() {
-        return moment(this.date).format('DD-MM-YYYY HH:mm')
+
+        return moment(this.date).format('DD-MM-YYYY HH:mm Z')
     }
 
     isAuthor(userId) {

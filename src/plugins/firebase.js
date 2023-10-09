@@ -20,9 +20,9 @@ export const initFirebase = (Vue) => {
     const analytics = getAnalytics(firebase);
     const firestore = getFirestore(firebase);
 
-    // if(process.env.NODE_ENV !== "production") {
-    //     connectFirestoreEmulator(firestore, 'localhost', 8080);
-    // }
+    if(!import.meta.env.PROD) {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+    }
 
     Vue.provide('firebase', firebase)
     Vue.provide('firestore', firestore)

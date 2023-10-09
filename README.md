@@ -40,3 +40,9 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Teams. Create teams to register to your event and then let public only the remaining spots
 - [ ] History of participants registration and withdrawal
 - [ ] Locations autocomplete with GMaps or ORS
+
+# Useful commands
+- Set Node to v16 `nvm use v16`
+- Start development env with `npm run dev`
+- Start local emulators `firebase emulators:start --import ./local --export-on-exit`
+- Running Scheduled Firebase Functions Locally `firebase functions:shell` then run your function `yourFunction()`

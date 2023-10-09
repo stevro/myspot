@@ -189,7 +189,7 @@
 
 import {useI18n} from "vue-i18n";
 import {computed, inject, onMounted, ref, watch} from "vue";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {collection, deleteDoc, doc, onSnapshot, orderBy, query, Timestamp, where} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {useUserStore} from "@/stores/user";
