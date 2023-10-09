@@ -341,8 +341,6 @@ onMounted(() => {
 function searchEvents() {
   let now = Timestamp.now().toMillis()
 
-  //add where minutesAvailableForBooking*60000 + now > date
-
   const q = query(collection(firestore, "spot_events"), where('date', '>=', now), orderBy('date', 'asc')).withConverter(eventConverter);
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     isLoading.value = false;
@@ -352,6 +350,8 @@ function searchEvents() {
       let data = doc.data();
 
       if(data.date > data.minutesAvailableForBooking*60000 + now){
+        //add a check for author
+        //if author show the event but add a message that others are unable to view it yet
         return;
       }
 

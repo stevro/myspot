@@ -20,7 +20,7 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Allow searching on booked events
 - [x] Show participants and reserves list to each event
 - [ ] Create a landing page
-- [ ] Recurrent events
+- [x] Recurrent events
 - [x] Create T&C and Privacy Policy pages
 - [ ] Archive old events
 - [ ] Share event on FB/Whatsapp
