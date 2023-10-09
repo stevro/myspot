@@ -6,6 +6,7 @@ import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE} from "@/models/recurrentSpotEven
 const recurrentEventConverter = {
     toFirestore: (event) => {
 
+
         event.computeEndDate()
 
         return Object.assign(eventConverter.toFirestore(event),

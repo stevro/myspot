@@ -98,7 +98,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
 
     computeEndDate() {
         if (this.endsOn === ENDS_ON_FIXED_DATE) {
-            console.log('fixed date', this.endingDate);
+
             return this.endingDate
         }
 
@@ -122,7 +122,7 @@ export default class RecurrentSpotEvent extends SpotEvent {
                 break;
 
         }
-        console.log('x occ', this.endingDate);
+
         return this.endingDate;
     }
 

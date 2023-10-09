@@ -16,7 +16,7 @@ exports.createNewEventFromRecurringEvent = functions.region('europe-west3').pubs
     functions.logger.debug('Now is: ' + d.toISOString())
     functions.logger.debug('Now timestamp: ' + now)
 
-    const recurrentEvents = await admin.firestore().collection("recurrent_events").get();
+    const recurrentEvents = await admin.firestore().collection("recurrent_events").where('endingDate' ,'>=', now).get();
 
     functions.logger.debug('Found ' + recurrentEvents.size + ' recurrent events')
 
