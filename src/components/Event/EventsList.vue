@@ -351,6 +351,10 @@ function searchEvents() {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
 
+      if(data.date > data.minutesAvailableForBooking*60000 + now){
+        return;
+      }
+
       events.value.push(new EventListItem(data))
     });
 
