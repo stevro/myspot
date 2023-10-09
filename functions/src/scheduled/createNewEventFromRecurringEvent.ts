@@ -11,12 +11,14 @@ exports.createNewEventFromRecurringEvent = functions.region('europe-west3').pubs
 
     // let d = new Date('2023-10-15 17:00')
     let d = new Date()
+    d.setSeconds(0)
+    d.setMilliseconds(0)
     now = d.valueOf()
 
     functions.logger.debug('Now is: ' + d.toISOString())
     functions.logger.debug('Now timestamp: ' + now)
 
-    const recurrentEvents = await admin.firestore().collection("recurrent_events").where('endingDate' ,'>=', now).get();
+    const recurrentEvents = await admin.firestore().collection("recurrent_events").where('endingDate', '>=', now).get();
 
     functions.logger.debug('Found ' + recurrentEvents.size + ' recurrent events')
 
@@ -26,8 +28,7 @@ exports.createNewEventFromRecurringEvent = functions.region('europe-west3').pubs
     }
 
     recurrentEvents.forEach((recurrentEvent) => {
-        functions.logger.debug('Recurrent event id: ' + recurrentEvent.id);
-        functions.logger.debug('Recurrent event title: ' + recurrentEvent.data().title);
+        functions.logger.debug('Recurrent event id: ' + recurrentEvent.id + ' - Recurrent event title: ' + recurrentEvent.data().title);
 
         let nextDate;
         if (false === (nextDate = isItTimeToCreateNewEvent(recurrentEvent))) {
@@ -50,7 +51,7 @@ async function isEventAlreadyCreated(nextSpotEvent) {
     const existingEvents = await admin.firestore().collection("spot_events").where('author.id', '==', nextSpotEvent.author.id).where('date', '==', nextSpotEvent.date).where('category.id', '==', nextSpotEvent.category.id).limit(1).get();
 
 
-    if(existingEvents.empty){
+    if (existingEvents.empty) {
         return false
     }
 
@@ -58,7 +59,7 @@ async function isEventAlreadyCreated(nextSpotEvent) {
         functions.logger.info('This event has already been added. Skip creating a new one.')
         functions.logger.info('Found event ID: ' + doc.id)
         functions.logger.debug('Found event data')
-        functions.logger.debug( doc.data())
+        functions.logger.debug(doc.data())
     });
 
     return true
@@ -102,8 +103,11 @@ function isItTimeToCreateNewEvent(recurrentEvent) {
     }
 
     let nextDate = nextEventScheduledDate(data);
+    let futureDate = now + data.minutesAvailableForBooking * 60000
+    functions.logger.info('Next date timestamp:', nextDate)
+    functions.logger.info('Current timestamp + minutes available for booking:', futureDate)
 
-    if ((now + data.minutesAvailableForBooking * 60000) === nextDate) {
+    if (futureDate === nextDate) {
         return nextDate
     }
 
