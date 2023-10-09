@@ -7,7 +7,7 @@ const admin = require("firebase-admin");
 
 let now: number;
 
-exports.createNewEventFromRecurringEvent = functions.region('europe-west3').pubsub.schedule('every 1 minute').onRun(async (context) => {
+exports.createNewEventFromRecurringEvent = functions.region('europe-west3').pubsub.schedule('* * * * *').onRun(async (context) => {
 
     // let d = new Date('2023-10-15 17:00')
     let d = new Date()

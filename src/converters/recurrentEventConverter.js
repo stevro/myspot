@@ -1,11 +1,12 @@
 import categoryConverter from "@/converters/categoryConverter";
 import authorConverter from "@/converters/authorConverter";
 import eventConverter from "@/converters/eventConverter";
-import RecurrentSpotEvent from "@/models/recurrentSpotEvent";
+import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE} from "@/models/recurrentSpotEvent";
 
 const recurrentEventConverter = {
     toFirestore: (event) => {
 
+        event.computeEndDate()
 
         return Object.assign(eventConverter.toFirestore(event),
             {
@@ -15,8 +16,8 @@ const recurrentEventConverter = {
                 frequencyType: event.frequencyType,
                 repeatOn: event.repeatOn,
                 endsOn: event.endsOn,
-                endingDate: event.endsOn !== 0 ? event.endingDate : null,
-                endingOccurrences: event.endsOn !== 0 ? event.endingOccurrences : null,
+                endingDate: event.endingDate,
+                endingOccurrences: event.endingOccurrences,
             })
     },
     fromFirestore: (snapshot, options) => {
