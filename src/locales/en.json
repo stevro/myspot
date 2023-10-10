@@ -79,7 +79,8 @@
     "recurrent_event_title": "Recurrent event",
     "disable_recurrent_event": "Does not repeat",
     "endsOnDate_title": "On",
-    "endsOnXOccurrences_title": "After"
+    "endsOnXOccurrences_title": "After",
+    "date_of_first_event": "Date of first event"
   },
   "repeatableSpotEvent" : {
     "repeatEvery": "Every",

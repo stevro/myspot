@@ -79,7 +79,8 @@
     "recurrent_event_title": "Eveniment recurent",
     "disable_recurrent_event": "Nu este recurent",
     "endsOnDate_title": "Pe data de",
-    "endsOnXOccurrences_title": "Dupa"
+    "endsOnXOccurrences_title": "Dupa",
+    "date_of_first_event": "Data primului eveniment"
   },
   "repeatableSpotEvent" : {
     "repeatEvery": "Frecventa",
