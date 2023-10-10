@@ -71,7 +71,7 @@
                   v-if="eventItem.spotEvent.description"
                   density="compact"
               >
-                <v-list-item-title>
+                <v-list-item-title class="text-wrap">
                   {{ eventItem.spotEvent.description }}
                 </v-list-item-title>
               </v-list-item>
@@ -79,7 +79,7 @@
                   density="compact"
                   prepend-icon="mdi-calendar-month"
               >
-                <v-list-item-title>
+                <v-list-item-title class="text-wrap">
                   {{ eventItem.spotEvent.displayDate() }}
                 </v-list-item-title>
               </v-list-item>
@@ -87,7 +87,7 @@
                   density="compact"
                   prepend-icon="mdi-map-marker"
               >
-                <v-list-item-title>
+                <v-list-item-title class="text-wrap">
                   {{ eventItem.spotEvent.location }}
                 </v-list-item-title>
               </v-list-item>
@@ -95,7 +95,7 @@
                   density="compact"
                   prepend-icon="mdi-repeat"
               >
-                <v-list-item-title>
+                <v-list-item-title class="text-wrap">
                   {{ eventItem.spotEvent.displayFrequency() }}
                 </v-list-item-title>
               </v-list-item>
