@@ -58,6 +58,11 @@ async function bookSpot() {
     return false;
   }
 
+  if(!spotEvent.isTimeOkForBooking() && !spotEvent.isAuthor(userStore.id)){
+    console.log('it is not yet time to book and you are not the author of the event')
+    return false;
+  }
+
   spotEvent.addParticipant(userStore.publicProfile())
 
   await setDoc(doc(firestore, "spot_events", spotEvent.id).withConverter(eventConverter), spotEvent);
