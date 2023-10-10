@@ -24,6 +24,11 @@
     "password_repeat": "Repeat password",
     "display_name": "Display name"
   },
+  "register": {
+    "main_message": "Register if you are sure you don't have a Facebook account!",
+    "submit": "Register",
+    "go_to_login": "Go to login"
+  },
   "sidebar": {
     "hello": "Hello",
     "dashboard": "Events",

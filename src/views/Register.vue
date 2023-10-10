@@ -7,7 +7,7 @@
 
           <v-row>
             <v-col cols="12" class="text-center">
-              <h3>Register if you are sure you don't have facebook!</h3>
+              <h3>{{t('register.main_message')}}</h3>
             </v-col>
 
             <v-col cols="12" v-if="hasRegisterErrors">
@@ -45,10 +45,10 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="register()">Register</v-btn>
+              <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="register()">{{t('register.submit')}}</v-btn>
             </v-col>
             <v-col cols="12">
-              <v-btn variant="text" size="small" block :to="{name:'login'}">Go to login</v-btn>
+              <v-btn variant="text" size="small" block :to="{name:'login'}">{{t('register.go_to_login')}}</v-btn>
             </v-col>
           </v-row>
         </v-form>

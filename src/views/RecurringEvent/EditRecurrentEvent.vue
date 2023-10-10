@@ -32,8 +32,8 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-text-field v-model="spotEvent.description" :label="$t('spotEvent.description')"
-                            ></v-text-field>
+              <v-textarea v-model="spotEvent.description" :label="$t('spotEvent.description')"
+                            ></v-textarea>
             </v-col>
 
           </v-row>

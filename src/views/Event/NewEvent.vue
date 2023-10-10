@@ -44,8 +44,8 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="newEvent.description" :label="$t('spotEvent.description')"
-                  ></v-text-field>
+                  <v-textarea v-model="newEvent.description" :label="$t('spotEvent.description')"
+                  ></v-textarea>
                 </v-col>
 
               </v-row>

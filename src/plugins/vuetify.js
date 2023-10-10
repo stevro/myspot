@@ -39,6 +39,12 @@ export default createVuetify({
             hideDetails: 'auto',
             bgColor: 'white',
         },
+        VTextarea: {
+            variant: 'solo',
+            density: 'compact',
+            hideDetails: 'auto',
+            bgColor: 'white',
+        },
         VSelect: {
             variant: 'solo',
             density: 'compact',

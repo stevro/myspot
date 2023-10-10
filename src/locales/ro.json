@@ -24,6 +24,11 @@
     "password_repeat": "Repeta parola",
     "display_name": "Nume"
   },
+  "register": {
+    "main_message": "Inregistreaza-te daca nu ai cont de Facebook!",
+    "submit": "Inregistreaza",
+    "go_to_login": "Mergi la autentificare"
+  },
   "sidebar": {
     "hello": "Salut",
     "dashboard": "Evenimente",
