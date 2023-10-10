@@ -23,6 +23,7 @@
             </v-col>
             <v-col cols="12">
               <v-text-field variant="underlined" prepend-icon="mdi-email" v-model="email"
+                            type="email"
                             :label="t('login.email')"
                             :rules="[v => !!v || 'Is required']"
                             v-on:keyup.enter="register()"
