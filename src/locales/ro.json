@@ -35,7 +35,8 @@
     "profile": "Profil",
     "logout": "Deconectare",
     "language_switch": "Limbă",
-    "recurring_events": "Evenimente recurente"
+    "recurring_events": "Evenimente recurente",
+    "past_events": "Evenimente trecute"
   },
   "languageSwitcher": {
     "title": "Schimbă limba"

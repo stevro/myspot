@@ -140,7 +140,9 @@ export default class SpotEvent {
         return false;
     }
 
-
+    hasDatePassed(){
+        return this.date < new Date().valueOf()
+    }
 
     toString() {
         return this.title;

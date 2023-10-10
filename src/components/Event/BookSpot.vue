@@ -44,7 +44,12 @@ async function bookSpot() {
   let spotEvent = props.spotEvent
 
   if (spotEvent.hasBookedSpot(userStore.id)) {
-    console.error('already booked')
+    console.log('already booked')
+    return false;
+  }
+
+  if(spotEvent.hasDatePassed()){
+    console.log('date passed')
     return false;
   }
 

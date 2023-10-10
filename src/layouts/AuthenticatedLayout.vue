@@ -98,6 +98,14 @@ const items = [
     href: {'name': 'recurring-events'},
     active: true,
   },
+  {
+    props: {
+      prependIcon: 'mdi-history',
+    },
+    title: 'sidebar.past_events',
+    href: {'name': 'past-events'},
+    active: true,
+  },
   // {
   //   props: {
   //     prependIcon: 'mdi-account-box',

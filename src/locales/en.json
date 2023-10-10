@@ -35,7 +35,8 @@
     "profile": "Profil",
     "logout": "Logout",
     "language_switch": "Change language",
-    "recurring_events": "Recurring events"
+    "recurring_events": "Recurring events",
+    "past_events": "Past events"
   },
   "languageSwitcher": {
     "title": "Change language"

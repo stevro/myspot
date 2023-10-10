@@ -55,5 +55,13 @@ export default createVuetify({
             density: 'compact',
             hideDetails: 'auto',
         },
+        VCard:{
+            variant:'elevated',
+            color:'white'
+        },
+        VList: {
+            bgColor: 'white'
+        }
+
     }
 })

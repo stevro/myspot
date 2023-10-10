@@ -78,6 +78,16 @@ const router = createRouter({
 
                 },
                 {
+                    path: '/events/past',
+                    name: 'past-events',
+                    component: () => import('@/views/PastEvents.vue'),
+                    meta: {
+                        requiresAuth: true,
+                        title: 'Past events',
+                    }
+
+                },
+                {
                     path: '/event/new',
                     name: 'new-event',
                     component: () => import('@/views/Event/NewEvent.vue'),
