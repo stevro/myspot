@@ -57,10 +57,10 @@ export default createVuetify({
         },
         VCard:{
             variant:'elevated',
-            color:'white'
+            // color:'white'
         },
         VList: {
-            bgColor: 'white'
+            // bgColor: 'white'
         }
 
     }

@@ -52,6 +52,8 @@
                     format="dd-MM-yyyy HH:mm"
                     :is-24="true"
                     :min-date="currentDate"
+                    :minutes-increment="5"
+                    :minutes-grid-increment="10"
                     teleport="body"
                     :locale="userStore.locale"
                     required
@@ -67,16 +69,29 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" @placechanged="onLocationChange" enable-geolocation>
-                </vue-google-autocomplete>
-<!--              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"-->
-<!--                            :rules="rules.required"-->
-<!--              ></v-text-field>-->
+              <v-switch inset color="primary" v-model="spotEvent.availableImmediatelyForBooking"
+                        @update:model-value="spotEvent.availableImmediatelyForBooking ? spotEvent.minutesAvailableForBooking = null : ''"
+                        :label=" spotEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
+                        :disabled="spotEvent.isRecurring()"
+                        :rules="[rules.availableImmediatelyForBooking]"
+              ></v-switch>
+            </v-col>
+            <v-col cols="12" v-if="!spotEvent.availableImmediatelyForBooking">
+              <v-select v-model="spotEvent.minutesAvailableForBooking" item-title="name" item-value="value"
+                        :items="minutesAvailableForBooking"
+                        :label="$t('spotEvent.minutesAvailableForBooking')"
+              ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-select :items="nomenclatures.durations" v-model="spotEvent.duration" :label="$t('spotEvent.duration')"
+                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" @placechanged="onLocationChange" enable-geolocation>
+                </vue-google-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-select :items="durationOptions" v-model="spotEvent.duration" :label="$t('spotEvent.duration')"
                         item-title="name"
                         item-value="value"
                         :return-object="false"
@@ -160,6 +175,7 @@ import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
 import VueGoogleAutocomplete from "@/components/GoogleAutocomplete.vue";
 import Coordinates from "@/models/coordinates";
+import {buildListOfDurationOptions} from "@/services/EventsServices";
 
 const firestore = inject('firestore')
 const spotEvent = ref(new SpotEvent())
@@ -243,6 +259,16 @@ function getLocation(location){
 function onLocationChange(formattedLocation){
   spotEvent.value.coordinates = new Coordinates(formattedLocation.latitude, formattedLocation.longitude);
 }
+
+const minutesAvailableForBooking = computed(() => {
+  return buildListOfDurationOptions(30, 1440 * 7)
+})
+
+const durationOptions = computed(() => {
+  return buildListOfDurationOptions(30, 1440 * 7)
+})
+
+
 
 </script>
 

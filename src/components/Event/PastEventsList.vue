@@ -122,7 +122,21 @@
 
           <v-divider></v-divider>
           <v-card-actions>
+            <v-row>
 
+              <v-col cols="12" class="text-left pt-0" v-if="eventItem.spotEvent.isAuthor(userStore.id)">
+
+
+                <v-btn
+                    color="red"
+                    icon="mdi-delete"
+                    @click="deleteSpotEvent(eventItem.spotEvent)"
+                    variant="plain"
+
+                ></v-btn>
+              </v-col>
+
+            </v-row>
           </v-card-actions>
 
         </v-card>
@@ -138,12 +152,15 @@
 
 import {useI18n} from "vue-i18n";
 import {computed, inject, onMounted, ref, watch} from "vue";
-import {collection, onSnapshot, orderBy, query, Timestamp, where, or, and} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query, Timestamp, where, or, and, deleteDoc, doc} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {useUserStore} from "@/stores/user";
 import EventListItem from "@/models/eventListItem";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import ParticipantsList from "@/components/Event/participantsList.vue";
+import Swal from "sweetalert2";
+import Withdraw from "@/components/Event/Withdraw.vue";
+import BookSpot from "@/components/Event/BookSpot.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
@@ -308,7 +325,32 @@ function searchEvents() {
   });
 }
 
+function deleteSpotEvent(spotEvent) {
 
+  if (!spotEvent.isAuthor(userStore.id)) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Permission denied',
+      confirmButtonColor: "#3085d6"
+    })
+    return
+  }
+
+  Swal.fire({
+    title: t('common.confirm.title'),
+    //text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: t('common.confirm.delete_confirm'),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteDoc(doc(firestore, "spot_events", spotEvent.id));
+    }
+  })
+
+}
 </script>
 
 <style scoped>

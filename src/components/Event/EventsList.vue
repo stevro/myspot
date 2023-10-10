@@ -105,6 +105,18 @@
                 </v-list-item-title>
               </v-list-item>
               <v-list-item
+                  v-if="eventItem.spotEvent.isTimeOkForBooking() === false"
+                  density="compact"
+                  prepend-icon="mdi-calendar-clock"
+              >
+                <v-list-item-title>
+                    {{
+                      $t('spotEvent.step3.availableTimeForBookingDisplay', {'time': eventItem.spotEvent.displayTimeAvailableForBooking()})
+                    }}
+                  <br/>{{$t('spotEvent.onlyAuthorCanBookBeforeTime')}}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
                   density="compact"
                   prepend-icon="mdi-map-marker"
               >
@@ -147,35 +159,10 @@
 
                 ></v-btn>
               </v-col>
-              <!--              <v-col cols="6" class="text-right pt-0">-->
-              <!--                <v-btn-->
-              <!--                    color="accent"-->
-              <!--                    :icon="eventItem.showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'"-->
-              <!--                    @click="eventItem.showDetails = !eventItem.showDetails"-->
-              <!--                ></v-btn>-->
-              <!--              </v-col>-->
+
             </v-row>
           </v-card-actions>
-          <!--          <v-expand-transition>-->
-          <!--            <div v-show="eventItem.showDetails">-->
-          <!--              <v-divider></v-divider>-->
 
-          <!--              <v-card-text>-->
-          <!--                <v-row no-gutters>-->
-
-          <!--                  <v-col cols="12" class="py-1">-->
-          <!--                    <v-icon>mdi-account-group</v-icon>-->
-          <!--                    {{ eventItem.spotEvent.bookedSpots() }} / {{ eventItem.spotEvent.totalSpots }}-->
-          <!--                  </v-col>-->
-          <!--                  <v-col cols="12" class="py-1">-->
-          <!--                    <v-icon>mdi-account</v-icon>-->
-          <!--                    {{ eventItem.spotEvent.author }}-->
-          <!--                  </v-col>-->
-          <!--                </v-row>-->
-
-          <!--              </v-card-text>-->
-          <!--            </div>-->
-          <!--          </v-expand-transition>-->
         </v-card>
       </v-col>
     </v-row>
@@ -349,7 +336,7 @@ function searchEvents() {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
 
-      if(data.date > data.minutesAvailableForBooking*60000 + now){
+      if(data.isTimeOkForBooking() && data.author.id !== userStore.id){
         //add a check for author
         //if author show the event but add a message that others are unable to view it yet
         return;

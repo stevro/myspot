@@ -144,6 +144,12 @@ export default class SpotEvent {
         return this.date < new Date().valueOf()
     }
 
+    isTimeOkForBooking(){
+        let now = new Date().valueOf();
+
+        return this.date <= this.minutesAvailableForBooking*60000 + now
+    }
+
     toString() {
         return this.title;
     }

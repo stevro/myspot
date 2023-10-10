@@ -51,6 +51,9 @@
     "totalSpots": "Total spots",
     "allowReserves": "Enable waiting list",
     "doNotAllowReserves": "Waiting list not enabled",
+    "availableImmediatelyForBooking": "Available immediately for registration",
+    "notAvailableImmediatelyForBooking": "Not available immediately for registration",
+    "minutesAvailableForBooking": "With how much time before the event can people register?",
     "allowReserves_hint": "Enabling waiting list will let people join your event even if it\\'s fully booked and if any of the participants resigns then the system will automatically notify the first reserve about the open spot.",
     "actions": {
       "updated": "Event updated",
@@ -71,7 +74,12 @@
       "title": "Review",
       "availableTimeForBookingDisplay": "Event will be available for registration with {time} before",
       "availableImmediatelyForBookingDisplay": "Event will be available for registration immediately"
-    }
+    },
+    "onlyAuthorCanBookBeforeTime": "Only you can book now",
+    "recurrent_event_title": "Recurrent event",
+    "disable_recurrent_event": "Does not repeat",
+    "endsOnDate_title": "On",
+    "endsOnXOccurrences_title": "After"
   },
   "repeatableSpotEvent" : {
     "repeatEvery": "Every",

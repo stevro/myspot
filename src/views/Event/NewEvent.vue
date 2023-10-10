@@ -90,11 +90,11 @@
               <v-row v-if="newEvent.isRecurring()" align="center" justify="center">
 
                 <v-col cols="6">
-                  Repeat event
+                  {{ $t('spotEvent.recurrent_event_title') }}
                 </v-col>
                 <v-col cols="6">
                   <v-btn prepend-icon="mdi-repeat-off" block variant="text" color="orange"
-                         size="small" @click="disableRepeatableEvent">Does not repeat
+                         size="small" @click="disableRepeatableEvent">{{$t('spotEvent.disable_recurrent_event')}}
                   </v-btn>
                 </v-col>
                 <v-col cols="12">
@@ -115,9 +115,9 @@
                       <template v-slot:label>
                         <v-row align="center" justify="center">
                           <v-col cols="3">
-                            On
+                            {{$t('spotEvent.endsOnDate_title')}}
                           </v-col>
-                          <v-col cols="9" :disabled="newEvent.endsOn !== 1">
+                          <v-col cols="9" :disabled="newEvent.endsOn !== ENDS_ON_FIXED_DATE">
                             <VueDatePicker
 
                                 v-model="newEvent.endingDate"
@@ -140,7 +140,7 @@
 
                         <v-row align="center" justify="center">
                           <v-col cols="3">
-                            After
+                            {{$t('spotEvent.endsOnXOccurrences_title')}}
                           </v-col>
                           <v-col cols="9" :disabled="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES">
                             <v-text-field :readonly="newEvent.endsOn !== ENDS_ON_X_OCCURRENCES" type="number"
@@ -334,6 +334,7 @@ import VueGoogleAutocomplete from "@/components/GoogleAutocomplete.vue";
 import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE, ENDS_ON_X_OCCURRENCES} from "@/models/recurrentSpotEvent";
 import recurrentEventConverter from "@/converters/recurrentEventConverter";
 import Coordinates from "@/models/coordinates";
+import {buildListOfDurationOptions} from "@/services/EventsServices";
 
 
 const {t} = useI18n()
@@ -491,62 +492,7 @@ const durationOptions = computed(() => {
   return buildListOfDurationOptions(30, 1440 * 7)
 })
 
-function buildListOfDurationOptions(start = 30, max = 2880) {
 
-  let list = [];
-
-  for (let i = start; i <= max; i += 30) {
-
-    let name = '';
-    let hour = Math.floor(i / 60);
-    let minutes = i % 60;
-    if (hour === 1) {
-      name = `${hour} hour `;
-    } else if (hour > 1) {
-      name = `${hour} hours `;
-    }
-
-    if (hour > 12 && hour % 12 > 0) {
-      continue;
-    }
-
-    if (hour >= 24) {
-
-      let days = Math.floor(hour / 24)
-      name = `${days} days`;
-      list.push({
-        name: name,
-        value: i,
-      })
-      i += 1410;//because we already have i+=30
-      continue
-    }
-
-    if (hour >= 6) {
-
-      if (minutes > 0) {
-        continue
-      }
-
-      list.push({
-        name: name,
-        value: i,
-      })
-      continue
-    }
-
-    if (minutes > 0) {
-      name += `${minutes} min`
-    }
-
-    list.push({
-      name: name,
-      value: i,
-    })
-  }
-
-  return list;
-}
 
 </script>
 

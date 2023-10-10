@@ -65,18 +65,96 @@
               </v-validation>
             </v-col>
           </v-row>
+
+          <v-row v-if="spotEvent.isRecurring()" align="center" justify="center">
+
+            <v-col cols="12">
+              {{ $t('spotEvent.recurrent_event_title') }}
+            </v-col>
+
+            <v-col cols="12">
+              <v-select :items="RecurrentSpotEvent.shortcuts()"
+                        v-model="spotEvent.shortcut"
+                        @update:model-value="spotEvent.shortcutUpdated()"
+
+              ></v-select>
+            </v-col>
+
+
+            <v-col cols="12">
+              {{ $t('repeatableSpotEvent.ends') }}
+            </v-col>
+            <v-col cols="12">
+              <v-radio-group v-model="spotEvent.endsOn" @update:model-value="changeFrequencyType()">
+                <v-radio label="On" :value="ENDS_ON_FIXED_DATE">
+                  <template v-slot:label>
+                    <v-row align="center" justify="center">
+                      <v-col cols="3">
+                        {{$t('spotEvent.endsOnDate_title')}}
+                      </v-col>
+                      <v-col cols="9" :disabled="spotEvent.endsOn !== ENDS_ON_FIXED_DATE">
+                        <VueDatePicker
+
+                            v-model="spotEvent.endingDate"
+                            :clearable="false"
+                            :enable-time-picker="false"
+                            model-type="timestamp"
+                            format="dd-MM-yyyy"
+                            :min-date="currentDate"
+                            teleport="body"
+                            :locale="userStore.locale"
+                        >
+
+                        </VueDatePicker>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-radio>
+                <v-radio :value="ENDS_ON_X_OCCURRENCES">
+                  <template v-slot:label>
+
+                    <v-row align="center" justify="center">
+                      <v-col cols="3">
+                        After
+                      </v-col>
+                      <v-col cols="9" :disabled="spotEvent.endsOn !== ENDS_ON_X_OCCURRENCES">
+                        <v-text-field :readonly="spotEvent.endsOn !== ENDS_ON_X_OCCURRENCES" type="number"
+                                      v-model="spotEvent.endingOccurrences"
+                                      :suffix="$t('repeatableSpotEvent.occurrences')"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </v-col>
+
+          </v-row>
+
           <v-row>
             <v-col cols="12">
-                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" @placechanged="onLocationChange" enable-geolocation>
-                </vue-google-autocomplete>
-<!--              <v-text-field v-model="spotEvent.location" :label="$t('spotEvent.location')"-->
-<!--                            :rules="rules.required"-->
-<!--              ></v-text-field>-->
+              <v-switch inset color="primary" v-model="spotEvent.availableImmediatelyForBooking"
+                        @update:model-value="spotEvent.availableImmediatelyForBooking ? spotEvent.minutesAvailableForBooking = null : ''"
+                        :label=" spotEvent.availableImmediatelyForBooking ? $t('spotEvent.availableImmediatelyForBooking') : $t('spotEvent.notAvailableImmediatelyForBooking')"
+                        :disabled="spotEvent.isRecurring()"
+
+              ></v-switch>
+            </v-col>
+            <v-col cols="12" v-if="!spotEvent.availableImmediatelyForBooking">
+              <v-select v-model="spotEvent.minutesAvailableForBooking" item-title="name" item-value="value"
+                        :items="minutesAvailableForBooking"
+                        :label="$t('spotEvent.minutesAvailableForBooking')"
+              ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
-              <v-select :items="nomenclatures.durations" v-model="spotEvent.duration" :label="$t('spotEvent.duration')"
+                <vue-google-autocomplete v-if="spotEvent.location" :rules="[rules.required]" :initialValue="spotEvent.location" country="ro" id="location" placeholder="Search a location" @change="getLocation" @placechanged="onLocationChange" enable-geolocation>
+                </vue-google-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-select :items="durationOptions" v-model="spotEvent.duration" :label="$t('spotEvent.duration')"
                         item-title="name"
                         item-value="value"
                         :return-object="false"
@@ -156,11 +234,12 @@ import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import moment from "moment";
 
 
-import RecurrentSpotEvent from "@/models/recurrentSpotEvent";
+import RecurrentSpotEvent, {ENDS_ON_FIXED_DATE, ENDS_ON_X_OCCURRENCES} from "@/models/recurrentSpotEvent";
 import {useUserStore} from "@/stores/user";
 import Swal from 'sweetalert2'
 import VueGoogleAutocomplete from "@/components/GoogleAutocomplete.vue";
 import Coordinates from "@/models/coordinates";
+import {buildListOfDurationOptions} from "@/services/EventsServices";
 
 const firestore = inject('firestore')
 const spotEvent = ref(new RecurrentSpotEvent())
@@ -244,6 +323,14 @@ function getLocation(location){
 function onLocationChange(formattedLocation){
   spotEvent.value.coordinates = new Coordinates(formattedLocation.latitude, formattedLocation.longitude);
 }
+
+const minutesAvailableForBooking = computed(() => {
+  return buildListOfDurationOptions(30, 1440 * 7)
+})
+
+const durationOptions = computed(() => {
+  return buildListOfDurationOptions(30, 1440 * 7)
+})
 
 </script>
 

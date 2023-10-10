@@ -51,6 +51,9 @@
     "totalSpots": "Locuri disponibile",
     "allowReserves": "Permite lista de așteptare",
     "doNotAllowReserves": "Lista de asteptare dezactivata",
+    "availableImmediatelyForBooking": "Disponibil imediat pentru inregistrare",
+    "notAvailableImmediatelyForBooking": "Nu este disponibil imediat pentru inregistrare",
+    "minutesAvailableForBooking": "Cu cat timp inainte de eveniment se pot inregistra participantii?",
     "allowReserves_hint": "Lista de așteptare permite inregistrarea mai multor persoane decat numarul de locuri disponibile si in caz de retragere a unui participant, prima persoana de pe lista de așteptare primeste locul liber.",
     "actions": {
       "updated": "Actualizare cu success",
@@ -71,7 +74,12 @@
       "title": "Revizuire",
       "availableTimeForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare cu {time} inainte",
       "availableImmediatelyForBookingDisplay": "Evenimentul va fi disponibil pentru inregistrare imediat"
-    }
+    },
+    "onlyAuthorCanBookBeforeTime": "Doar tu poti rezerva un loc acum",
+    "recurrent_event_title": "Eveniment recurent",
+    "disable_recurrent_event": "Nu este recurent",
+    "endsOnDate_title": "Pe data de",
+    "endsOnXOccurrences_title": "Dupa"
   },
   "repeatableSpotEvent" : {
     "repeatEvery": "Frecventa",
