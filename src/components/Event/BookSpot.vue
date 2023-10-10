@@ -13,6 +13,11 @@
   >
     {{$t('eventItem.fully_booked')}}
   </v-btn>
+  <v-btn size="small" color="primary" variant="flat" disabled block
+      v-else-if="!props.spotEvent.isTimeOkForBooking() && !props.spotEvent.isAuthor(userStore.id)"
+  >
+    {{$t('eventItem.not_time_yet')}}
+  </v-btn>
 
   <v-btn size="small" color="primary" variant="flat" block
          @click="bookSpot"

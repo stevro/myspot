@@ -87,32 +87,7 @@
           <v-card-text>
 
 
-            <v-list density="compact">
-              <v-list-item
-                  v-if="eventItem.spotEvent.description"
-                  density="compact"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.description }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  density="compact"
-                  prepend-icon="mdi-calendar-month"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.displayDate() }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  density="compact"
-                  prepend-icon="mdi-map-marker"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.location }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
+            <spot-event-card-details-list :event-item="eventItem"></spot-event-card-details-list>
 
 
             <participants-list :event-item="eventItem"></participants-list>
@@ -161,6 +136,7 @@ import ParticipantsList from "@/components/Event/participantsList.vue";
 import Swal from "sweetalert2";
 import Withdraw from "@/components/Event/Withdraw.vue";
 import BookSpot from "@/components/Event/BookSpot.vue";
+import SpotEventCardDetailsList from "@/components/Event/SpotEventCardDetailsList.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')

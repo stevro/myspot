@@ -87,44 +87,7 @@
           <v-card-text>
 
 
-            <v-list density="compact">
-              <v-list-item
-                  v-if="eventItem.spotEvent.description"
-                  density="compact"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.description }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  density="compact"
-                  prepend-icon="mdi-calendar-month"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.displayDate() }}
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  v-if="eventItem.spotEvent.isTimeOkForBooking() === false"
-                  density="compact"
-                  prepend-icon="mdi-calendar-clock"
-              >
-                <v-list-item-title>
-                    {{
-                      $t('spotEvent.step3.availableTimeForBookingDisplay', {'time': eventItem.spotEvent.displayTimeAvailableForBooking()})
-                    }}
-                  <br/>{{$t('spotEvent.onlyAuthorCanBookBeforeTime')}}
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  density="compact"
-                  prepend-icon="mdi-map-marker"
-              >
-                <v-list-item-title>
-                  {{ eventItem.spotEvent.location }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
+            <spot-event-card-details-list :event-item="eventItem"></spot-event-card-details-list>
 
 
             <participants-list :event-item="eventItem"></participants-list>
@@ -176,7 +139,6 @@
 
 import {useI18n} from "vue-i18n";
 import {computed, inject, onMounted, ref, watch} from "vue";
-import moment from 'moment-timezone';
 import {collection, deleteDoc, doc, onSnapshot, orderBy, query, Timestamp, where} from "firebase/firestore";
 import eventConverter from "@/converters/eventConverter";
 import {useUserStore} from "@/stores/user";
@@ -186,6 +148,7 @@ import BookSpot from "@/components/Event/BookSpot.vue";
 import Withdraw from "@/components/Event/Withdraw.vue";
 import {useNomenclaturesStore} from "@/stores/nomenclatures";
 import ParticipantsList from "@/components/Event/participantsList.vue";
+import SpotEventCardDetailsList from "@/components/Event/SpotEventCardDetailsList.vue";
 
 const {t} = useI18n()
 const firestore = inject('firestore')
@@ -335,12 +298,6 @@ function searchEvents() {
 
     querySnapshot.forEach((doc) => {
       let data = doc.data();
-
-      if(data.isTimeOkForBooking() && data.author.id !== userStore.id){
-        //add a check for author
-        //if author show the event but add a message that others are unable to view it yet
-        return;
-      }
 
       events.value.push(new EventListItem(data))
     });
