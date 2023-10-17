@@ -24,7 +24,8 @@ export default defineConfig({
               enabled: false
           },
           workbox: {
-              globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+              globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+              navigateFallbackDenylist: [/__/],
           },
           includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
           manifest: {

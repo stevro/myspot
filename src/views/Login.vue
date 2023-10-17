@@ -108,6 +108,8 @@ const isSubmittingEmailAuth = ref(false)
 const isSubmittingModernAuth = ref(false)
 
 const googleProvider = new GoogleAuthProvider()
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
 
 const facebookProvider = new FacebookAuthProvider();
 facebookProvider.addScope('public_profile');
