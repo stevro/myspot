@@ -53,9 +53,12 @@
     <h1>5. Your rights and choices</h1>
     <p>You have the right to access, modify, or delete your personal information at any time. You can also object to the
     processing of your information or withdraw your consent for marketing communications. To exercise your rights or for
-    any questions about our privacy policy, please contact us.</p>
+    any questions about our privacy policy, please contact us at support@my-spot.app.</p>
 
-    <h1>6. Changes to this policy</h1>
+    <h1>6. Account deletion</h1>
+    <p>You have the right to delete your personal information at any time. To exercise your rights please contact us at support@my-spot.app.</p>
+
+    <h1>7. Changes to this policy</h1>
     <p>We reserve the right to update or modify this privacy policy at any time. We will notify you of any material changes
     by email or through our software interface. Your continued use of our services after any such updates or
     modifications constitutes your acceptance of the revised policy.</p>
