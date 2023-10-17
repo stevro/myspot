@@ -77,7 +77,9 @@
     },
     "onlyAuthorCanBookBeforeTime": "Doar tu poti rezerva un loc acum",
     "recurrent_event_title": "Eveniment recurent",
+    "recurrent_event_btn_title": "Faceti acest eveniment sa fie recurent",
     "disable_recurrent_event": "Nu este recurent",
+    "enable_recurrent_event": "Activati recurenta",
     "endsOnDate_title": "Pe data de",
     "endsOnXOccurrences_title": "Dupa",
     "date_of_first_event": "Data primului eveniment"

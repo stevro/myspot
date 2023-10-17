@@ -82,8 +82,9 @@
 
                 </v-col>
                 <v-col cols="2">
-                  <v-btn icon="mdi-repeat" variant="text" size="small"
-                         @click="initRecurrentEvent"></v-btn>
+                  <v-btn prepend-icon="mdi-repeat" variant="text" size="small"
+                         :title="$t('spotEvent.recurrent_event_btn_title')"
+                         @click="initRecurrentEvent">{{$t('spotEvent.enable_recurrent_event')}}</v-btn>
                 </v-col>
               </v-row>
 

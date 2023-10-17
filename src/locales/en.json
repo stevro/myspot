@@ -77,7 +77,9 @@
     },
     "onlyAuthorCanBookBeforeTime": "Only you can book now",
     "recurrent_event_title": "Recurrent event",
+    "recurrent_event_btn_title": "Make this event recurring",
     "disable_recurrent_event": "Does not repeat",
+    "enable_recurrent_event": "Repeat",
     "endsOnDate_title": "On",
     "endsOnXOccurrences_title": "After",
     "date_of_first_event": "Date of first event"
