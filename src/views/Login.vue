@@ -19,10 +19,15 @@
               <h3>Modern sign in with</h3>
             </v-col>
             <v-col cols="12">
-              <v-btn :loading="isSubmittingFacebook" variant="flat" block prepend-icon="mdi-facebook"
-                     @click="signIn('facebook')">Facebook
+              <v-btn :loading="isSubmittingModernAuth" variant="flat" block prepend-icon="mdi-google"
+                     @click="signIn('google')">Google
               </v-btn>
             </v-col>
+<!--            <v-col cols="12">-->
+<!--              <v-btn :loading="isSubmittingModernAuth" variant="flat" block prepend-icon="mdi-facebook"-->
+<!--                     @click="signIn('facebook')">Facebook-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
 
           </v-row>
 
@@ -53,7 +58,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn :loading="isSubmitting" variant="flat" color="accent" block @click="signIn('email')">go old men
+                <v-btn :loading="isSubmittingEmailAuth" variant="flat" color="accent" block @click="signIn('email')">go old men
                   mode
                 </v-btn>
               </v-col>
@@ -76,6 +81,7 @@
 
 import {useI18n} from 'vue-i18n'
 import {
+  GoogleAuthProvider,
   FacebookAuthProvider,
   getAuth,
   getRedirectResult,
@@ -98,13 +104,15 @@ const firebase = inject('firebase')
 const loginForm = ref(null)
 const email = ref('')
 const password = ref('')
-const isSubmitting = ref(false)
-const isSubmittingFacebook = ref(false)
+const isSubmittingEmailAuth = ref(false)
+const isSubmittingModernAuth = ref(false)
 
-const provider = new FacebookAuthProvider();
-provider.addScope('public_profile');
-provider.addScope('email');
-// provider.addScope('user_friends');
+const googleProvider = new GoogleAuthProvider()
+
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.addScope('public_profile');
+facebookProvider.addScope('email');
+// facebookProvider.addScope('user_friends');
 const auth = getAuth();
 const firebaseStore = useFirebaseStore()
 const hasLoginErrors = ref(false)
@@ -123,12 +131,12 @@ async function signIn(providerType) {
   loginError.value = '';
 
   if (providerType === 'email') {
-    isSubmitting.value = true;
+    isSubmittingEmailAuth.value = true;
     if (true === await isLoginFormValid()) {
 
       signInWithEmailAndPassword(auth, email.value, password.value).then(function (userCred) {
         //signed in
-        isSubmitting.value = false;
+        isSubmittingEmailAuth.value = false;
 
         authStore.authenticate(userCred.user)
         userStore.setUser(userCred.user)
@@ -139,19 +147,19 @@ async function signIn(providerType) {
         console.error(error)
         hasLoginErrors.value = true;
         loginError.value = 'Invalid credentials'
-        isSubmitting.value = false;
+        isSubmittingEmailAuth.value = false;
 
       })
     } else {
       hasLoginErrors.value = true;
-      isSubmitting.value = false
+      isSubmittingEmailAuth.value = false
     }
-  } else {
-    isSubmittingFacebook.value = true;
-    await signInWithRedirect(auth, provider)
+  } else if(providerType === 'facebook') {
+    isSubmittingModernAuth.value = true;
+    await signInWithRedirect(auth, facebookProvider)
     const result = await getRedirectResult(auth);
 
-    isSubmittingFacebook.value = false
+    isSubmittingModernAuth.value = false
 
     if (result) {
       // This is the signed-in user
@@ -162,6 +170,27 @@ async function signIn(providerType) {
 
       router.push({'name': 'dashboard'})
     }
+  } else if(providerType === 'google'){
+    isSubmittingModernAuth.value = true;
+    await signInWithRedirect(auth, googleProvider)
+    const result = await getRedirectResult(auth);
+
+    isSubmittingModernAuth.value = false
+
+    if(result) {
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+
+      const user = result.user;
+
+      authStore.authenticate(user)
+      userStore.setUser(user)
+
+      router.push({'name': 'dashboard'})
+    }
+
+  } else{
+    console.error('Unknown auth provider ' + providerType)
   }
 
 }
