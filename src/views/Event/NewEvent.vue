@@ -178,6 +178,7 @@
                   <vue-google-autocomplete country="ro" :rules="[rules.required]" id="location"
                                            placeholder="Search a location" @change="getLocation"
                                            @placechanged="onLocationChange"
+                                           types=""
                                            enable-geolocation>
                   </vue-google-autocomplete>
                   <!--                  <v-text-field v-model="newEvent.location" :label="$t('spotEvent.location')"-->
