@@ -57,10 +57,10 @@
 
     <v-row v-for="eventItem in visibleEventsList" v-bind:key="eventItem.id">
       <v-col>
-        <v-card :prepend-icon="eventItem.spotEvent.category.icon" :title="eventItem.spotEvent.title"
+        <v-card  :title="eventItem.spotEvent.title"
                 :subtitle="eventItem.spotEvent.category.name + ' ' + $t('common.by') + ' ' + eventItem.spotEvent.author">
           <template v-slot:prepend>
-            <v-icon size="x-large"></v-icon>
+            <v-icon :icon="eventItem.spotEvent.category.icon" size="x-large"></v-icon>
           </template>
 
           <v-card-text>
