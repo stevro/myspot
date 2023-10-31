@@ -24,13 +24,14 @@ An app for booking a spot in a team / to an event / etc.
 - [x] Create T&C and Privacy Policy pages
 - [ ] Archive old events
 - [ ] Share event on FB/Whatsapp
-- [ ] Allow booking spot from the new event notification
 - [ ] Give user a feedback notification when booking from the "new event" notification, like booking successful or not
 - [ ] Extend security on backend
 - [x] Adding new categories (hiking, biking, climbing)
-- [ ] Allow users to have a profile (displayName, phone, etc)
-- [ ] Allow users to control if their contact details are visible to other participants
+- [ ] Allow users to have a profile (displayName, phone, etc), and make it visible only to event authors
+- [ ] Allow users to control if their contact details are visible to other participants(public) or just to events authors
 - [ ] Comments section on the event to allow users to ask questions/share details
+- [ ] Private events - Allow creation of events where you can grant acces based on invitation to registered users
+- [ ] Invitation link - Allow the generation of an invitation link. (anyone with the invite link can view/book the event)
 
 # To do for v2
 - [ ] Show weather updates
@@ -39,7 +40,8 @@ An app for booking a spot in a team / to an event / etc.
 - [ ] Show directions to event place
 - [ ] Teams. Create teams to register to your event and then let public only the remaining spots
 - [ ] History of participants registration and withdrawal
-- [ ] Locations autocomplete with GMaps or ORS
+- [x] Locations autocomplete with GMaps or ORS
+- [ ] Allow booking spot from the new event notification
 
 # Useful commands
 - Set Node to v16 `nvm use v16`
