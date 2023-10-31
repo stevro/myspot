@@ -91,7 +91,7 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js')
 // https://firebase.google.com/docs/web/setup#config-object
 const firebaseConfig = {
     apiKey: "AIzaSyCTGjg4n-tbjw4FnGOqNt5SFmqRepXzam8",
-    authDomain: "myspot-346e8.firebaseapp.com",
+    authDomain: "my-spot.app",
     projectId: "myspot-346e8",
     storageBucket: "myspot-346e8.appspot.com",
     messagingSenderId: "61211815199",

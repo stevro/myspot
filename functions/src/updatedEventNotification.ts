@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+import {MessagingOptions, MessagingPayload} from "firebase-admin/lib/messaging/messaging-api";
 
 const admin = require("firebase-admin");
 
@@ -33,14 +34,24 @@ exports.sendUpdatedEventNotifications = functions.region('europe-west3').firesto
         }
 
         const title = spotEvent.title;
-        const payload = {
+        const payload: MessagingPayload = {
             notification: {
                 title: `${spotEvent.author.displayName} updated '${title}'`,
                 body: updates.join(', '),
                 // icon: snapshot.data().profilePicUrl || '/images/profile_placeholder.png',
-                click_action: `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com`,
+                clickAction: `${process.env.APP_URL}`,
             },
+            data: {
+                action:'GO_TO_APP'
+            }
+
+            // topic: 'event-updated',
         };
+
+        const options: MessagingOptions = {
+            priority: 'high',
+            contentAvailable: true,
+        }
 
         // Get the list of device tokens.
         const allTokens = await admin.firestore().collection("fcm_tokens").get();
@@ -61,7 +72,7 @@ exports.sendUpdatedEventNotifications = functions.region('europe-west3').firesto
 
         if (tokens.length > 0) {
             // Send notifications to all tokens.
-            const response = await admin.messaging().sendToDevice(tokens, payload);
+            const response = await admin.messaging().sendToDevice(tokens, payload, options);
             await cleanupTokens(response, tokens);
             functions.logger.log("Notifications have been sent and tokens cleaned up.");
         } else {
