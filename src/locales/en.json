@@ -25,7 +25,7 @@
     "display_name": "Display name"
   },
   "register": {
-    "main_message": "Register if you are sure you don't have a Facebook account!",
+    "main_message": "Register if you are sure you don't have a Google account!",
     "submit": "Register",
     "go_to_login": "Go to login"
   },
