@@ -48,3 +48,8 @@ An app for booking a spot in a team / to an event / etc.
 - Start development env with `npm run dev`
 - Start local emulators `firebase emulators:start --import ./local --export-on-exit`
 - Running Scheduled Firebase Functions Locally `firebase functions:shell` then run your function `yourFunction()`
+
+
+# Deploy
+- `firebase deploy --only hosting`
+- `firebase deploy --only functions`
