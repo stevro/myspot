@@ -66,7 +66,7 @@
                       format="dd-MM-yyyy HH:mm"
                       :is-24="true"
                       :minutes-increment="5"
-                      :minutes-grid-increment="10"
+                      :minutes-grid-increment="15"
                       :min-date="minDateForEvent"
                       teleport="body"
                       :locale="userStore.locale"

@@ -53,7 +53,7 @@
                     :is-24="true"
                     :min-date="currentDate"
                     :minutes-increment="5"
-                    :minutes-grid-increment="10"
+                    :minutes-grid-increment="15"
                     teleport="body"
                     :locale="userStore.locale"
                     required

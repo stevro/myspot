@@ -51,6 +51,8 @@
                     model-type="timestamp"
                     format="dd-MM-yyyy HH:mm"
                     :is-24="true"
+                    :minutes-increment="5"
+                    :minutes-grid-increment="15"
                     :min-date="currentDate"
                     teleport="body"
                     :locale="userStore.locale"
