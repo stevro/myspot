@@ -54,3 +54,8 @@ An app for booking a spot in a team / to an event / etc.
 - Firstly run `npm run build` then `firebase deploy` for deploying everything. Or as a shortcut you can use `npm run deploy`
 - To deploy only the files run `firebase deploy --only hosting`
 - To deploy only the functions run `firebase deploy --only functions`
+
+# Deploy with version increment
+- `npm run deploy` or `npm run deploy-patch` will increment the patch version in the package.json before deploy
+- `npm run deploy-minor`
+- `npm run deploy-major`

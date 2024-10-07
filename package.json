@@ -1,6 +1,6 @@
 {
   "name": "myspot",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -8,7 +8,10 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "deploy": "vite build && firebase deploy"
+    "deploy": "npm version patch && vite build && firebase deploy"
+    "deploy-patch": "npm version patch && vite build && firebase deploy"
+    "deploy-minor": "npm version minor && vite build && firebase deploy"
+    "deploy-major": "npm version major && vite build && firebase deploy"
   },
   "dependencies": {
     "@mdi/font": "7.2.96",
