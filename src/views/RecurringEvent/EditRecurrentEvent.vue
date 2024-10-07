@@ -226,7 +226,7 @@
 
 <script setup>
 
-import {computed, inject, onMounted, ref} from "vue";
+import {computed, inject, nextTick, onMounted, ref, watch} from "vue";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import recurrentEventConverter from "@/converters/recurrentEventConverter";
 import {useRoute, useRouter} from "vue-router";
@@ -330,6 +330,12 @@ const minutesAvailableForBooking = computed(() => {
 
 const durationOptions = computed(() => {
   return buildListOfDurationOptions(30, 1440 * 7)
+})
+
+watch(() => spotEvent.value.date, function () {
+  nextTick(function () {
+    spotEvent.value.applyDefaultFrequencyType(spotEvent.value.frequencyType)
+  })
 })
 
 </script>

@@ -486,6 +486,9 @@ function disableRepeatableEvent() {
 watch(() => newEvent.value.repeatOn, function () {
   newEvent.value.repeatOn.sort()
 })
+watch(() => newEvent.value.date, function () {
+    changeFrequencyType()
+})
 
 const minutesAvailableForBooking = computed(() => {
   return buildListOfDurationOptions(30, 1440 * 7)
