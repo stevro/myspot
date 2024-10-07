@@ -51,5 +51,6 @@ An app for booking a spot in a team / to an event / etc.
 
 
 # Deploy
-- `firebase deploy --only hosting`
-- `firebase deploy --only functions`
+- Firstly run `npm run build` then `firebase deploy` for deploying everything.
+- To deploy only the files run `firebase deploy --only hosting`
+- To deploy only the functions run `firebase deploy --only functions`
