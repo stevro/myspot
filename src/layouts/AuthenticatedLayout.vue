@@ -15,6 +15,9 @@
             {{ $t('sidebar.logout') }}
           </v-btn>
         </div>
+        <div class="pa-2 text-center">
+          <small>v{{appVersion}}</small>
+        </div>
       </template>
     </v-navigation-drawer>
 
@@ -54,6 +57,9 @@ const firebase = inject('firebase')
 const auth = getAuth();
 
 const firebaseStore = useFirebaseStore()
+
+const appVersion = import.meta.env.VITE_APP_VERSION
+
 auth.useDeviceLanguage();
 onAuthStateChanged(auth, (user) => {
   if (user) {
