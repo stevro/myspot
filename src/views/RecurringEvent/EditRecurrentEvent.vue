@@ -335,10 +335,19 @@ const durationOptions = computed(() => {
 })
 
 watch(() => spotEvent.value.date, function () {
+  changeFrequencyType()
+})
+
+function changeFrequencyType() {
+
+  if (!spotEvent.value.isRecurring()) {
+    return
+  }
   nextTick(function () {
     spotEvent.value.applyDefaultFrequencyType(spotEvent.value.frequencyType)
   })
-})
+
+}
 
 </script>
 
